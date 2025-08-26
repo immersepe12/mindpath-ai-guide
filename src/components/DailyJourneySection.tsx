@@ -64,8 +64,8 @@ const DailyJourneySection = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             
-            {/* Mobile App Interface */}
-            <div className="relative order-2 lg:order-1">
+            {/* Mobile App Interface - Hidden on mobile, shown on lg+ */}
+            <div className="relative order-2 lg:order-1 hidden lg:block">
               <div className="mx-auto w-72 md:w-80 h-[600px] md:h-[700px] bg-gray-900 rounded-[2.5rem] p-2 shadow-2xl">
                 <div className="w-full h-full bg-gradient-to-b from-mindtalk-orange to-mindtalk-orange rounded-[2rem] overflow-hidden relative">
                   
@@ -185,6 +185,116 @@ const DailyJourneySection = () => {
                   Experience a gamified 90-day journey where every day brings you closer to emotional wellness. 
                   Track your progress, earn stars, and build lasting habits through daily micro-tasks.
                 </p>
+              </div>
+
+              {/* Mobile App Interface - Shown only on mobile between paragraphs */}
+              <div className="relative lg:hidden mb-6 md:mb-8">
+                <div className="mx-auto w-72 h-[600px] bg-gray-900 rounded-[2.5rem] p-2 shadow-2xl">
+                  <div className="w-full h-full bg-gradient-to-b from-mindtalk-orange to-mindtalk-orange rounded-[2rem] overflow-hidden relative">
+                    
+                    {/* Status Bar */}
+                    <div className="flex justify-between items-center p-3 text-white text-xs">
+                      <span>3:55</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex gap-1">
+                          <div className="w-1 h-2 bg-white rounded"></div>
+                          <div className="w-1 h-2 bg-white rounded"></div>
+                          <div className="w-1 h-2 bg-white rounded"></div>
+                          <div className="w-1 h-2 bg-white/50 rounded"></div>
+                        </div>
+                        <span>📶</span>
+                        <span>📶</span>
+                        <span className="bg-yellow-400 text-black px-1 rounded text-xs">66</span>
+                      </div>
+                    </div>
+
+                    {/* Header */}
+                    <div className="px-3 pb-3">
+                      <div className="flex justify-between items-center text-white">
+                        <h3 className="text-base font-semibold">Your Journey</h3>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <span className="text-xs">15 Stars</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Progress Card */}
+                    <div className="mx-3 mb-3">
+                      <Card className="bg-white/95 border-0">
+                        <CardContent className="p-3">
+                          <h4 className="text-mindtalk-orange font-semibold mb-2 text-sm">90 days Emotional Reset</h4>
+                          <Progress value={50} className="mb-1" />
+                          <p className="text-xs text-gray-600 mb-1">50% Complete</p>
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <Trophy className="w-3 h-3" />
+                            <span>45/90 Days</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Add Therapy Session Highlight in Mobile Interface */}
+                    <TherapySessionHighlight variant="daily" />
+
+                    {/* Current Day */}
+                    <div className="mx-3 mb-3">
+                      <Card className="bg-white/95 border-0">
+                        <CardContent className="p-3">
+                          <h4 className="font-semibold text-mindtalk-orange mb-1 text-sm">Day 16 - August 20, 2025</h4>
+                          <p className="text-xs text-mindtalk-green mb-2">Available now</p>
+                          
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="text-xs text-gray-600">Tasks Completed:</span>
+                            <span className="text-xs font-medium text-mindtalk-orange">0/3</span>
+                          </div>
+                          <Progress value={0} className="mb-3" />
+
+                          {/* Sample Task */}
+                          <div className="space-y-2">
+                            <div className="border rounded-lg p-2">
+                              <div className="flex justify-between items-start mb-1">
+                                <h5 className="font-medium text-gray-900 text-sm">The Role of Guilt</h5>
+                                <Info className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                              </div>
+                              <p className="text-xs text-gray-600 mb-1">Assessment for Building Emotional Strength</p>
+                              <p className="text-xs text-mindtalk-orange font-medium mb-2">Assessment Required</p>
+                              <button className="w-full bg-mindtalk-orange text-white py-1.5 rounded-lg text-xs font-medium">
+                                Start
+                              </button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Journey Calendar Preview */}
+                    <div className="mx-3">
+                      <Card className="bg-white/95 border-0">
+                        <CardContent className="p-3">
+                          <h4 className="text-mindtalk-orange font-semibold mb-2 text-sm">Journey Calendar</h4>
+                          <div className="grid grid-cols-7 gap-0.5">
+                            {days.slice(0, 21).map((day) => (
+                              <div key={day.day} className="text-center">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                                  day.status === 'completed' 
+                                    ? 'bg-mindtalk-orange text-white' 
+                                    : day.status === 'current'
+                                    ? 'bg-mindtalk-green text-white font-bold'
+                                    : 'bg-gray-300 text-gray-500'
+                                }`}>
+                                  {day.status === 'completed' && <Star className="w-2 h-2 fill-white" />}
+                                  {day.status === 'current' && day.day}
+                                  {day.status === 'future' && day.day}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Features */}
