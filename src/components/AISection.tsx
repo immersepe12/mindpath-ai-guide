@@ -1,7 +1,7 @@
 
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
-import { Bot, MessageCircle, Brain, TrendingUp, Shield, Zap } from "lucide-react";
+import { Bot, MessageCircle, Brain, TrendingUp, Shield, Zap, Phone, Clock } from "lucide-react";
 
 const AISection = () => {
   return (
@@ -17,25 +17,26 @@ const AISection = () => {
               </div>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Meet Your AI Deep Agent
+              Meet Dr. Riya - Your AI Deep Agent
             </h2>
             <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              The world's first mental health AI that learns your patterns, tracks your progress, 
-              and bridges the gap between therapy sessions for truly personalized care
+              The world's first mental health AI that learns your patterns, tracks your progress between sessions, 
+              and provides personalized support 24/7
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* AI Features */}
+            {/* Dr. Riya AI Features */}
             <div className="space-y-8">
               <Card className="bg-white/10 backdrop-blur border-white/20 text-white">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <Brain className="w-8 h-8 text-white" />
-                    <h3 className="text-xl font-semibold">Learns Your Patterns</h3>
+                    <h3 className="text-xl font-semibold">Deep Learning & Memory</h3>
                   </div>
                   <p className="text-white/80">
-                    Analyzes your daily tasks, moods, and triggers to understand your unique mental health journey
+                    Dr. Riya remembers every conversation, assessment, and milestone in your journey. 
+                    She learns your patterns and provides increasingly personalized guidance.
                   </p>
                 </CardContent>
               </Card>
@@ -44,10 +45,11 @@ const AISection = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <MessageCircle className="w-8 h-8 text-white" />
-                    <h3 className="text-xl font-semibold">24/7 Support</h3>
+                    <h3 className="text-xl font-semibold">24/7 Emotional Support</h3>
                   </div>
                   <p className="text-white/80">
-                    Available anytime for guidance, assessments, and emotional support between therapy sessions
+                    Whether it's 2 AM anxiety or midday stress, Dr. Riya is always available to provide 
+                    immediate support and coping strategies.
                   </p>
                 </CardContent>
               </Card>
@@ -56,48 +58,58 @@ const AISection = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <TrendingUp className="w-8 h-8 text-white" />
-                    <h3 className="text-xl font-semibold">Therapist Integration</h3>
+                    <h3 className="text-xl font-semibold">Therapist Bridge</h3>
                   </div>
                   <p className="text-white/80">
-                    Provides detailed insights to your therapist, making every session more effective and targeted
+                    All insights are shared with your therapist, making every human session more 
+                    productive and focused on your specific needs.
                   </p>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Mock Chat Interface */}
+            {/* Enhanced Chat Interface */}
             <div className="relative">
               <Card className="bg-white shadow-2xl max-w-md mx-auto">
                 <CardContent className="p-0">
                   {/* Chat Header */}
                   <div className="bg-mindtalk-orange text-white p-4 rounded-t-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                        <Bot className="w-5 h-5" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                          <Bot className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">Dr. Riya</h4>
+                          <p className="text-sm text-white/80 flex items-center gap-1">
+                            <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                            Available 24/7
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold">Dr. Riya - AI Agent</h4>
-                        <p className="text-sm text-white/80">Available 24/7</p>
+                      <div className="flex gap-2">
+                        <Phone className="w-5 h-5 text-white/70" />
+                        <Clock className="w-5 h-5 text-white/70" />
                       </div>
                     </div>
                   </div>
 
                   {/* Chat Messages */}
-                  <div className="p-4 space-y-4 h-64 overflow-hidden">
+                  <div className="p-4 space-y-4 h-80 overflow-hidden">
                     <div className="flex gap-3">
                       <div className="w-8 h-8 rounded-full bg-mindtalk-orange flex items-center justify-center flex-shrink-0">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                       <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
                         <p className="text-sm text-gray-800">
-                          Hello! I'm glad you're here. How can I assist you today?
+                          Hi! I noticed you completed your breathing exercise today. How are you feeling?
                         </p>
                       </div>
                     </div>
 
                     <div className="flex gap-3 justify-end">
                       <div className="bg-mindtalk-green text-white rounded-lg p-3 max-w-xs">
-                        <p className="text-sm">What is my progress?</p>
+                        <p className="text-sm">Much calmer, thank you</p>
                       </div>
                     </div>
 
@@ -107,8 +119,29 @@ const AISection = () => {
                       </div>
                       <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
                         <p className="text-sm text-gray-800">
-                          You've completed 14 daily tasks this week with 85% consistency. Your mood scores show improvement!
+                          That's wonderful! Your consistency with daily tasks is improving. Should I share this progress with Dr. Sharma for your session tomorrow?
                         </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 justify-end">
+                      <div className="bg-mindtalk-green text-white rounded-lg p-3 max-w-xs">
+                        <p className="text-sm">Yes, please do!</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-mindtalk-orange flex items-center justify-center flex-shrink-0">
+                        <Bot className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
+                        <p className="text-sm text-gray-800">
+                          Done! I've prepared a summary for Dr. Sharma. Would you like to continue with today's mindfulness exercise?
+                        </p>
+                        <div className="mt-2 flex gap-2">
+                          <button className="bg-mindtalk-blue text-white text-xs px-2 py-1 rounded">Continue Chat</button>
+                          <button className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded">Voice Call</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -118,7 +151,7 @@ const AISection = () => {
                     <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-2">
                       <input 
                         type="text" 
-                        placeholder="Type to start chatting..." 
+                        placeholder="Chat with Dr. Riya..." 
                         className="flex-1 bg-transparent text-sm focus:outline-none"
                         disabled
                       />
@@ -139,7 +172,7 @@ const AISection = () => {
 
           <div className="text-center mt-16">
             <MindTalkButton variant="ai" size="hero" className="bg-white text-mindtalk-blue hover:bg-white/90">
-              Try AI Agent Now
+              Chat with Dr. Riya Now
             </MindTalkButton>
           </div>
         </div>
