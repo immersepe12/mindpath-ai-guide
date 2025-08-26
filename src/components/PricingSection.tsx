@@ -2,6 +2,7 @@
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Check, X, Crown, Heart } from "lucide-react";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 const PricingSection = () => {
   return (
@@ -116,7 +117,12 @@ const PricingSection = () => {
                   </div>
                 </div>
 
-                <MindTalkButton variant="hero" size="lg" className="w-full animate-pulse-slow mt-4 sm:mt-6 text-sm sm:text-base">
+                <MindTalkButton 
+                  variant="hero" 
+                  size="lg" 
+                  className="w-full animate-pulse-slow mt-4 sm:mt-6 text-sm sm:text-base"
+                  onClick={scrollToForm}
+                >
                   <Heart className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
                   Start Your Recovery
                 </MindTalkButton>
