@@ -1,5 +1,6 @@
 
 import Navigation from "@/components/Navigation";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import HeroSection from "@/components/HeroSection";
 import JourneysSection from "@/components/JourneysSection";
 import DailyJourneySection from "@/components/DailyJourneySection";
@@ -15,6 +16,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
+      <StickyMobileCTA />
       <div id="hero">
         <HeroSection />
       </div>

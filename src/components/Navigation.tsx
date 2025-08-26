@@ -52,11 +52,11 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 lg:bg-white/95 bg-white/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
+        <div className="flex items-center justify-between h-14 lg:h-16">
+          {/* Logo - Hidden on mobile */}
+          <div className="flex-shrink-0 hidden lg:block">
             <img 
               src="/lovable-uploads/0a99fb1e-f879-44b2-bb75-a5250bb2c95a.png" 
               alt="Cadabams MindTalk"
@@ -90,8 +90,8 @@ const Navigation = () => {
             </MindTalkButton>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden">
+          {/* Mobile Menu Button - Centered */}
+          <div className="lg:hidden flex-1 flex justify-center">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <button className="p-2 text-gray-700 hover:text-mindtalk-orange">
