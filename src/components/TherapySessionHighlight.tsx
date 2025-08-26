@@ -120,7 +120,7 @@ const TherapySessionHighlight = ({ variant = 'journeys' }: TherapySessionHighlig
 
               <div className="text-center sm:text-left">
                 <MindTalkButton 
-                  variant="secondary" 
+                  variant="ai" 
                   size="lg"
                   className="w-full sm:w-auto"
                 >
