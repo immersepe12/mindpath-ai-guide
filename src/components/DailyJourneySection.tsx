@@ -3,6 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { Trophy, Star, CheckCircle, Info, Calendar, Target } from "lucide-react";
 import { Progress } from "./ui/progress";
 import TherapySessionHighlight from "./TherapySessionHighlight";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 const DailyJourneySection = () => {
   // Generate 90 days for the calendar
@@ -376,7 +377,12 @@ const DailyJourneySection = () => {
               </div>
 
               <div className="text-center">
-                <MindTalkButton variant="hero" size="lg" className="w-full sm:w-auto">
+                <MindTalkButton 
+                  variant="hero" 
+                  size="lg" 
+                  className="w-full sm:w-auto"
+                  onClick={scrollToForm}
+                >
                   Start Your 90-Day Journey - ₹4,499
                 </MindTalkButton>
               </div>
