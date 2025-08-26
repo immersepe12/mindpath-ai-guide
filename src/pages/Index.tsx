@@ -2,6 +2,7 @@
 import HeroSection from "@/components/HeroSection";
 import JourneysSection from "@/components/JourneysSection";
 import AppShowcaseSection from "@/components/AppShowcaseSection";
+import DailyJourneySection from "@/components/DailyJourneySection";
 import MindfulnessSection from "@/components/MindfulnessSection";
 import AISection from "@/components/AISection";
 import DoctorBookingSection from "@/components/DoctorBookingSection";
@@ -15,6 +16,7 @@ const Index = () => {
       <HeroSection />
       <JourneysSection />
       <AppShowcaseSection />
+      <DailyJourneySection />
       <MindfulnessSection />
       <AISection />
       <DoctorBookingSection />
