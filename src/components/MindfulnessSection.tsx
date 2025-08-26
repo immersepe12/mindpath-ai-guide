@@ -1,44 +1,35 @@
-
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Play, Moon, Waves, CloudSnow, Heart } from "lucide-react";
-
-const meditationSessions = [
-  {
-    title: "Guided Nighttime Body Scan",
-    duration: "15 min",
-    icon: Moon,
-    category: "Sleep",
-    color: "bg-indigo-500"
-  },
-  {
-    title: "Deep Sleep Hypnosis",
-    duration: "20 min", 
-    icon: CloudSnow,
-    category: "Sleep",
-    color: "bg-purple-500"
-  },
-  {
-    title: "Ocean Wave Sleep Meditation",
-    duration: "30 min",
-    icon: Waves,
-    category: "Relaxation",
-    color: "bg-blue-500"
-  },
-  {
-    title: "Weighted Blanket Visualization",
-    duration: "12 min",
-    icon: Heart,
-    category: "Comfort",
-    color: "bg-pink-500"
-  }
-];
-
+const meditationSessions = [{
+  title: "Guided Nighttime Body Scan",
+  duration: "15 min",
+  icon: Moon,
+  category: "Sleep",
+  color: "bg-indigo-500"
+}, {
+  title: "Deep Sleep Hypnosis",
+  duration: "20 min",
+  icon: CloudSnow,
+  category: "Sleep",
+  color: "bg-purple-500"
+}, {
+  title: "Ocean Wave Sleep Meditation",
+  duration: "30 min",
+  icon: Waves,
+  category: "Relaxation",
+  color: "bg-blue-500"
+}, {
+  title: "Weighted Blanket Visualization",
+  duration: "12 min",
+  icon: Heart,
+  category: "Comfort",
+  color: "bg-pink-500"
+}];
 const MindfulnessSection = () => {
-  return (
-    <section className="py-20 relative overflow-hidden">
+  return <section className="py-20 relative overflow-hidden">
       {/* Background with cloud-like gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-purple-50 to-indigo-100"></div>
+      
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
@@ -80,7 +71,9 @@ const MindfulnessSection = () => {
                         </div>
                         <div className="flex-1">
                           <div className="w-full bg-white/30 rounded-full h-1">
-                            <div className="bg-white h-1 rounded-full" style={{ width: '60%' }}></div>
+                            <div className="bg-white h-1 rounded-full" style={{
+                            width: '60%'
+                          }}></div>
                           </div>
                           <div className="flex justify-between text-xs text-white/80 mt-1">
                             <span>12:30</span>
@@ -136,8 +129,7 @@ const MindfulnessSection = () => {
 
           {/* Meditation Sessions Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {meditationSessions.map((session, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
+            {meditationSessions.map((session, index) => <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group">
                 <CardContent className="p-6">
                   <div className={`w-16 h-16 ${session.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <session.icon className="w-8 h-8 text-white" />
@@ -160,8 +152,7 @@ const MindfulnessSection = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+              </Card>)}
           </div>
 
           <div className="text-center mt-12">
@@ -171,8 +162,6 @@ const MindfulnessSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default MindfulnessSection;
