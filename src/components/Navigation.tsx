@@ -90,8 +90,8 @@ const Navigation = () => {
             </MindTalkButton>
           </div>
 
-          {/* Mobile Menu Button - Top Left */}
-          <div className="lg:hidden">
+          {/* Mobile Menu Button - Top Right */}
+          <div className="lg:hidden ml-auto">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <button className="p-2 text-white hover:text-mindtalk-orange">
