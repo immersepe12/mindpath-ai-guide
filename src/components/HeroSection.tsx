@@ -28,15 +28,13 @@ const HeroSection = () => {
 
       <div className="container mx-auto relative z-10 max-w-6xl">
         <div className="text-center text-white">
-          {/* Cadabams MindTalk Branding */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center">
-              <Brain className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-2xl sm:text-3xl lg:text-3xl font-bold">Cadabams</h1>
-              <p className="text-lg sm:text-xl lg:text-xl font-semibold text-white/90">MindTalk</p>
-            </div>
+          {/* Cadabams MindTalk Logo */}
+          <div className="flex justify-center mb-6 sm:mb-8">
+            <img 
+              src="/lovable-uploads/8009be16-5ad1-4bcd-bf1c-89c6b237bf20.png" 
+              alt="Cadabams MindTalk Logo"
+              className="h-16 sm:h-20 lg:h-24 w-auto object-contain"
+            />
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight text-white px-4">
@@ -47,8 +45,7 @@ const HeroSection = () => {
           </h2>
 
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-white/90 max-w-4xl mx-auto leading-relaxed px-4">
-            World's first AI-powered mental health program with 200+ assessments, 
-            150+ breathwork sessions, and expert therapy support. Complete recovery for just ₹4,499
+            World's first AI-powered mental health program with expert therapy support. Complete recovery for just ₹4,499
           </p>
 
           <div className="flex justify-center items-center mb-8 sm:mb-12 px-4">
