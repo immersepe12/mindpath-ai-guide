@@ -2,6 +2,7 @@
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Bot, MessageCircle, Brain, TrendingUp, Shield, Calendar, Phone, Clock } from "lucide-react";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 const AISection = () => {
   return (
@@ -156,7 +157,12 @@ const AISection = () => {
           </div>
 
           <div className="text-center mt-16">
-            <MindTalkButton variant="hero" size="hero" className="bg-white text-mindtalk-orange hover:bg-white/90">
+            <MindTalkButton 
+              variant="hero" 
+              size="hero" 
+              className="bg-white text-mindtalk-orange hover:bg-white/90"
+              onClick={scrollToForm}
+            >
               Start Your 90-Day Journey with Dr. Riya
             </MindTalkButton>
           </div>

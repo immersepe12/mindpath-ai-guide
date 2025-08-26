@@ -2,6 +2,7 @@
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Star, Users, Clock, Award } from "lucide-react";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 const doctors = [
   {
@@ -126,6 +127,7 @@ const DoctorBookingSection = () => {
               variant="hero" 
               size="lg" 
               className="w-full sm:w-auto text-sm sm:text-base px-6 sm:px-8"
+              onClick={scrollToForm}
             >
               <span className="hidden sm:inline">Start Your 90-Day Journey - ₹4,499</span>
               <span className="sm:hidden">Start Journey - ₹4,499</span>

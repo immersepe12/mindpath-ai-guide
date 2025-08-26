@@ -1,6 +1,7 @@
 
 import { MindTalkButton } from "./ui/button-variants";
 import { ArrowRight, Clock, Shield, Heart } from "lucide-react";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 const CTASection = () => {
   return (
@@ -24,6 +25,7 @@ const CTASection = () => {
               variant="hero" 
               size="hero" 
               className="bg-white text-mindtalk-orange hover:bg-white/90 shadow-2xl w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 h-12 sm:h-14"
+              onClick={scrollToForm}
             >
               <Heart className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Start Your 90-Day Journey - ₹4,499</span>

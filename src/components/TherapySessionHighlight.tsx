@@ -2,6 +2,7 @@
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Video, Calendar, MessageCircle, User, Clock, CheckCircle, ArrowRight } from "lucide-react";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 interface TherapySessionHighlightProps {
   variant?: 'journeys' | 'daily';
@@ -123,6 +124,7 @@ const TherapySessionHighlight = ({ variant = 'journeys' }: TherapySessionHighlig
                   variant="ai" 
                   size="lg"
                   className="w-full sm:w-auto"
+                  onClick={scrollToForm}
                 >
                   Schedule Your First Session
                 </MindTalkButton>

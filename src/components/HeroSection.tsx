@@ -1,6 +1,7 @@
 
 import { MindTalkButton } from "./ui/button-variants";
 import { ArrowRight, Brain, Heart, Sparkles } from "lucide-react";
+import { scrollToForm } from "@/utils/scrollToForm";
 
 const HeroSection = () => {
   return (
@@ -55,6 +56,7 @@ const HeroSection = () => {
               variant="hero" 
               size="hero" 
               className="bg-white text-mindtalk-orange hover:bg-white/90 shadow-2xl w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 h-12 sm:h-14"
+              onClick={scrollToForm}
             >
               <span className="hidden sm:inline">Start Your 90-Day Journey</span>
               <span className="sm:hidden">Start Journey</span>
