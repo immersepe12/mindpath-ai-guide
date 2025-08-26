@@ -15,8 +15,8 @@ const Index = () => {
       <HeroSection />
       <DailyJourneySection />
       <TherapySessionHighlight variant="journeys" />
-      <JourneysSection />
       <AISection />
+      <JourneysSection />
       <DoctorBookingSection />
       <PricingSection />
       <TestimonialsSection />
