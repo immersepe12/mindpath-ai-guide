@@ -102,8 +102,6 @@ const JourneysSection = () => {
         </div>
       </div>
       
-      <TherapySessionHighlight variant="journeys" />
-      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mt-8 sm:mt-12 px-4">
           <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
