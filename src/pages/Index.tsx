@@ -1,3 +1,5 @@
+
+import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import JourneysSection from "@/components/JourneysSection";
 import DailyJourneySection from "@/components/DailyJourneySection";
@@ -12,15 +14,30 @@ import LeadCaptureForm from "@/components/LeadCaptureForm";
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <HeroSection />
+      <Navigation />
+      <div id="hero">
+        <HeroSection />
+      </div>
       <LeadCaptureForm />
-      <DailyJourneySection />
+      <div id="daily-journey">
+        <DailyJourneySection />
+      </div>
       <TherapySessionHighlight variant="journeys" />
-      <AISection />
-      <JourneysSection />
-      <DoctorBookingSection />
-      <PricingSection />
-      <TestimonialsSection />
+      <div id="ai-section">
+        <AISection />
+      </div>
+      <div id="journeys">
+        <JourneysSection />
+      </div>
+      <div id="doctor-booking">
+        <DoctorBookingSection />
+      </div>
+      <div id="pricing">
+        <PricingSection />
+      </div>
+      <div id="testimonials">
+        <TestimonialsSection />
+      </div>
       <CTASection />
     </div>
   );

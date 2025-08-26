@@ -5,7 +5,7 @@ import { scrollToForm } from "@/utils/scrollToForm";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8 pt-16">
       {/* Gradient Background */}
       <div className="absolute inset-0 gradient-healing"></div>
       
