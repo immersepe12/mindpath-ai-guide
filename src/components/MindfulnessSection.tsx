@@ -43,11 +43,11 @@ const MindfulnessSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-            Choose Your Mindful Journey
+            150+ Breathwork & Visualization Sessions
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Access a library of guided meditations, breathwork sessions, and sleep stories 
-            designed to support your mental wellness every step of the way
+            Your 90-day program includes a comprehensive library of guided meditations, breathwork sessions, 
+            and sleep stories designed to support your mental wellness journey
           </p>
         </div>
 
@@ -67,7 +67,7 @@ const MindfulnessSection = () => {
                   
                   <div className="p-6 relative z-10 h-full flex flex-col">
                     <div className="text-center text-white mb-8">
-                      <h3 className="text-lg font-semibold mb-2">Good Evening</h3>
+                      <h3 className="text-lg font-semibold mb-2">Day 45 of Your Journey</h3>
                       <p className="text-sm opacity-90">Time to unwind and relax</p>
                     </div>
 
@@ -91,7 +91,7 @@ const MindfulnessSection = () => {
                     </div>
 
                     <div className="text-center text-white">
-                      <p className="text-sm opacity-90 mb-4">Choose your mindful journey</p>
+                      <p className="text-sm opacity-90 mb-4">Part of your 90-day program</p>
                     </div>
                   </div>
                 </div>
@@ -102,12 +102,11 @@ const MindfulnessSection = () => {
             <div className="space-y-8 order-1 lg:order-2">
               <div>
                 <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                  Meditation & Breathwork Library
+                  Complete Wellness Library
                 </h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  Access professionally crafted audio sessions designed to reduce stress, 
-                  improve sleep, and enhance emotional well-being. Each session is integrated 
-                  with your recovery journey.
+                  Access 150+ professionally crafted breathwork and visualization sessions designed to reduce stress, 
+                  improve sleep, and enhance emotional well-being. All integrated with your 90-day recovery journey.
                 </p>
               </div>
 
@@ -117,8 +116,8 @@ const MindfulnessSection = () => {
                     <div className="w-12 h-12 bg-mindtalk-blue rounded-full flex items-center justify-center mx-auto mb-2">
                       <Play className="w-6 h-6 text-white" />
                     </div>
-                    <h4 className="font-semibold text-sm">50+ Sessions</h4>
-                    <p className="text-xs text-gray-600">Audio library</p>
+                    <h4 className="font-semibold text-sm">150+ Sessions</h4>
+                    <p className="text-xs text-gray-600">Complete library</p>
                   </div>
                 </Card>
 
@@ -156,8 +155,8 @@ const MindfulnessSection = () => {
                   
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">{session.duration}</span>
-                    <div className="w-8 h-8 bg-mindtalk-orange rounded-full flex items-center justify-center">
-                      <Play className="w-4 h-4 text-white" />
+                    <div className="bg-green-100 px-2 py-1 rounded-full">
+                      <span className="text-xs text-green-800 font-medium">Included</span>
                     </div>
                   </div>
                 </CardContent>
@@ -166,8 +165,8 @@ const MindfulnessSection = () => {
           </div>
 
           <div className="text-center mt-12">
-            <MindTalkButton variant="ai" size="lg">
-              Explore Full Library
+            <MindTalkButton variant="hero" size="lg">
+              Start Your 90-Day Journey - ₹4,499
             </MindTalkButton>
           </div>
         </div>

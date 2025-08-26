@@ -36,11 +36,11 @@ const DoctorBookingSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-            Expert Therapists at Your Fingertips
+            Expert Therapists in Your 90-Day Journey
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Book sessions with India's leading mental health professionals. 
-            15 specialized doctors available to guide your recovery journey.
+            Your program includes 12 sessions with India's leading mental health professionals
+            over your complete 90-day recovery journey.
           </p>
         </div>
 
@@ -60,8 +60,8 @@ const DoctorBookingSection = () => {
               <div className="text-gray-600">Average Rating</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-mindtalk-purple mb-2">24/7</div>
-              <div className="text-gray-600">Availability</div>
+              <div className="text-3xl font-bold text-mindtalk-purple mb-2">90 Days</div>
+              <div className="text-gray-600">Complete Program</div>
             </div>
           </div>
 
@@ -104,9 +104,11 @@ const DoctorBookingSection = () => {
                     </div>
                   </div>
 
-                  <MindTalkButton variant="journey" className="w-full mt-4">
-                    Book Session
-                  </MindTalkButton>
+                  <div className="mt-4 p-3 bg-orange-50 rounded-lg text-center">
+                    <p className="text-sm text-mindtalk-orange font-medium">
+                      Included in your 90-day program
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -115,13 +117,13 @@ const DoctorBookingSection = () => {
           {/* Bottom CTA */}
           <div className="text-center bg-white rounded-2xl p-8 shadow-lg">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to Start Your Recovery Journey?
+              12 Expert Therapy Sessions Included
             </h3>
             <p className="text-gray-600 mb-6">
-              Your first session includes a comprehensive assessment and personalized journey planning
+              Your 90-day journey includes comprehensive assessment and personalized therapy with these expert professionals
             </p>
             <MindTalkButton variant="hero" size="lg">
-              Book Your First Session
+              Start Your 90-Day Journey - ₹4,499
             </MindTalkButton>
           </div>
         </div>
