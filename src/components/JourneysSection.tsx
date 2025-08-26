@@ -1,7 +1,7 @@
-
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Heart, Briefcase, Users, Zap, CheckCircle, Clock, Target } from "lucide-react";
+import TherapySessionHighlight from "./TherapySessionHighlight";
 
 const journeys = [
   {
@@ -100,7 +100,11 @@ const JourneysSection = () => {
             </Card>
           ))}
         </div>
-
+      </div>
+      
+      <TherapySessionHighlight variant="journeys" />
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mt-8 sm:mt-12 px-4">
           <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6">
             All journeys are part of your complete 90-day recovery program

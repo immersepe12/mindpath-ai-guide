@@ -1,8 +1,8 @@
-
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Trophy, Star, CheckCircle, Info, Calendar, Target } from "lucide-react";
 import { Progress } from "./ui/progress";
+import TherapySessionHighlight from "./TherapySessionHighlight";
 
 const DailyJourneySection = () => {
   // Generate 90 days for the calendar
@@ -110,6 +110,9 @@ const DailyJourneySection = () => {
                       </CardContent>
                     </Card>
                   </div>
+
+                  {/* Add Therapy Session Highlight in Mobile Interface */}
+                  <TherapySessionHighlight variant="daily" />
 
                   {/* Current Day */}
                   <div className="mx-3 md:mx-4 mb-3 md:mb-4">
