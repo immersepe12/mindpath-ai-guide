@@ -29,11 +29,11 @@ const HeroSection = () => {
       <div className="container mx-auto relative z-10 max-w-6xl">
         <div className="text-center text-white">
           {/* Cadabams MindTalk Logo */}
-          <div className="flex justify-center mb-6 sm:mb-8">
+          <div className="flex justify-center mb-8 sm:mb-10 mt-6 sm:mt-8">
             <img 
               src="/lovable-uploads/848a7388-361c-46c2-b31c-c02f1f5ce9e0.png" 
               alt="Cadabams MindTalk Logo"
-              className="h-24 sm:h-28 lg:h-36 xl:h-40 w-auto object-contain"
+              className="h-16 sm:h-24 md:h-28 lg:h-36 xl:h-40 w-auto object-contain"
             />
           </div>
 
