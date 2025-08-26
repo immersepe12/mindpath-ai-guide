@@ -2,6 +2,7 @@
 import HeroSection from "@/components/HeroSection";
 import JourneysSection from "@/components/JourneysSection";
 import DailyJourneySection from "@/components/DailyJourneySection";
+import TherapySessionHighlight from "@/components/TherapySessionHighlight";
 import AISection from "@/components/AISection";
 import DoctorBookingSection from "@/components/DoctorBookingSection";
 import PricingSection from "@/components/PricingSection";
@@ -12,8 +13,9 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <HeroSection />
-      <JourneysSection />
       <DailyJourneySection />
+      <TherapySessionHighlight variant="journeys" />
+      <JourneysSection />
       <AISection />
       <DoctorBookingSection />
       <PricingSection />
