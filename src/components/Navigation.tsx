@@ -65,33 +65,19 @@ const Navigation = () => {
             />
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navigationItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  activeSection === item.id
-                    ? "text-mindtalk-orange"
-                    : "text-gray-700 hover:text-mindtalk-orange"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-            <MindTalkButton
-              variant="hero"
-              size="sm"
-              onClick={handleGetStartedClick}
-              className="ml-4"
-            >
-              Get Started
-            </MindTalkButton>
-          </div>
+          {/* Mobile Logo and Menu Container */}
+          <div className="flex items-center justify-between w-full lg:hidden">
+            {/* Mobile Logo - Left Side */}
+            <div className="flex-shrink-0">
+              <img 
+                src="/lovable-uploads/376b91f1-8c27-402b-93e5-a13e20bd13ed.png" 
+                alt="Cadabams MindTalk"
+                className="h-8 w-auto cursor-pointer"
+                onClick={() => handleNavClick("hero")}
+              />
+            </div>
 
-          {/* Mobile Menu Button - Top Right */}
-          <div className="lg:hidden ml-auto">
+            {/* Mobile Menu Button - Right Side */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <button className="p-2 text-white hover:text-mindtalk-orange">
@@ -137,6 +123,31 @@ const Navigation = () => {
                 </div>
               </SheetContent>
             </Sheet>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            {navigationItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  activeSection === item.id
+                    ? "text-mindtalk-orange"
+                    : "text-gray-700 hover:text-mindtalk-orange"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+            <MindTalkButton
+              variant="hero"
+              size="sm"
+              onClick={handleGetStartedClick}
+              className="ml-4"
+            >
+              Get Started
+            </MindTalkButton>
           </div>
         </div>
       </div>
