@@ -58,7 +58,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <img 
-              src="/lovable-uploads/848a7388-361c-46c2-b31c-c02f1f5ce9e0.png" 
+              src="/lovable-uploads/0a99fb1e-f879-44b2-bb75-a5250bb2c95a.png" 
               alt="Cadabams MindTalk"
               className="h-10 w-auto cursor-pointer"
               onClick={() => handleNavClick("hero")}
@@ -102,7 +102,7 @@ const Navigation = () => {
                 <SheetHeader>
                   <SheetTitle>
                     <img 
-                      src="/lovable-uploads/848a7388-361c-46c2-b31c-c02f1f5ce9e0.png" 
+                      src="/lovable-uploads/0a99fb1e-f879-44b2-bb75-a5250bb2c95a.png" 
                       alt="Cadabams MindTalk"
                       className="h-10 w-auto"
                     />
