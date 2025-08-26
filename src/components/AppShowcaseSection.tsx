@@ -1,6 +1,6 @@
 
 import { Card, CardContent } from "./ui/card";
-import { Play, Calendar, BookOpen, HeadphonesIcon, FileText, Pill } from "lucide-react";
+import { Calendar, BookOpen, HeadphonesIcon, FileText, Pill, TrendingUp } from "lucide-react";
 
 const AppShowcaseSection = () => {
   return (
@@ -8,11 +8,11 @@ const AppShowcaseSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-            Your Personal Recovery Companion
+            Your Personal 90-Day Recovery Companion
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Track your progress, access expert resources, and stay connected with your therapy journey 
-            through our intuitive mobile app
+            Track your progress through 200+ assessments, access 150+ breathwork sessions, and stay connected 
+            with your therapy journey through our intuitive mobile app
           </p>
         </div>
 
@@ -22,10 +22,10 @@ const AppShowcaseSection = () => {
             <div className="space-y-8">
               <div>
                 <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                  Track Your Journey Progress
+                  Track Your 90-Day Journey Progress
                 </h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  See your recovery journey unfold day by day. Our "30 Days Emotional Reset" program 
+                  See your recovery journey unfold day by day. Our "90 Days Emotional Reset" program 
                   breaks down your healing into manageable daily micro-tasks with clear progress tracking.
                 </p>
               </div>
@@ -34,11 +34,11 @@ const AppShowcaseSection = () => {
                 <Card className="p-4 border border-mindtalk-orange/20">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-mindtalk-orange rounded-lg flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-white" />
+                      <FileText className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-semibold">Daily Tasks</h4>
-                      <p className="text-sm text-gray-600">Micro-tasks & assessments</p>
+                      <h4 className="font-semibold">200+ Assessments</h4>
+                      <p className="text-sm text-gray-600">Daily progress tracking</p>
                     </div>
                   </div>
                 </Card>
@@ -46,11 +46,11 @@ const AppShowcaseSection = () => {
                 <Card className="p-4 border border-mindtalk-green/20">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-mindtalk-green rounded-lg flex items-center justify-center">
-                      <BookOpen className="w-5 h-5 text-white" />
+                      <HeadphonesIcon className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-semibold">Progress Tracking</h4>
-                      <p className="text-sm text-gray-600">Visual journey completion</p>
+                      <h4 className="font-semibold">150+ Breathwork</h4>
+                      <p className="text-sm text-gray-600">Guided sessions & visualizations</p>
                     </div>
                   </div>
                 </Card>
@@ -64,18 +64,18 @@ const AppShowcaseSection = () => {
                   <div className="p-6 space-y-4">
                     <div className="text-center">
                       <h4 className="text-lg font-semibold text-gray-900">Good Morning</h4>
-                      <p className="text-sm text-gray-600">Let's continue your journey</p>
+                      <p className="text-sm text-gray-600">Let's continue your 90-day journey</p>
                     </div>
                     
                     <div className="bg-gradient-to-r from-mindtalk-orange to-mindtalk-orange-light rounded-2xl p-4 text-white">
-                      <h3 className="font-semibold mb-2">30 Days Emotional Reset</h3>
+                      <h3 className="font-semibold mb-2">90 Days Emotional Reset</h3>
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-full bg-white/30 rounded-full h-2">
                           <div className="bg-white h-2 rounded-full" style={{ width: '40%' }}></div>
                         </div>
                         <span className="text-sm">40%</span>
                       </div>
-                      <p className="text-sm opacity-90">Day 12 of 30 • Keep going!</p>
+                      <p className="text-sm opacity-90">Day 36 of 90 • Keep going!</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
@@ -88,12 +88,12 @@ const AppShowcaseSection = () => {
                         <p className="text-xs font-medium">Assessments</p>
                       </Card>
                       <Card className="p-3 text-center">
-                        <Pill className="w-6 h-6 text-mindtalk-purple mx-auto mb-2" />
-                        <p className="text-xs font-medium">Prescriptions</p>
+                        <TrendingUp className="w-6 h-6 text-mindtalk-purple mx-auto mb-2" />
+                        <p className="text-xs font-medium">Progress</p>
                       </Card>
                       <Card className="p-3 text-center">
-                        <Play className="w-6 h-6 text-mindtalk-orange mx-auto mb-2" />
-                        <p className="text-xs font-medium">Videos</p>
+                        <Calendar className="w-6 h-6 text-mindtalk-orange mx-auto mb-2" />
+                        <p className="text-xs font-medium">Daily Tasks</p>
                       </Card>
                     </div>
                   </div>
@@ -106,11 +106,11 @@ const AppShowcaseSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="p-6 text-center border-0 shadow-lg">
               <div className="w-16 h-16 bg-mindtalk-orange rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-8 h-8 text-white" />
+                <FileText className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Daily Micro-Tasks</h3>
+              <h3 className="text-xl font-semibold mb-3">200+ Assessments</h3>
               <p className="text-gray-600">
-                Small, manageable tasks designed to build lasting habits and promote continuous healing
+                Comprehensive mood tracking and progress assessments designed to personalize your 90-day journey
               </p>
             </Card>
 
@@ -118,19 +118,19 @@ const AppShowcaseSection = () => {
               <div className="w-16 h-16 bg-mindtalk-green rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <HeadphonesIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Audio & Video Resources</h3>
+              <h3 className="text-xl font-semibold mb-3">150+ Breathwork Sessions</h3>
               <p className="text-gray-600">
-                Guided meditations, breathwork sessions, and educational content accessible anytime
+                Guided meditations, breathing exercises, and visualization sessions accessible anytime
               </p>
             </Card>
 
             <Card className="p-6 text-center border-0 shadow-lg">
               <div className="w-16 h-16 bg-mindtalk-blue rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <FileText className="w-8 h-8 text-white" />
+                <Calendar className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Smart Assessments</h3>
+              <h3 className="text-xl font-semibold mb-3">Daily Micro-Tasks</h3>
               <p className="text-gray-600">
-                Regular mood tracking and progress assessments that help personalize your journey
+                Small, manageable tasks designed to build lasting habits throughout your 90-day program
               </p>
             </Card>
           </div>

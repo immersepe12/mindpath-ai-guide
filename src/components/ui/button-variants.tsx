@@ -9,9 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        hero: "gradient-healing text-white hover:scale-105 shadow-lg hover:shadow-xl font-semibold",
+        hero: "bg-mindtalk-orange text-white hover:bg-mindtalk-orange/90 shadow-lg hover:shadow-xl font-semibold",
         journey: "bg-mindtalk-green text-white hover:bg-mindtalk-green/90 shadow-md hover:shadow-lg",
-        ai: "gradient-calm text-white hover:scale-105 shadow-md hover:shadow-lg font-medium",
+        ai: "bg-mindtalk-blue text-white hover:bg-mindtalk-blue/90 shadow-md hover:shadow-lg font-medium",
         outline: "border-2 border-mindtalk-orange text-mindtalk-orange hover:bg-mindtalk-orange hover:text-white",
         ghost: "text-mindtalk-orange hover:bg-mindtalk-orange/10"
       },

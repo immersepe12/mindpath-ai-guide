@@ -11,8 +11,8 @@ const journeys = [
     icon: Zap,
     gradient: "from-blue-500 to-purple-600",
     features: ["Breathing techniques", "Cognitive restructuring", "Panic management", "Sleep improvement"],
-    duration: "30 days",
-    sessions: "Weekly check-ins"
+    duration: "90 days",
+    sessions: "12 therapy sessions"
   },
   {
     id: 2,
@@ -21,8 +21,8 @@ const journeys = [
     icon: Heart,
     gradient: "from-pink-500 to-red-500",
     features: ["Mood tracking", "Behavioral activation", "Thought patterns", "Energy building"],
-    duration: "30 days",
-    sessions: "Bi-weekly sessions"
+    duration: "90 days",
+    sessions: "12 therapy sessions"
   },
   {
     id: 3,
@@ -31,8 +31,8 @@ const journeys = [
     icon: Users,
     gradient: "from-green-500 to-emerald-600",
     features: ["Communication skills", "Boundary setting", "Conflict resolution", "Emotional intelligence"],
-    duration: "30 days",
-    sessions: "Weekly coaching"
+    duration: "90 days",
+    sessions: "12 therapy sessions"
   },
   {
     id: 4,
@@ -41,8 +41,8 @@ const journeys = [
     icon: Briefcase,
     gradient: "from-orange-500 to-amber-600",
     features: ["Time management", "Stress reduction", "Career clarity", "Energy restoration"],
-    duration: "30 days",
-    sessions: "Weekly mentoring"
+    duration: "90 days",
+    sessions: "12 therapy sessions"
   }
 ];
 
@@ -52,10 +52,10 @@ const JourneysSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-            Choose Your Recovery Journey
+            Choose Your 90-Day Recovery Path
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Each journey is carefully crafted with daily micro-tasks, assessments, and expert sessions 
+            Each journey includes 200+ assessments, 150+ breathwork sessions, and 12 expert therapy sessions 
             tailored to your specific mental health goals
           </p>
         </div>
@@ -95,13 +95,6 @@ const JourneysSection = () => {
                     </div>
                   ))}
                 </div>
-
-                <MindTalkButton 
-                  variant="journey" 
-                  className="w-full group-hover:scale-105 transition-transform duration-300"
-                >
-                  Start This Journey
-                </MindTalkButton>
               </CardContent>
             </Card>
           ))}
@@ -109,10 +102,10 @@ const JourneysSection = () => {
 
         <div className="text-center mt-12">
           <p className="text-lg text-gray-600 mb-6">
-            Can't decide? Our AI will recommend the perfect journey combination for you
+            All journeys are part of your complete 90-day recovery program
           </p>
-          <MindTalkButton variant="outline" size="lg">
-            Get AI Recommendation
+          <MindTalkButton variant="hero" size="lg">
+            Start Your 90-Day Journey - ₹4,499
           </MindTalkButton>
         </div>
       </div>

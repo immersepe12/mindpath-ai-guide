@@ -38,25 +38,22 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
             Your Complete
-            <span className="block gradient-warm bg-clip-text text-transparent">
+            <span className="block text-white">
               90-Day Recovery Journey
             </span>
           </h2>
 
           <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-3xl mx-auto leading-relaxed">
-            World's first AI-powered mental health program combining personalized daily micro-tasks 
-            with expert therapy sessions. Complete recovery for just ₹4,499
+            World's first AI-powered mental health program with 200+ assessments, 
+            150+ breathwork sessions, and expert therapy support. Complete recovery for just ₹4,499
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <MindTalkButton variant="hero" size="hero" className="bg-white text-mindtalk-orange hover:bg-white/90">
+          <div className="flex justify-center items-center mb-12">
+            <MindTalkButton variant="hero" size="hero" className="bg-white text-mindtalk-orange hover:bg-white/90 shadow-2xl">
               Start Your 90-Day Journey
               <ArrowRight className="ml-2 w-5 h-5" />
-            </MindTalkButton>
-            <MindTalkButton variant="outline" size="hero" className="border-white text-white hover:bg-white hover:text-mindtalk-orange">
-              Try AI Dr. Riya
             </MindTalkButton>
           </div>
 
@@ -67,12 +64,12 @@ const HeroSection = () => {
               <div className="text-white/80">Expert therapy sessions over 90 days</div>
             </div>
             <div className="p-4">
-              <div className="text-3xl font-bold mb-2">Daily Tasks</div>
-              <div className="text-white/80">AI-guided micro-tasks & assessments</div>
+              <div className="text-3xl font-bold mb-2">200+ Resources</div>
+              <div className="text-white/80">Assessments, breathwork & visualizations</div>
             </div>
             <div className="p-4">
               <div className="text-3xl font-bold mb-2">₹4,499</div>
-              <div className="text-white/80">Complete recovery package</div>
+              <div className="text-white/80">Complete 90-day recovery package</div>
             </div>
           </div>
         </div>
