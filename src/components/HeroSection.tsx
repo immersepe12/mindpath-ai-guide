@@ -31,7 +31,7 @@ const HeroSection = () => {
           {/* Cadabams MindTalk Logo */}
           <div className="flex justify-center mb-6 sm:mb-8">
             <img 
-              src="/lovable-uploads/9fc56fae-65b1-47d5-a395-30bc7c73d5b1.png" 
+              src="/lovable-uploads/848a7388-361c-46c2-b31c-c02f1f5ce9e0.png" 
               alt="Cadabams MindTalk Logo"
               className="h-24 sm:h-28 lg:h-36 xl:h-40 w-auto object-contain"
             />
