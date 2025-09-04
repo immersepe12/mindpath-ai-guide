@@ -3,13 +3,22 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Heart, ArrowRight, Phone, Mail, User } from "lucide-react";
+
+// Extend window object for Freshworks CRM
+declare global {
+  interface Window {
+    fw?: {
+      createLead?: (data: any) => Promise<any>;
+    };
+  }
+}
 
 const formSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -22,6 +31,7 @@ type FormData = z.infer<typeof formSchema>;
 const LeadCaptureForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -32,15 +42,63 @@ const LeadCaptureForm = () => {
     }
   });
 
+  const getLeadSource = () => {
+    const path = location.pathname;
+    switch (path) {
+      case '/stress-anxiety':
+        return 'Stress & Anxiety Recovery Program';
+      case '/depression':
+        return 'Depression & Emotional Reset Program';
+      case '/relationships':
+        return 'Relationships & Family Program';
+      case '/workplace':
+        return 'Workplace Burnout Recovery Program';
+      default:
+        return 'MindTalk Homepage';
+    }
+  };
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    console.log("Form submitted:", data);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const leadData = {
+      ...data,
+      leadSource: getLeadSource(),
+      currentPage: location.pathname,
+      timestamp: new Date().toISOString(),
+      program: 'MindTalk 90-Day Recovery Journey'
+    };
     
-    // Navigate to thank you page
-    navigate("/thank-you");
+    console.log("Lead submitted:", leadData);
+    
+    try {
+      // Freshworks lead creation (if available)
+      if (window.fw && typeof window.fw.createLead === 'function') {
+        await window.fw.createLead({
+          first_name: data.firstName,
+          email: data.email,
+          mobile_number: data.mobile,
+          lead_source: leadData.leadSource,
+          custom_field: {
+            journey_type: leadData.leadSource,
+            page_source: leadData.currentPage,
+            program: leadData.program
+          }
+        });
+      }
+      
+      // Simulate additional API call for internal tracking
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Navigate to thank you page
+      navigate("/thank-you");
+    } catch (error) {
+      console.error("Error submitting lead:", error);
+      // Still navigate to thank you page even if tracking fails
+      navigate("/thank-you");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
