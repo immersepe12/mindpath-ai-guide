@@ -102,14 +102,7 @@ const LeadCaptureForm = () => {
           email: data.email,
           mobile_number: data.mobile,
           lead_source: leadSource,
-          CF_form_source_custom: fullUrl,
-          CF_utm_source: utmParams.utm_source,
-          CF_utm_medium: utmParams.utm_medium,
-          CF_utm_campaign: utmParams.utm_campaign,
-          CF_journey_type: leadSource,
-          CF_program: 'MindTalk 90-Day Recovery Journey',
-          CF_referrer: document.referrer || '',
-          CF_timestamp: new Date().toISOString()
+          cf_form_source_custom: fullUrl
         });
       }
       
