@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import { Heart, Briefcase, Users, Zap, CheckCircle, Clock, Target } from "lucide-react";
 import TherapySessionHighlight from "./TherapySessionHighlight";
 import { scrollToForm } from "@/utils/scrollToForm";
+import { Link } from "react-router-dom";
 
 const journeys = [
   {
@@ -13,7 +14,8 @@ const journeys = [
     gradient: "from-blue-500 to-purple-600",
     features: ["Breathing techniques", "Cognitive restructuring", "Panic management", "Sleep improvement"],
     duration: "90 days",
-    sessions: "12 therapy sessions"
+    sessions: "12 therapy sessions",
+    link: "/stress-anxiety"
   },
   {
     id: 2,
@@ -23,7 +25,8 @@ const journeys = [
     gradient: "from-pink-500 to-red-500",
     features: ["Mood tracking", "Behavioral activation", "Thought patterns", "Energy building"],
     duration: "90 days",
-    sessions: "12 therapy sessions"
+    sessions: "12 therapy sessions",
+    link: "/depression"
   },
   {
     id: 3,
@@ -33,7 +36,8 @@ const journeys = [
     gradient: "from-green-500 to-emerald-600",
     features: ["Communication skills", "Boundary setting", "Conflict resolution", "Emotional intelligence"],
     duration: "90 days",
-    sessions: "12 therapy sessions"
+    sessions: "12 therapy sessions",
+    link: "/relationships"
   },
   {
     id: 4,
@@ -43,7 +47,8 @@ const journeys = [
     gradient: "from-orange-500 to-amber-600",
     features: ["Time management", "Stress reduction", "Career clarity", "Energy restoration"],
     duration: "90 days",
-    sessions: "12 therapy sessions"
+    sessions: "12 therapy sessions",
+    link: "/workplace"
   }
 ];
 
@@ -63,7 +68,8 @@ const JourneysSection = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 max-w-7xl mx-auto">
           {journeys.map((journey, index) => (
-            <Card key={journey.id} className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 sm:hover:-translate-y-2 border-0 shadow-lg">
+            <Link key={journey.id} to={journey.link} className="block">
+              <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 sm:hover:-translate-y-2 border-0 shadow-lg cursor-pointer">
               <CardHeader className="pb-3 sm:pb-4 p-4 sm:p-6">
                 <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-r ${journey.gradient} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-105 sm:group-hover:scale-110 transition-transform duration-300`}>
                   <journey.icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
@@ -98,7 +104,8 @@ const JourneysSection = () => {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
