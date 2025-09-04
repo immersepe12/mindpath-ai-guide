@@ -58,15 +58,38 @@ const LeadCaptureForm = () => {
     }
   };
 
+  const getFullUrl = () => {
+    const domain = 'cadabamsmindtalk.com';
+    const path = location.pathname;
+    return `${domain}${path}`;
+  };
+
+  const getUtmParameters = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+      utm_source: urlParams.get('utm_source') || '',
+      utm_medium: urlParams.get('utm_medium') || '',
+      utm_campaign: urlParams.get('utm_campaign') || '',
+      utm_content: urlParams.get('utm_content') || '',
+      utm_term: urlParams.get('utm_term') || ''
+    };
+  };
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     
+    const utmParams = getUtmParameters();
+    const fullUrl = getFullUrl();
+    const leadSource = getLeadSource();
+    
     const leadData = {
       ...data,
-      leadSource: getLeadSource(),
+      leadSource,
       currentPage: location.pathname,
+      fullUrl,
       timestamp: new Date().toISOString(),
-      program: 'MindTalk 90-Day Recovery Journey'
+      program: 'MindTalk 90-Day Recovery Journey',
+      ...utmParams
     };
     
     console.log("Lead submitted:", leadData);
@@ -78,12 +101,15 @@ const LeadCaptureForm = () => {
           first_name: data.firstName,
           email: data.email,
           mobile_number: data.mobile,
-          lead_source: leadData.leadSource,
-          custom_field: {
-            journey_type: leadData.leadSource,
-            page_source: leadData.currentPage,
-            program: leadData.program
-          }
+          lead_source: leadSource,
+          CF_form_source_custom: fullUrl,
+          CF_utm_source: utmParams.utm_source,
+          CF_utm_medium: utmParams.utm_medium,
+          CF_utm_campaign: utmParams.utm_campaign,
+          CF_journey_type: leadSource,
+          CF_program: 'MindTalk 90-Day Recovery Journey',
+          CF_referrer: document.referrer || '',
+          CF_timestamp: new Date().toISOString()
         });
       }
       
