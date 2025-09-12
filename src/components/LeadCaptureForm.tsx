@@ -17,6 +17,7 @@ declare global {
     fw?: {
       createLead?: (data: any) => Promise<any>;
     };
+    dataLayer?: any[];
   }
 }
 
@@ -109,12 +110,22 @@ const LeadCaptureForm = () => {
       // Simulate additional API call for internal tracking
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Navigate to thank you page
-      navigate("/thank-you");
+      // Trigger GTM conversion event before navigation
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'form_submit_success',
+          form_type: 'lead_capture',
+          lead_source: leadSource,
+          email: data.email
+        });
+      }
+      
+      // Open thank you page in new tab for GTM conversion tracking
+      window.open('/thank-you', '_blank');
     } catch (error) {
       console.error("Error submitting lead:", error);
-      // Still navigate to thank you page even if tracking fails
-      navigate("/thank-you");
+      // Still open thank you page even if tracking fails
+      window.open('/thank-you', '_blank');
     } finally {
       setIsSubmitting(false);
     }
