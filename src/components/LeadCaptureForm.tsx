@@ -120,12 +120,28 @@ const LeadCaptureForm = () => {
         });
       }
       
-      // Open thank you page in new tab for GTM conversion tracking
-      window.open('/thank-you', '_blank');
+      // Create URL with conversion data for thank you page
+      const conversionParams = new URLSearchParams({
+        source: leadSource,
+        email: data.email,
+        conversion: 'lead_capture',
+        program: 'MindTalk 90-Day Recovery Journey',
+        value: '4499'
+      });
+      
+      // Open thank you page in new tab with conversion data
+      window.open(`/thank-you?${conversionParams.toString()}`, '_blank');
     } catch (error) {
       console.error("Error submitting lead:", error);
       // Still open thank you page even if tracking fails
-      window.open('/thank-you', '_blank');
+      const conversionParams = new URLSearchParams({
+        source: leadSource,
+        email: data.email,
+        conversion: 'lead_capture',
+        program: 'MindTalk 90-Day Recovery Journey',
+        value: '4499'
+      });
+      window.open(`/thank-you?${conversionParams.toString()}`, '_blank');
     } finally {
       setIsSubmitting(false);
     }

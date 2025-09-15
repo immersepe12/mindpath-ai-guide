@@ -1,10 +1,49 @@
 
+import { useEffect } from "react";
 import { MindTalkButton } from "@/components/ui/button-variants";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Brain, Phone, Mail, Calendar, ArrowRight, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 
+// Extend window object for GTM
+declare global {
+  interface Window {
+    dataLayer?: any[];
+  }
+}
+
 const ThankYou = () => {
+  useEffect(() => {
+    // Extract conversion data from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const source = urlParams.get('source');
+    const email = urlParams.get('email');
+    const conversion = urlParams.get('conversion');
+    const program = urlParams.get('program');
+    const value = urlParams.get('value');
+
+    // Fire GTM conversion event when page loads
+    if (window.dataLayer && conversion) {
+      window.dataLayer.push({
+        event: 'conversion_complete',
+        conversion_type: conversion,
+        lead_source: source,
+        email: email,
+        program: program,
+        conversion_value: value,
+        currency: 'INR',
+        page: '/thank-you'
+      });
+      
+      console.log('GTM conversion event fired:', {
+        event: 'conversion_complete',
+        conversion_type: conversion,
+        lead_source: source,
+        email: email
+      });
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-mindtalk-green/10 to-mindtalk-blue/10 flex items-center justify-center px-4">
       <div className="max-w-4xl mx-auto w-full">
