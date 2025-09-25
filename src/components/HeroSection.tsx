@@ -34,6 +34,9 @@ const HeroSection = () => {
               src="/lovable-uploads/848a7388-361c-46c2-b31c-c02f1f5ce9e0.png" 
               alt="Cadabams MindTalk Logo"
               className="h-16 sm:h-24 md:h-28 lg:h-36 xl:h-40 w-auto object-contain"
+              loading="eager"
+              width="320"
+              height="213"
             />
           </div>
 

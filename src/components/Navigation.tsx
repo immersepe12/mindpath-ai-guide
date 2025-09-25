@@ -62,6 +62,9 @@ const Navigation = () => {
               alt="Cadabams MindTalk"
               className="h-10 w-auto cursor-pointer"
               onClick={() => handleNavClick("hero")}
+              loading="lazy"
+              width="40"
+              height="40"
             />
           </div>
 
@@ -91,6 +94,9 @@ const Navigation = () => {
                       src="/lovable-uploads/0a99fb1e-f879-44b2-bb75-a5250bb2c95a.png" 
                       alt="Cadabams MindTalk"
                       className="h-10 w-auto"
+                      loading="lazy"
+                      width="40"
+                      height="40"
                     />
                   </SheetTitle>
                 </SheetHeader>
