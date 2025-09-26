@@ -17,6 +17,9 @@ declare global {
     fw?: {
       createLead?: (data: any) => Promise<any>;
     };
+    fwcrm?: {
+      set: (data: any) => void;
+    };
     dataLayer?: any[];
   }
 }
@@ -105,16 +108,28 @@ const LeadCaptureForm = () => {
       const formSourceCustom = getFormSourceCustom();
       console.log("Form Source Custom value:", formSourceCustom);
       
-      // Freshworks lead creation (if available)
-      if (window.fw && typeof window.fw.createLead === 'function') {
-        console.log("Freshworks available, creating lead with data:", {
-          first_name: data.firstName,
-          email: data.email,
-          mobile_number: data.mobile,
-          lead_source: leadSource,
-          cf_form_source_custom: formSourceCustom
+      // Freshworks contact creation/update (if available)
+      if (window.fwcrm && typeof window.fwcrm.set === 'function') {
+        console.log("Freshworks CRM available, creating/updating contact with data:", {
+          "Email": data.email,
+          "First Name": data.firstName,
+          "Mobile": data.mobile,
+          "Lead Source": leadSource,
+          "Form Source Custom": formSourceCustom
         });
         
+        window.fwcrm.set({
+          "Email": data.email,
+          "First Name": data.firstName,
+          "Mobile": data.mobile,
+          "Lead Source": leadSource,
+          "Form Source Custom": formSourceCustom
+        });
+        
+        console.log("Freshworks contact created/updated successfully");
+      } else if (window.fw && typeof window.fw.createLead === 'function') {
+        // Fallback to old method if new one isn't available
+        console.log("Using fallback Freshworks method");
         await window.fw.createLead({
           first_name: data.firstName,
           email: data.email,
@@ -122,10 +137,8 @@ const LeadCaptureForm = () => {
           lead_source: leadSource,
           cf_form_source_custom: formSourceCustom
         });
-        
-        console.log("Freshworks lead created successfully");
       } else {
-        console.log("Freshworks not available or createLead function not found");
+        console.log("Freshworks not available");
       }
       
       // Simulate additional API call for internal tracking
