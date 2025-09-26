@@ -102,15 +102,30 @@ const LeadCaptureForm = () => {
     console.log("Lead submitted:", leadData);
     
     try {
+      const formSourceCustom = getFormSourceCustom();
+      console.log("Form Source Custom value:", formSourceCustom);
+      
       // Freshworks lead creation (if available)
       if (window.fw && typeof window.fw.createLead === 'function') {
+        console.log("Freshworks available, creating lead with data:", {
+          first_name: data.firstName,
+          email: data.email,
+          mobile_number: data.mobile,
+          lead_source: leadSource,
+          cf_form_source_custom: formSourceCustom
+        });
+        
         await window.fw.createLead({
           first_name: data.firstName,
           email: data.email,
           mobile_number: data.mobile,
           lead_source: leadSource,
-          cf_form_source_custom: getFormSourceCustom()
+          cf_form_source_custom: formSourceCustom
         });
+        
+        console.log("Freshworks lead created successfully");
+      } else {
+        console.log("Freshworks not available or createLead function not found");
       }
       
       // Simulate additional API call for internal tracking
