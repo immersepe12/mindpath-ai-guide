@@ -65,6 +65,12 @@ const LeadCaptureForm = () => {
     return `${domain}${path}`;
   };
 
+  const getFormSourceCustom = () => {
+    const path = location.pathname;
+    const pageName = path === '/' ? 'Homepage' : path.replace('/', '').replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return `LP ${pageName}`;
+  };
+
   const getUtmParameters = () => {
     const urlParams = new URLSearchParams(window.location.search);
     return {
@@ -103,7 +109,7 @@ const LeadCaptureForm = () => {
           email: data.email,
           mobile_number: data.mobile,
           lead_source: leadSource,
-          cf_form_source_custom: fullUrl
+          cf_form_source_custom: getFormSourceCustom()
         });
       }
       
