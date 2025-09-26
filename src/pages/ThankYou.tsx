@@ -22,26 +22,43 @@ const ThankYou = () => {
     const program = urlParams.get('program');
     const value = urlParams.get('value');
 
-    // Fire GTM conversion event when page loads
-    if (window.dataLayer && conversion) {
-      window.dataLayer.push({
-        event: 'conversion_complete',
-        conversion_type: conversion,
-        lead_source: source,
-        email: email,
-        program: program,
-        conversion_value: value,
-        currency: 'INR',
-        page: '/thank-you'
-      });
-      
-      console.log('GTM conversion event fired:', {
-        event: 'conversion_complete',
-        conversion_type: conversion,
-        lead_source: source,
-        email: email
-      });
-    }
+    console.log('ThankYou page loaded with params:', { source, email, conversion, program, value });
+
+    // Add delay to ensure GTM is fully initialized
+    const fireConversionEvent = () => {
+      if (window.dataLayer && conversion) {
+        const eventData = {
+          event: 'conversion_complete',
+          conversion_type: conversion,
+          lead_source: source,
+          email: email,
+          program: program,
+          conversion_value: value,
+          currency: 'INR',
+          page: '/thank-you'
+        };
+        
+        window.dataLayer.push(eventData);
+        console.log('GTM conversion event fired successfully:', eventData);
+      } else {
+        console.warn('GTM dataLayer not available or missing conversion data:', {
+          hasDataLayer: !!window.dataLayer,
+          hasConversion: !!conversion
+        });
+      }
+    };
+
+    // Try immediately, then retry with delay if needed
+    fireConversionEvent();
+    
+    // Backup retry after 500ms to ensure GTM is ready
+    const retryTimeout = setTimeout(() => {
+      if (window.dataLayer && conversion) {
+        fireConversionEvent();
+      }
+    }, 500);
+
+    return () => clearTimeout(retryTimeout);
   }, []);
 
   return (

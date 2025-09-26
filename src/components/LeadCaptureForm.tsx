@@ -129,11 +129,11 @@ const LeadCaptureForm = () => {
         value: '4499'
       });
       
-      // Open thank you page in new tab with conversion data
-      window.open(`/thank-you?${conversionParams.toString()}`, '_blank');
+      // Navigate to thank you page in same tab to preserve GTM context
+      navigate(`/thank-you?${conversionParams.toString()}`);
     } catch (error) {
       console.error("Error submitting lead:", error);
-      // Still open thank you page even if tracking fails
+      // Still navigate to thank you page even if tracking fails
       const conversionParams = new URLSearchParams({
         source: leadSource,
         email: data.email,
@@ -141,7 +141,7 @@ const LeadCaptureForm = () => {
         program: 'MindTalk 90-Day Recovery Journey',
         value: '4499'
       });
-      window.open(`/thank-you?${conversionParams.toString()}`, '_blank');
+      navigate(`/thank-you?${conversionParams.toString()}`);
     } finally {
       setIsSubmitting(false);
     }
