@@ -11,6 +11,7 @@ import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 import LeadCaptureForm from "@/components/LeadCaptureForm";
+import LeadDebugger from "@/components/LeadDebugger";
 
 const Index = () => {
   return (
@@ -41,6 +42,7 @@ const Index = () => {
         <TestimonialsSection />
       </div>
       <CTASection />
+      <LeadDebugger />
     </div>
   );
 };

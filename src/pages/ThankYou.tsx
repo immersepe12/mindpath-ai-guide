@@ -4,6 +4,7 @@ import { MindTalkButton } from "@/components/ui/button-variants";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, Brain, Phone, Mail, Calendar, ArrowRight, Home } from "lucide-react";
 import { Link } from "react-router-dom";
+import LeadDebugger from "@/components/LeadDebugger";
 
 // Extend window object for GTM
 declare global {
@@ -21,8 +22,50 @@ const ThankYou = () => {
     const conversion = urlParams.get('conversion');
     const program = urlParams.get('program');
     const value = urlParams.get('value');
+    const submissionId = urlParams.get('submission_id');
+    const fwSuccess = urlParams.get('fw_success');
+    const hasError = urlParams.get('has_error');
 
-    console.log('ThankYou page loaded with params:', { source, email, conversion, program, value });
+    console.log('🔍 THANK YOU DEBUG: Page loaded with params:', { 
+      source, email, conversion, program, value, submissionId, fwSuccess, hasError 
+    });
+
+    // Enhanced user journey tracking
+    const visitData = {
+      visitId: `visit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      timestamp: new Date().toISOString(),
+      params: { source, email, conversion, program, value, submissionId, fwSuccess, hasError },
+      referrer: document.referrer,
+      userAgent: navigator.userAgent,
+      hasConversionParams: !!(source && email && conversion),
+      freshworksSuccess: fwSuccess === 'true',
+      hadFormError: hasError === 'true'
+    };
+
+    // Store visit data for analysis
+    try {
+      localStorage.setItem(`thank_you_visit_${visitData.visitId}`, JSON.stringify(visitData));
+      console.log('🔍 THANK YOU DEBUG: Visit data stored:', visitData);
+    } catch (e) {
+      console.warn('Could not store visit data:', e);
+    }
+
+    // Check if this is a direct access (no conversion params)
+    if (!source || !email || !conversion) {
+      console.warn('⚠️ THANK YOU DEBUG: Direct access detected - no conversion parameters found');
+      try {
+        const directAccessData = {
+          ...visitData,
+          accessType: 'direct',
+          warning: 'User accessed thank you page without proper conversion flow'
+        };
+        localStorage.setItem(`direct_access_${visitData.visitId}`, JSON.stringify(directAccessData));
+      } catch (e) {
+        console.warn('Could not store direct access data:', e);
+      }
+    } else {
+      console.log('✅ THANK YOU DEBUG: Valid conversion access detected');
+    }
 
     // Add delay to ensure GTM is fully initialized
     const fireConversionEvent = () => {
@@ -177,6 +220,7 @@ const ThankYou = () => {
           </CardContent>
         </Card>
       </div>
+      <LeadDebugger />
     </div>
   );
 };

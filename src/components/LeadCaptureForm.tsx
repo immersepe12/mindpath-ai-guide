@@ -102,79 +102,179 @@ const LeadCaptureForm = () => {
       ...utmParams
     };
     
-    console.log("Lead submitted:", leadData);
+    // Enhanced debugging: Store lead submission in localStorage for tracking
+    const submissionId = `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const debugData = {
+      submissionId,
+      ...leadData,
+      userAgent: navigator.userAgent,
+      timestamp: new Date().toISOString(),
+      fwCrmAvailable: !!(window.fwcrm && typeof window.fwcrm.set === 'function'),
+      fwAvailable: !!(window.fw && typeof window.fw.createLead === 'function'),
+      dataLayerAvailable: !!window.dataLayer
+    };
+    
+    try {
+      localStorage.setItem(`lead_submission_${submissionId}`, JSON.stringify(debugData));
+      console.log("🔍 LEAD DEBUG: Submission started", debugData);
+    } catch (e) {
+      console.warn("Could not store debug data in localStorage:", e);
+    }
+    
+    let freshworksSucess = false;
+    let freshworksError = null;
     
     try {
       const formSourceCustom = getFormSourceCustom();
-      console.log("Form Source Custom value:", formSourceCustom);
+      console.log("🔍 LEAD DEBUG: Form Source Custom value:", formSourceCustom);
       
-      // Freshworks contact creation/update (if available)
+      // Enhanced Freshworks integration with detailed logging
       if (window.fwcrm && typeof window.fwcrm.set === 'function') {
-        console.log("Freshworks CRM available, creating/updating contact with data:", {
+        console.log("🔍 LEAD DEBUG: Freshworks CRM available, attempting contact creation/update");
+        
+        const fwData = {
           "Email": data.email,
           "First Name": data.firstName,
           "Mobile": data.mobile,
           "Lead Source": leadSource,
           "Form Source Custom": formSourceCustom
-        });
+        };
         
-        window.fwcrm.set({
-          "Email": data.email,
-          "First Name": data.firstName,
-          "Mobile": data.mobile,
-          "Lead Source": leadSource,
-          "Form Source Custom": formSourceCustom
-        });
+        console.log("🔍 LEAD DEBUG: Sending to Freshworks:", fwData);
         
-        console.log("Freshworks contact created/updated successfully");
+        try {
+          window.fwcrm.set(fwData);
+          freshworksSucess = true;
+          console.log("✅ LEAD DEBUG: Freshworks contact created/updated successfully");
+          
+          // Track successful Freshworks submission
+          try {
+            const successData = { ...debugData, freshworksSuccess: true, freshworksMethod: 'fwcrm.set' };
+            localStorage.setItem(`lead_success_${submissionId}`, JSON.stringify(successData));
+          } catch (e) {
+            console.warn("Could not store success data:", e);
+          }
+          
+        } catch (fwError) {
+          freshworksError = fwError;
+          console.error("❌ LEAD DEBUG: Freshworks fwcrm.set failed:", fwError);
+        }
+        
       } else if (window.fw && typeof window.fw.createLead === 'function') {
-        // Fallback to old method if new one isn't available
-        console.log("Using fallback Freshworks method");
-        await window.fw.createLead({
-          first_name: data.firstName,
-          email: data.email,
-          mobile_number: data.mobile,
-          lead_source: leadSource,
-          cf_form_source_custom: formSourceCustom
-        });
+        console.log("🔍 LEAD DEBUG: Using fallback Freshworks method (fw.createLead)");
+        
+        try {
+          await window.fw.createLead({
+            first_name: data.firstName,
+            email: data.email,
+            mobile_number: data.mobile,
+            lead_source: leadSource,
+            cf_form_source_custom: formSourceCustom
+          });
+          freshworksSucess = true;
+          console.log("✅ LEAD DEBUG: Freshworks lead created successfully (fallback method)");
+          
+          // Track successful Freshworks submission
+          try {
+            const successData = { ...debugData, freshworksSuccess: true, freshworksMethod: 'fw.createLead' };
+            localStorage.setItem(`lead_success_${submissionId}`, JSON.stringify(successData));
+          } catch (e) {
+            console.warn("Could not store success data:", e);
+          }
+          
+        } catch (fwError) {
+          freshworksError = fwError;
+          console.error("❌ LEAD DEBUG: Freshworks fw.createLead failed:", fwError);
+        }
+        
       } else {
-        console.log("Freshworks not available");
+        console.warn("❌ LEAD DEBUG: Freshworks not available - neither fwcrm.set nor fw.createLead found");
+        console.log("🔍 LEAD DEBUG: Window object inspection:", {
+          hasFwcrm: !!window.fwcrm,
+          fwcrmSetType: typeof window.fwcrm?.set,
+          hasFw: !!window.fw,
+          fwCreateLeadType: typeof window.fw?.createLead
+        });
+      }
+      
+      // Store final submission result
+      try {
+        const finalData = {
+          ...debugData,
+          freshworksSuccess: freshworksSucess,
+          freshworksError: freshworksError?.message || null,
+          completedAt: new Date().toISOString()
+        };
+        localStorage.setItem(`lead_final_${submissionId}`, JSON.stringify(finalData));
+      } catch (e) {
+        console.warn("Could not store final data:", e);
       }
       
       // Simulate additional API call for internal tracking
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Trigger GTM conversion event before navigation
+      // Enhanced GTM tracking
       if (window.dataLayer) {
-        window.dataLayer.push({
+        const gtmData = {
           event: 'form_submit_success',
           form_type: 'lead_capture',
           lead_source: leadSource,
-          email: data.email
-        });
+          email: data.email,
+          submission_id: submissionId,
+          freshworks_success: freshworksSucess
+        };
+        window.dataLayer.push(gtmData);
+        console.log("✅ LEAD DEBUG: GTM event pushed:", gtmData);
+      } else {
+        console.warn("❌ LEAD DEBUG: GTM dataLayer not available");
       }
       
-      // Create URL with conversion data for thank you page
+      // Create URL with enhanced conversion data for thank you page
       const conversionParams = new URLSearchParams({
         source: leadSource,
         email: data.email,
         conversion: 'lead_capture',
         program: 'MindTalk 90-Day Recovery Journey',
-        value: '4499'
+        value: '4499',
+        submission_id: submissionId,
+        fw_success: freshworksSucess.toString()
       });
+      
+      console.log("🔍 LEAD DEBUG: Navigating to thank you page with params:", conversionParams.toString());
       
       // Navigate to thank you page in same tab to preserve GTM context
       navigate(`/thank-you?${conversionParams.toString()}`);
+      
     } catch (error) {
-      console.error("Error submitting lead:", error);
+      console.error("❌ LEAD DEBUG: Error submitting lead:", error);
+      
+      // Store error details
+      try {
+        const errorData = {
+          ...debugData,
+          error: error.message || 'Unknown error',
+          errorStack: error.stack,
+          freshworksSuccess: freshworksSucess,
+          errorAt: new Date().toISOString()
+        };
+        localStorage.setItem(`lead_error_${submissionId}`, JSON.stringify(errorData));
+      } catch (e) {
+        console.warn("Could not store error data:", e);
+      }
+      
       // Still navigate to thank you page even if tracking fails
       const conversionParams = new URLSearchParams({
         source: leadSource,
         email: data.email,
         conversion: 'lead_capture',
         program: 'MindTalk 90-Day Recovery Journey',
-        value: '4499'
+        value: '4499',
+        submission_id: submissionId,
+        fw_success: freshworksSucess.toString(),
+        has_error: 'true'
       });
+      
+      console.log("🔍 LEAD DEBUG: Navigating to thank you page after error with params:", conversionParams.toString());
       navigate(`/thank-you?${conversionParams.toString()}`);
     } finally {
       setIsSubmitting(false);
