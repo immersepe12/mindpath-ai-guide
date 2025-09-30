@@ -1,6 +1,7 @@
 
 import Navigation from "@/components/Navigation";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
+import WhatsAppFloating from "@/components/WhatsAppFloating";
 import HeroSection from "@/components/HeroSection";
 import JourneysSection from "@/components/JourneysSection";
 import DailyJourneySection from "@/components/DailyJourneySection";
@@ -18,6 +19,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Navigation />
       <StickyMobileCTA />
+      <WhatsAppFloating />
       <div id="hero">
         <HeroSection />
       </div>
