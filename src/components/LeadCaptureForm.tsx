@@ -129,8 +129,74 @@ const LeadCaptureForm = () => {
       console.log("🔍 LEAD DEBUG: Form Source Custom value:", formSourceCustom);
       
       // Enhanced Freshworks integration with detailed logging
-      if (window.fwcrm && typeof window.fwcrm.set === 'function') {
-        console.log("🔍 LEAD DEBUG: Freshworks CRM available, attempting contact creation/update");
+      if (window.fw && typeof window.fw.createLead === 'function') {
+        console.log("🔍 LEAD DEBUG: Creating/Updating Lead via fw.createLead with cf_form_source_custom");
+        
+        try {
+          await window.fw.createLead({
+            first_name: data.firstName,
+            email: data.email,
+            mobile_number: data.mobile,
+            lead_source: leadSource,
+            cf_form_source_custom: formSourceCustom
+          });
+          freshworksSucess = true;
+          console.log("✅ LEAD DEBUG: Lead created/updated via fw.createLead with custom field");
+          
+          // Track successful Freshworks submission
+          try {
+            const successData = { ...debugData, freshworksSuccess: true, freshworksMethod: 'fw.createLead' };
+            localStorage.setItem(`lead_success_${submissionId}`, JSON.stringify(successData));
+          } catch (e) {
+            console.warn("Could not store success data:", e);
+          }
+
+          // Best-effort: also sync contact data
+          if (window.fwcrm && typeof window.fwcrm.set === 'function') {
+            try {
+              window.fwcrm.set({
+                "Email": data.email,
+                "First Name": data.firstName,
+                "Mobile": data.mobile,
+                "Lead Source": leadSource,
+                "Form Source Custom": formSourceCustom
+              });
+              console.log("ℹ️ LEAD DEBUG: Contact synced via fwcrm.set after lead creation");
+            } catch (crmErr) {
+              console.warn("⚠️ LEAD DEBUG: fwcrm.set sync failed:", crmErr);
+            }
+          }
+          
+        } catch (fwError) {
+          freshworksError = fwError;
+          console.error("❌ LEAD DEBUG: fw.createLead failed:", fwError);
+
+          // Fallback to contact creation/update
+          if (window.fwcrm && typeof window.fwcrm.set === 'function') {
+            try {
+              window.fwcrm.set({
+                "Email": data.email,
+                "First Name": data.firstName,
+                "Mobile": data.mobile,
+                "Lead Source": leadSource,
+                "Form Source Custom": formSourceCustom
+              });
+              freshworksSucess = true;
+              console.log("✅ LEAD DEBUG: Fallback contact created/updated via fwcrm.set");
+              try {
+                const successData = { ...debugData, freshworksSuccess: true, freshworksMethod: 'fwcrm.set (fallback)' };
+                localStorage.setItem(`lead_success_${submissionId}`, JSON.stringify(successData));
+              } catch (e) {
+                console.warn("Could not store success data:", e);
+              }
+            } catch (crmErr) {
+              console.error("❌ LEAD DEBUG: Fallback fwcrm.set failed:", crmErr);
+            }
+          }
+        }
+        
+      } else if (window.fwcrm && typeof window.fwcrm.set === 'function') {
+        console.log("🔍 LEAD DEBUG: fw.createLead not available, using fwcrm.set");
         
         const fwData = {
           "Email": data.email,
@@ -158,33 +224,6 @@ const LeadCaptureForm = () => {
         } catch (fwError) {
           freshworksError = fwError;
           console.error("❌ LEAD DEBUG: Freshworks fwcrm.set failed:", fwError);
-        }
-        
-      } else if (window.fw && typeof window.fw.createLead === 'function') {
-        console.log("🔍 LEAD DEBUG: Using fallback Freshworks method (fw.createLead)");
-        
-        try {
-          await window.fw.createLead({
-            first_name: data.firstName,
-            email: data.email,
-            mobile_number: data.mobile,
-            lead_source: leadSource,
-            cf_form_source_custom: formSourceCustom
-          });
-          freshworksSucess = true;
-          console.log("✅ LEAD DEBUG: Freshworks lead created successfully (fallback method)");
-          
-          // Track successful Freshworks submission
-          try {
-            const successData = { ...debugData, freshworksSuccess: true, freshworksMethod: 'fw.createLead' };
-            localStorage.setItem(`lead_success_${submissionId}`, JSON.stringify(successData));
-          } catch (e) {
-            console.warn("Could not store success data:", e);
-          }
-          
-        } catch (fwError) {
-          freshworksError = fwError;
-          console.error("❌ LEAD DEBUG: Freshworks fw.createLead failed:", fwError);
         }
         
       } else {
