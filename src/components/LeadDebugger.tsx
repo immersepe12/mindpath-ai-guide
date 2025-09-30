@@ -98,18 +98,9 @@ const LeadDebugger = () => {
     return new Date(timestamp).toLocaleString();
   };
 
-  // Only show in development or when manually enabled
-  if (!isVisible && !window.location.hostname.includes('localhost') && !window.location.search.includes('debug=true')) {
-    return (
-      <Button
-        onClick={() => setIsVisible(true)}
-        variant="outline"
-        size="sm"
-        className="fixed bottom-4 right-4 z-50 opacity-50 hover:opacity-100"
-      >
-        Debug Leads
-      </Button>
-    );
+  // Only show in development mode
+  if (!isVisible && !window.location.hostname.includes('localhost')) {
+    return null;
   }
 
   return (
