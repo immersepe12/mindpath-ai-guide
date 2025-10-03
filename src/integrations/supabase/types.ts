@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          created_at: string | null
+          current_page: string | null
+          email: string
+          error_message: string | null
+          first_name: string
+          form_source_custom: string | null
+          freshworks_error: string | null
+          freshworks_method: string | null
+          freshworks_success: boolean | null
+          full_url: string | null
+          id: string
+          lead_source: string
+          mobile: string
+          program: string | null
+          submission_id: string
+          submission_status: string | null
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_page?: string | null
+          email: string
+          error_message?: string | null
+          first_name: string
+          form_source_custom?: string | null
+          freshworks_error?: string | null
+          freshworks_method?: string | null
+          freshworks_success?: boolean | null
+          full_url?: string | null
+          id?: string
+          lead_source: string
+          mobile: string
+          program?: string | null
+          submission_id: string
+          submission_status?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_page?: string | null
+          email?: string
+          error_message?: string | null
+          first_name?: string
+          form_source_custom?: string | null
+          freshworks_error?: string | null
+          freshworks_method?: string | null
+          freshworks_success?: boolean | null
+          full_url?: string | null
+          id?: string
+          lead_source?: string
+          mobile?: string
+          program?: string | null
+          submission_id?: string
+          submission_status?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

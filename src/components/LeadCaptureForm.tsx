@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate, useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
@@ -114,8 +115,49 @@ const LeadCaptureForm = () => {
       dataLayerAvailable: !!window.dataLayer
     };
     
+    // Save to database FIRST (for reliability)
+    let databaseSuccess = false;
+    let databaseError = null;
+    
     try {
-      localStorage.setItem(`lead_submission_${submissionId}`, JSON.stringify(debugData));
+      const { error: dbError } = await supabase
+        .from('leads')
+        .insert({
+          submission_id: submissionId,
+          first_name: data.firstName,
+          email: data.email,
+          mobile: data.mobile,
+          lead_source: leadSource,
+          current_page: location.pathname,
+          full_url: fullUrl,
+          form_source_custom: getFormSourceCustom(),
+          utm_source: utmParams.utm_source || null,
+          utm_medium: utmParams.utm_medium || null,
+          utm_campaign: utmParams.utm_campaign || null,
+          utm_content: utmParams.utm_content || null,
+          utm_term: utmParams.utm_term || null,
+          user_agent: navigator.userAgent,
+          program: 'MindTalk 90-Day Recovery Journey',
+        });
+      
+      if (dbError) {
+        console.error('❌ LEAD DEBUG: Database error:', dbError);
+        databaseError = dbError.message;
+      } else {
+        databaseSuccess = true;
+        console.log("✅ LEAD DEBUG: Lead saved to database successfully");
+      }
+    } catch (dbErr) {
+      console.error('❌ LEAD DEBUG: Database exception:', dbErr);
+      databaseError = dbErr instanceof Error ? dbErr.message : 'Unknown database error';
+    }
+    
+    try {
+      localStorage.setItem(`lead_submission_${submissionId}`, JSON.stringify({
+        ...debugData,
+        databaseSuccess,
+        databaseError
+      }));
       console.log("🔍 LEAD DEBUG: Submission started", debugData);
     } catch (e) {
       console.warn("Could not store debug data in localStorage:", e);
@@ -236,6 +278,23 @@ const LeadCaptureForm = () => {
         });
       }
       
+      // Update database with Freshworks result
+      if (databaseSuccess) {
+        try {
+          await supabase
+            .from('leads')
+            .update({
+              freshworks_success: freshworksSucess,
+              freshworks_method: freshworksSucess ? (window.fw ? 'fw.createLead' : 'fwcrm.set') : null,
+              freshworks_error: freshworksError?.message || null,
+            })
+            .eq('submission_id', submissionId);
+          console.log("✅ LEAD DEBUG: Database updated with Freshworks status");
+        } catch (updateErr) {
+          console.error('❌ LEAD DEBUG: Failed to update Freshworks status in database:', updateErr);
+        }
+      }
+      
       // Store final submission result
       try {
         const finalData = {
@@ -260,6 +319,7 @@ const LeadCaptureForm = () => {
           lead_source: leadSource,
           email: data.email,
           submission_id: submissionId,
+          database_success: databaseSuccess,
           freshworks_success: freshworksSucess
         };
         window.dataLayer.push(gtmData);
@@ -276,6 +336,7 @@ const LeadCaptureForm = () => {
         program: 'MindTalk 90-Day Recovery Journey',
         value: '4499',
         submission_id: submissionId,
+        db_saved: databaseSuccess.toString(),
         fw_success: freshworksSucess.toString()
       });
       
@@ -309,6 +370,7 @@ const LeadCaptureForm = () => {
         program: 'MindTalk 90-Day Recovery Journey',
         value: '4499',
         submission_id: submissionId,
+        db_saved: databaseSuccess.toString(),
         fw_success: freshworksSucess.toString(),
         has_error: 'true'
       });
