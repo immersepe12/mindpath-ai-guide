@@ -3,10 +3,14 @@ import { MindTalkButton } from "./ui/button-variants";
 import { Card, CardContent } from "./ui/card";
 import { Star, Users, Clock, Award } from "lucide-react";
 import { scrollToForm } from "@/utils/scrollToForm";
+import doctorMadanImg from "@/assets/doctor-madan.jpg";
+import doctorPalashImg from "@/assets/doctor-palash.jpg";
+import doctorAvaniImg from "@/assets/doctor-avani.jpg";
 
 const doctors = [
   {
     name: "Dr. Madan",
+    image: doctorMadanImg,
     specialization: "Adult Cases & Anxiety Disorders",
     experience: "8+ years",
     rating: 4.9,
@@ -15,6 +19,7 @@ const doctors = [
   },
   {
     name: "Dr. Palash",
+    image: doctorPalashImg,
     specialization: "Geriatric Cases & Depression",
     experience: "12+ years", 
     rating: 4.8,
@@ -23,6 +28,7 @@ const doctors = [
   },
   {
     name: "Dr. Avani Sirsi",
+    image: doctorAvaniImg,
     specialization: "Corporate Mental Health",
     experience: "15+ years",
     rating: 4.9,
@@ -72,10 +78,12 @@ const DoctorBookingSection = () => {
               <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardContent className="p-4 sm:p-6">
                   <div className="text-center mb-3 sm:mb-4">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-mindtalk-orange to-mindtalk-orange-light rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3">
-                      <span className="text-lg sm:text-2xl font-bold text-white">
-                        {doctor.name.split('.')[1]?.charAt(0) || 'D'}
-                      </span>
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mx-auto mb-2 sm:mb-3 ring-2 ring-mindtalk-orange/20">
+                      <img 
+                        src={doctor.image} 
+                        alt={doctor.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-900">{doctor.name}</h3>
                     <p className="text-sm sm:text-base text-mindtalk-blue font-medium">{doctor.specialization}</p>
