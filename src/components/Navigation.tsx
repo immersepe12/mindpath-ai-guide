@@ -7,13 +7,14 @@ import { scrollToSection } from "@/utils/scrollToSection";
 import { scrollToForm } from "@/utils/scrollToForm";
 
 const navigationItems = [
-  { label: "Home", id: "hero" },
-  { label: "Daily Journey", id: "daily-journey" },
-  { label: "AI Features", id: "ai-section" },
-  { label: "Recovery Paths", id: "journeys" },
-  { label: "Book Session", id: "doctor-booking" },
-  { label: "Pricing", id: "pricing" },
-  { label: "Reviews", id: "testimonials" }
+  { label: "Home", id: "hero", type: "section" },
+  { label: "Daily Journey", id: "daily-journey", type: "section" },
+  { label: "AI Features", id: "ai-section", type: "section" },
+  { label: "Recovery Paths", id: "journeys", type: "section" },
+  { label: "Assessments", id: "/assessment", type: "route" },
+  { label: "Book Session", id: "doctor-booking", type: "section" },
+  { label: "Pricing", id: "pricing", type: "section" },
+  { label: "Reviews", id: "testimonials", type: "section" }
 ];
 
 const Navigation = () => {
@@ -41,8 +42,12 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (sectionId: string) => {
-    scrollToSection(sectionId);
+  const handleNavClick = (item: { id: string; type: string }) => {
+    if (item.type === "route") {
+      window.location.href = item.id;
+    } else {
+      scrollToSection(item.id);
+    }
     setIsOpen(false);
   };
 
@@ -61,7 +66,7 @@ const Navigation = () => {
               src="/lovable-uploads/0a99fb1e-f879-44b2-bb75-a5250bb2c95a.png" 
               alt="Cadabams MindTalk"
               className="h-10 w-auto cursor-pointer"
-              onClick={() => handleNavClick("hero")}
+              onClick={() => handleNavClick({ id: "hero", type: "section" })}
               loading="lazy"
               width="40"
               height="40"
@@ -76,7 +81,7 @@ const Navigation = () => {
                 src="/lovable-uploads/376b91f1-8c27-402b-93e5-a13e20bd13ed.png" 
                 alt="Cadabams MindTalk"
                 className="h-8 w-auto cursor-pointer"
-                onClick={() => handleNavClick("hero")}
+                onClick={() => handleNavClick({ id: "hero", type: "section" })}
               />
             </div>
 
@@ -105,7 +110,7 @@ const Navigation = () => {
                   {navigationItems.map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => handleNavClick(item.id)}
+                      onClick={() => handleNavClick(item)}
                       className={`block w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${
                         activeSection === item.id
                           ? "bg-orange-50 text-mindtalk-orange"
@@ -136,7 +141,7 @@ const Navigation = () => {
             {navigationItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={() => handleNavClick(item)}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   activeSection === item.id
                     ? "text-mindtalk-orange"

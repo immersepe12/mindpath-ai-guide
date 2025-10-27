@@ -13,6 +13,7 @@ import StressAnxietyPage from "./pages/StressAnxietyPage";
 import DepressionPage from "./pages/DepressionPage";
 import RelationshipsPage from "./pages/RelationshipsPage";
 import WorkplacePage from "./pages/WorkplacePage";
+import AssessmentPage from "./pages/AssessmentPage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/depression" element={<DepressionPage />} />
           <Route path="/relationships" element={<RelationshipsPage />} />
           <Route path="/workplace" element={<WorkplacePage />} />
+          <Route path="/assessment" element={<AssessmentPage />} />
           <Route path="/thank-you" element={<ThankYou />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
