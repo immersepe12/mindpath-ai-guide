@@ -11,17 +11,20 @@ const AISection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
+            <div className="inline-block px-4 py-2 bg-white/10 rounded-full mb-4">
+              <span className="text-sm font-semibold text-white">DeepAgent Technology</span>
+            </div>
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center animate-pulse-slow">
                 <Bot className="w-8 h-8 text-white" />
               </div>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Meet Dr. Riya - Your 24/7 AI Companion
+              Meet Dr. Riya - Your 24/7 DeepAgent Companion
             </h2>
             <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              The world's first mental health AI that learns your patterns throughout your 90-day journey, 
-              tracks your progress between sessions, and provides personalized support anytime
+              Powered by advanced DeepAgent AI that remembers your journal entries, understands your emotional patterns, 
+              and integrates with your therapy sessions for truly personalized support throughout your 90-day journey.
             </p>
           </div>
 
@@ -35,8 +38,8 @@ const AISection = () => {
                     <h3 className="text-xl font-semibold">Deep Learning & Memory</h3>
                   </div>
                   <p className="text-white/80">
-                    Dr. Riya remembers every conversation, assessment, and milestone in your 90-day journey. 
-                    She learns your patterns and provides increasingly personalized guidance.
+                    Remembers your journal entries, conversations, and progress throughout your 90-day journey. 
+                    She learns your emotional patterns and provides increasingly personalized guidance.
                   </p>
                 </CardContent>
               </Card>
@@ -58,11 +61,11 @@ const AISection = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <TrendingUp className="w-8 h-8 text-white" />
-                    <h3 className="text-xl font-semibold">Therapist Integration</h3>
+                    <h3 className="text-xl font-semibold">Complete Integration</h3>
                   </div>
                   <p className="text-white/80">
-                    All insights are shared with your therapist, making every session more 
-                    productive and focused on your specific needs throughout your recovery.
+                    Insights from journals, AI chats, and daily tasks are shared with your therapist, 
+                    making every session more productive and focused on your specific needs.
                   </p>
                 </CardContent>
               </Card>
@@ -162,9 +165,12 @@ const AISection = () => {
               className="bg-white text-mindtalk-orange hover:bg-white/90 w-full sm:w-auto text-sm sm:text-base lg:text-lg px-4 sm:px-6 lg:px-8 h-12 sm:h-14"
               onClick={scrollToForm}
             >
-              <span className="hidden sm:inline">Start Your 90-Day Journey with Dr. Riya</span>
-              <span className="sm:hidden">Start 90-Day Journey</span>
+              <span className="hidden sm:inline">Experience DeepAgent AI Support</span>
+              <span className="sm:hidden">Experience DeepAgent</span>
             </MindTalkButton>
+            <p className="text-sm text-white/70 mt-4">
+              Dr. Riya will learn from your journals and support you throughout your journey
+            </p>
           </div>
         </div>
       </div>

@@ -3,10 +3,13 @@ import Navigation from "@/components/Navigation";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import WhatsAppFloating from "@/components/WhatsAppFloating";
 import HeroSection from "@/components/HeroSection";
-import JourneysSection from "@/components/JourneysSection";
-import DailyJourneySection from "@/components/DailyJourneySection";
-import TherapySessionHighlight from "@/components/TherapySessionHighlight";
+import ThreePillarsSection from "@/components/ThreePillarsSection";
+import JournalingFeatureSection from "@/components/JournalingFeatureSection";
 import AISection from "@/components/AISection";
+import DailyJourneySection from "@/components/DailyJourneySection";
+import JourneysSection from "@/components/JourneysSection";
+import IntegrationFlowSection from "@/components/IntegrationFlowSection";
+import TherapySessionHighlight from "@/components/TherapySessionHighlight";
 import DoctorBookingSection from "@/components/DoctorBookingSection";
 import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -24,16 +27,21 @@ const Index = () => {
         <HeroSection />
       </div>
       <LeadCaptureForm />
+      <ThreePillarsSection />
+      <div id="journaling">
+        <JournalingFeatureSection />
+      </div>
+      <div id="ai-section">
+        <AISection />
+      </div>
       <div id="daily-journey">
         <DailyJourneySection />
       </div>
       <TherapySessionHighlight variant="journeys" />
-      <div id="ai-section">
-        <AISection />
-      </div>
       <div id="journeys">
         <JourneysSection />
       </div>
+      <IntegrationFlowSection />
       <div id="doctor-booking">
         <DoctorBookingSection />
       </div>

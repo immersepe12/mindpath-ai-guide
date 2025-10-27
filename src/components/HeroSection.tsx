@@ -47,8 +47,12 @@ const HeroSection = () => {
             </span>
           </h2>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 text-white/90 max-w-4xl mx-auto leading-relaxed px-4">
-            World's first AI-powered mental health program with expert therapy support. Complete recovery for just ₹4,499
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-4 sm:mb-6 text-white/90 max-w-4xl mx-auto leading-relaxed px-4">
+            Transform your mental health with AI-powered journaling, 24/7 DeepAgent support, 
+            and structured recovery programs - all working together for your healing
+          </p>
+          <p className="text-sm sm:text-base text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
+            Experience the world's first integrated mental health ecosystem: AI journaling + DeepAgent companion + expert therapy
           </p>
 
           <div className="flex justify-center items-center mb-8 sm:mb-12 px-4">
