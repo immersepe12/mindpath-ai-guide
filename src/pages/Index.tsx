@@ -28,6 +28,9 @@ const Index = () => {
       </div>
       <LeadCaptureForm />
       <ThreePillarsSection />
+      <div id="doctor-booking">
+        <DoctorBookingSection />
+      </div>
       <div id="journaling">
         <JournalingFeatureSection />
       </div>
@@ -42,9 +45,6 @@ const Index = () => {
         <JourneysSection />
       </div>
       <IntegrationFlowSection />
-      <div id="doctor-booking">
-        <DoctorBookingSection />
-      </div>
       <div id="pricing">
         <PricingSection />
       </div>
