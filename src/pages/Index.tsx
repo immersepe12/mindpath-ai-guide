@@ -27,10 +27,10 @@ const Index = () => {
         <HeroSection />
       </div>
       <LeadCaptureForm />
-      <ThreePillarsSection />
       <div id="doctor-booking">
         <DoctorBookingSection />
       </div>
+      <ThreePillarsSection />
       <div id="journaling">
         <JournalingFeatureSection />
       </div>
