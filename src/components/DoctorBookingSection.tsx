@@ -6,7 +6,7 @@ import { scrollToForm } from "@/utils/scrollToForm";
 
 const doctors = [
   {
-    name: "Dr. Nishmita T J",
+    name: "Dr. Madan",
     specialization: "Adult Cases & Anxiety Disorders",
     experience: "8+ years",
     rating: 4.9,
@@ -14,7 +14,7 @@ const doctors = [
     availability: "Available Today"
   },
   {
-    name: "Dr. Priya Raghvan",
+    name: "Dr. Palash",
     specialization: "Geriatric Cases & Depression",
     experience: "12+ years", 
     rating: 4.8,
@@ -22,7 +22,7 @@ const doctors = [
     availability: "Next Available: Tomorrow"
   },
   {
-    name: "Dr. B.R. Madhukar",
+    name: "Dr. Avani Sirsi",
     specialization: "Corporate Mental Health",
     experience: "15+ years",
     rating: 4.9,
