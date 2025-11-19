@@ -1,4 +1,4 @@
-import { ClipboardCheck } from "lucide-react";
+import { ClipboardCheck, Download } from "lucide-react";
 import { MindTalkButton } from "./ui/button-variants";
 import { scrollToForm } from "@/utils/scrollToForm";
 
@@ -57,14 +57,25 @@ const AssessmentHeroSection = () => {
           </div>
 
           {/* CTA */}
-          <MindTalkButton
-            variant="hero"
-            size="hero"
-            onClick={scrollToForm}
-            className="bg-white text-mindtalk-orange hover:bg-white/90 shadow-2xl hover:shadow-3xl"
-          >
-            Start Free Assessment
-          </MindTalkButton>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <MindTalkButton
+              variant="hero"
+              size="hero"
+              onClick={scrollToForm}
+              className="bg-white text-mindtalk-orange hover:bg-white/90 shadow-2xl hover:shadow-3xl"
+            >
+              Start Free Assessment
+            </MindTalkButton>
+            <MindTalkButton 
+              variant="outline" 
+              size="hero"
+              className="border-white text-white hover:bg-white/10"
+              onClick={() => window.open('https://link-to.app/TMoa8H6NOL', '_blank')}
+            >
+              <Download className="mr-2 w-5 h-5" />
+              Download App
+            </MindTalkButton>
+          </div>
         </div>
       </div>
     </section>

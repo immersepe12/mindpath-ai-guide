@@ -1,6 +1,6 @@
 
 import { MindTalkButton } from "./ui/button-variants";
-import { ArrowRight, Clock, Shield, Heart } from "lucide-react";
+import { ArrowRight, Clock, Shield, Heart, Download } from "lucide-react";
 import { scrollToForm } from "@/utils/scrollToForm";
 
 const CTASection = () => {
@@ -20,7 +20,7 @@ const CTASection = () => {
             our proven 90-day recovery program with AI support and expert therapy.
           </p>
 
-          <div className="flex justify-center items-center mb-8 sm:mb-12 px-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 sm:mb-12 px-4">
             <MindTalkButton 
               variant="hero" 
               size="hero" 
@@ -31,6 +31,15 @@ const CTASection = () => {
               <span className="hidden sm:inline">Start Your 90-Day Journey - ₹4,499</span>
               <span className="sm:hidden">Start Journey - ₹4,499</span>
               <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+            </MindTalkButton>
+            <MindTalkButton 
+              variant="outline" 
+              size="hero"
+              className="border-white bg-white/10 text-white hover:bg-white/20 w-full sm:w-auto text-sm sm:text-base lg:text-lg px-6 sm:px-8 h-12 sm:h-14"
+              onClick={() => window.open('https://link-to.app/TMoa8H6NOL', '_blank')}
+            >
+              <Download className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
+              Download App
             </MindTalkButton>
           </div>
 
