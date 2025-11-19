@@ -54,8 +54,9 @@ const AppHeroSection = () => {
               variant="outline" 
               size="hero"
               className="border-white text-white hover:bg-white/10"
+              onClick={() => window.open('https://link-to.app/TMoa8H6NOL', '_blank')}
             >
-              Download App (Soon)
+              Download App
             </MindTalkButton>
           </div>
 
