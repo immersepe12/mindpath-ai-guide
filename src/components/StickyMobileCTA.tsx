@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Heart, ArrowRight } from "lucide-react";
+import { Heart, ArrowRight, Download } from "lucide-react";
 import { MindTalkButton } from "./ui/button-variants";
 import { scrollToForm } from "@/utils/scrollToForm";
 
@@ -37,16 +37,26 @@ const StickyMobileCTA = () => {
       }`}
     >
       <div className="bg-gradient-to-t from-white via-white/95 to-transparent pt-4 pb-4 px-4">
-        <MindTalkButton
-          variant="hero"
-          size="lg"
-          onClick={handleClick}
-          className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl"
-        >
-          <Heart className="mr-2 w-5 h-5" />
-          Start Your Journey - ₹4,499
-          <ArrowRight className="ml-2 w-5 h-5" />
-        </MindTalkButton>
+        <div className="flex gap-2">
+          <MindTalkButton
+            variant="hero"
+            size="lg"
+            onClick={handleClick}
+            className="flex-1 h-12 text-sm font-semibold shadow-lg hover:shadow-xl"
+          >
+            <Heart className="mr-1 w-4 h-4" />
+            Start Journey
+            <ArrowRight className="ml-1 w-4 h-4" />
+          </MindTalkButton>
+          <MindTalkButton
+            variant="outline"
+            size="lg"
+            onClick={() => window.open('https://link-to.app/TMoa8H6NOL', '_blank')}
+            className="h-12 px-4 text-sm font-semibold shadow-lg hover:shadow-xl border-mindtalk-orange text-mindtalk-orange hover:bg-mindtalk-orange hover:text-white"
+          >
+            <Download className="w-4 h-4" />
+          </MindTalkButton>
+        </div>
       </div>
     </div>
   );
