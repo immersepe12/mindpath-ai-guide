@@ -44,11 +44,16 @@
     --mindtalk-green-light: 142 69% 58%;
     --mindtalk-blue: 217 91% 60%;
     --mindtalk-purple: 280 100% 70%;
+    --mindtalk-maroon: 0 65% 32%;
+    --mindtalk-golden: 40 97% 54%;
+    --mindtalk-red-orange: 16 82% 51%;
 
     /* Gradients */
     --gradient-healing: linear-gradient(135deg, hsl(14 88% 55%) 0%, hsl(142 76% 36%) 100%);
     --gradient-calm: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(280 100% 70%) 100%);
     --gradient-warm: linear-gradient(135deg, hsl(21 100% 71%) 0%, hsl(14 88% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(30 100% 98%) 100%);
+    --gradient-trust: linear-gradient(135deg, hsl(40 97% 54% / 0.1) 0%, hsl(14 88% 55% / 0.1) 100%);
 
     /* Semantic tokens */
     --hero-bg: var(--gradient-healing);

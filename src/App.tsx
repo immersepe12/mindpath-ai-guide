@@ -14,6 +14,7 @@ import DepressionPage from "./pages/DepressionPage";
 import RelationshipsPage from "./pages/RelationshipsPage";
 import WorkplacePage from "./pages/WorkplacePage";
 import AssessmentPage from "./pages/AssessmentPage";
+import HomePage from "./pages/HomePage";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/app" element={<AppShowcase />} />
           <Route path="/stress-anxiety" element={<StressAnxietyPage />} />
           <Route path="/depression" element={<DepressionPage />} />
