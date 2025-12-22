@@ -59,7 +59,10 @@ export default {
 					green: 'hsl(var(--mindtalk-green))',
 					'green-light': 'hsl(var(--mindtalk-green-light))',
 					blue: 'hsl(var(--mindtalk-blue))',
-					purple: 'hsl(var(--mindtalk-purple))'
+					purple: 'hsl(var(--mindtalk-purple))',
+					maroon: 'hsl(var(--mindtalk-maroon))',
+					golden: 'hsl(var(--mindtalk-golden))',
+					'red-orange': 'hsl(var(--mindtalk-red-orange))'
 				}
 			},
 			borderRadius: {
