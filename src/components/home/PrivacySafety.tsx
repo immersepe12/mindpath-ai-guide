@@ -1,65 +1,46 @@
 import { Shield, Lock, Eye, AlertTriangle } from "lucide-react";
 
 const privacyPoints = [
-  {
-    icon: Shield,
-    title: "Privacy-first design",
-    description: "Your data is encrypted and protected with industry-standard security.",
-  },
-  {
-    icon: Lock,
-    title: "You control what you share",
-    description: "Decide what information to include and what to keep private.",
-  },
-  {
-    icon: Eye,
-    title: "Data used to support your experience",
-    description: "Your information helps personalize your journey — never sold to third parties.",
-  },
+  { icon: Shield, title: "Privacy-first", desc: "Encrypted & secure" },
+  { icon: Lock, title: "You control", desc: "Share what you choose" },
+  { icon: Eye, title: "Your data", desc: "Never sold" },
 ];
 
 const PrivacySafety = () => {
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-10 md:py-16 bg-background">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Your Privacy & Safety Matter
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              Your Privacy Matters
             </h2>
-            <p className="text-lg text-muted-foreground">
-              We take your trust seriously. Here's how we protect you.
-            </p>
           </div>
 
-          {/* Privacy Points */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          {/* Privacy Points - Horizontal scroll on mobile */}
+          <div className="flex md:grid md:grid-cols-3 gap-3 overflow-x-auto pb-4 md:pb-0 snap-x scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 mb-6">
             {privacyPoints.map((point, index) => (
               <div
                 key={index}
-                className="bg-card rounded-2xl p-6 shadow-sm border border-border text-center"
+                className="flex-shrink-0 w-[140px] md:w-auto snap-center"
               >
-                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-4">
-                  <point.icon className="w-6 h-6 text-accent" />
+                <div className="bg-card rounded-xl p-4 shadow-sm border border-border text-center h-full">
+                  <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mx-auto mb-2">
+                    <point.icon className="w-5 h-5 text-accent" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-foreground">{point.title}</h3>
+                  <p className="text-xs text-muted-foreground">{point.desc}</p>
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{point.title}</h3>
-                <p className="text-sm text-muted-foreground">{point.description}</p>
               </div>
             ))}
           </div>
 
-          {/* Crisis Disclaimer */}
-          <div className="bg-destructive/5 border border-destructive/20 rounded-2xl p-6 flex flex-col sm:flex-row items-start gap-4">
-            <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center shrink-0">
-              <AlertTriangle className="w-5 h-5 text-destructive" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-1">Important Note</h4>
-              <p className="text-sm text-muted-foreground">
-                If you feel unsafe or are in crisis, please contact local emergency services immediately. 
-                MindTalk is a supportive tool but is not designed for emergency situations.
-              </p>
-            </div>
+          {/* Crisis Disclaimer - Compact */}
+          <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-4 flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-destructive shrink-0" />
+            <p className="text-xs text-muted-foreground">
+              In crisis? Contact local emergency services immediately.
+            </p>
           </div>
         </div>
       </div>

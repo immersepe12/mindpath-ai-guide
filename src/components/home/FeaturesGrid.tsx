@@ -12,71 +12,67 @@ const features = [
     icon: ClipboardCheck,
     title: "Assessments",
     promise: "Spot patterns early",
-    detail: "From preventive check-ins to serious indicator screenings — know where you stand.",
     color: "bg-primary/10 text-primary",
   },
   {
     icon: Wind,
-    title: "Breathwork & Grounding",
+    title: "Breathwork",
     promise: "Calm in moments",
-    detail: "Visualization, meditation, and calming tools designed to bring you back to center.",
     color: "bg-accent/10 text-accent",
   },
   {
     icon: FileText,
-    title: "Worksheets & Reflections",
+    title: "Worksheets",
     promise: "Process and grow",
-    detail: "Guided prompts and journaling exercises that help you understand yourself better.",
     color: "bg-mindtalk-blue/10 text-mindtalk-blue",
   },
   {
     icon: BookOpen,
-    title: "Articles & Learning",
-    promise: "Knowledge that helps",
-    detail: "Simple explanations, science-backed insights, and practical tips you can use today.",
+    title: "Articles",
+    promise: "Learn what helps",
     color: "bg-mindtalk-purple/10 text-mindtalk-purple",
   },
   {
     icon: Video,
     title: "Video Lessons",
-    promise: "Learn new skills",
-    detail: "Mini courses and education content on coping skills, emotions, and mental wellness.",
+    promise: "Build new skills",
     color: "bg-mindtalk-golden/10 text-mindtalk-golden",
   },
   {
     icon: Users,
-    title: "Community Support",
+    title: "Community",
     promise: "You're not alone",
-    detail: "Peer support and counselor-guided spaces where you can share and connect.",
     color: "bg-mindtalk-maroon/10 text-mindtalk-maroon",
   },
 ];
 
 const FeaturesGrid = () => {
   return (
-    <section id="features" className="py-16 md:py-24 bg-secondary/30">
+    <section id="features" className="py-10 md:py-16 bg-secondary/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Everything You Need in One Place
+        <div className="text-center mb-6 md:mb-10">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-2">
+            Everything in One Place
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A comprehensive toolkit designed to support your mental health journey — from quick check-ins to deep learning.
+          <p className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto">
+            Tools to support your mental health journey
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {/* Horizontal scroll on mobile, grid on larger screens */}
+        <div className="flex md:grid md:grid-cols-3 lg:grid-cols-6 gap-3 overflow-x-auto pb-4 md:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group bg-card rounded-2xl p-6 shadow-sm border border-border hover:shadow-lg hover:border-primary/20 transition-all duration-300"
+              className="flex-shrink-0 w-[140px] md:w-auto snap-center"
             >
-              <div className={`w-14 h-14 rounded-xl ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                <feature.icon className="w-7 h-7" />
+              <div className="bg-card rounded-xl p-4 shadow-sm border border-border hover:border-primary/20 transition-all h-full text-center">
+                <div className={`w-12 h-12 rounded-xl ${feature.color} flex items-center justify-center mx-auto mb-3`}>
+                  <feature.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-sm font-bold text-foreground mb-1">{feature.title}</h3>
+                <p className="text-xs text-muted-foreground">{feature.promise}</p>
               </div>
-              <h3 className="text-lg font-bold text-foreground mb-1">{feature.title}</h3>
-              <p className="text-sm font-medium text-primary mb-2">{feature.promise}</p>
-              <p className="text-sm text-muted-foreground">{feature.detail}</p>
             </div>
           ))}
         </div>

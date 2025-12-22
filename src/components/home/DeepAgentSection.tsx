@@ -2,94 +2,72 @@ import { Bot, User, Shield } from "lucide-react";
 
 const DeepAgentSection = () => {
   return (
-    <section id="ai-support" className="py-16 md:py-24 gradient-calm">
+    <section id="ai-support" className="py-10 md:py-16 gradient-calm">
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Left: Copy */}
-            <div className="text-center lg:text-left">
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/20 text-primary-foreground text-sm font-medium mb-4">
-                Personalized AI Support
+            <div className="text-center lg:text-left order-2 lg:order-1">
+              <span className="inline-block px-3 py-1 rounded-full bg-primary-foreground/20 text-primary-foreground text-xs font-medium mb-3">
+                AI Support
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-6">
-                Not Just Tools — A Guide That Remembers Your Journey
+              <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
+                A Guide That Remembers Your Journey
               </h2>
               
-              <div className="space-y-4 text-primary-foreground/90 mb-8">
-                <p>
-                  Your AI assistant considers your check-ins, completed tasks, assessments, and journey progress to understand your unique situation.
-                </p>
-                <p>
-                  It can suggest the next best action: a 2-minute grounding tool, a relevant lesson, or a recommendation to speak with a professional.
-                </p>
-                <p>
-                  It can help you prepare for therapy by summarizing patterns and what to discuss.
-                </p>
+              <div className="space-y-3 text-sm text-primary-foreground/90 mb-6">
+                <p>• Considers your check-ins, tasks & progress</p>
+                <p>• Suggests next best actions</p>
+                <p>• Helps prepare for therapy sessions</p>
               </div>
 
               {/* Safety Note */}
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-primary-foreground/10 border border-primary-foreground/20">
-                <Shield className="w-5 h-5 text-primary-foreground shrink-0 mt-0.5" />
-                <p className="text-sm text-primary-foreground/80">
-                  AI guidance is supportive and educational — not a replacement for professional diagnosis.
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-primary-foreground/10 border border-primary-foreground/20">
+                <Shield className="w-4 h-4 text-primary-foreground shrink-0" />
+                <p className="text-xs text-primary-foreground/80">
+                  Supportive guidance — not a replacement for professional care.
                 </p>
               </div>
             </div>
 
-            {/* Right: Chat Demo */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="w-full max-w-md bg-card rounded-2xl shadow-2xl overflow-hidden">
+            {/* Right: Chat Demo - Compact */}
+            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
+              <div className="w-full max-w-[300px] bg-card rounded-xl shadow-2xl overflow-hidden">
                 {/* Chat Header */}
-                <div className="bg-primary px-4 py-3 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                    <Bot className="w-4 h-4 text-primary-foreground" />
+                <div className="bg-primary px-3 py-2 flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                    <Bot className="w-3.5 h-3.5 text-primary-foreground" />
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-primary-foreground">MindTalk AI</p>
-                    <p className="text-xs text-primary-foreground/70">Always here for you</p>
-                  </div>
+                  <p className="text-xs font-medium text-primary-foreground">MindTalk AI</p>
                 </div>
 
                 {/* Chat Messages */}
-                <div className="p-4 space-y-4 bg-secondary/30">
+                <div className="p-3 space-y-3 bg-secondary/30">
                   {/* User Message */}
                   <div className="flex justify-end">
-                    <div className="flex items-start gap-2 max-w-[80%]">
-                      <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-2.5">
-                        <p className="text-sm">I've been feeling anxious this week.</p>
+                    <div className="flex items-end gap-1.5 max-w-[85%]">
+                      <div className="bg-primary text-primary-foreground rounded-xl rounded-br-sm px-3 py-2">
+                        <p className="text-xs">Feeling anxious this week.</p>
                       </div>
-                      <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center shrink-0">
-                        <User className="w-4 h-4 text-muted-foreground" />
+                      <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center shrink-0">
+                        <User className="w-3 h-3 text-muted-foreground" />
                       </div>
                     </div>
                   </div>
 
                   {/* AI Response */}
                   <div className="flex justify-start">
-                    <div className="flex items-start gap-2 max-w-[85%]">
-                      <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <Bot className="w-4 h-4 text-primary" />
+                    <div className="flex items-end gap-1.5 max-w-[90%]">
+                      <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <Bot className="w-3 h-3 text-primary" />
                       </div>
-                      <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-4 py-3 space-y-3">
-                        <p className="text-sm text-foreground">
-                          I hear you. Looking at your week, I noticed your anxiety check-ins were higher on Monday and Wednesday.
+                      <div className="bg-card border border-border rounded-xl rounded-bl-sm px-3 py-2">
+                        <p className="text-xs text-foreground mb-2">
+                          I noticed higher anxiety on Mon & Wed.
                         </p>
-                        <div className="space-y-2">
-                          <p className="text-xs font-medium text-muted-foreground">Suggestions for you:</p>
-                          <div className="space-y-1.5">
-                            <div className="flex items-center gap-2 text-sm">
-                              <span className="text-primary">→</span>
-                              <span className="text-foreground">Try a 2-min grounding exercise</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                              <span className="text-primary">→</span>
-                              <span className="text-foreground">Review what changed this week</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                              <span className="text-primary">→</span>
-                              <span className="text-foreground">2 patterns you noted recently</span>
-                            </div>
-                          </div>
+                        <div className="space-y-1 text-xs">
+                          <p className="text-primary">→ 2-min grounding</p>
+                          <p className="text-primary">→ Review patterns</p>
                         </div>
                       </div>
                     </div>
