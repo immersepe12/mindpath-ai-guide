@@ -383,7 +383,7 @@ const DailyJourneySection = () => {
                   className="w-full sm:w-auto"
                   onClick={scrollToForm}
                 >
-                  Start Your 90-Day Journey - ₹4,499
+                  Start Your 90-Day Journey - Start Your 90-Day Journey - ₹7,799
                 </MindTalkButton>
               </div>
             </div>
