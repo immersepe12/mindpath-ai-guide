@@ -16,7 +16,7 @@ const StressAnxietyPage = () => {
     <>
       <Helmet>
         <title>Stress & Anxiety Recovery Program - 90 Days to Calm | MindTalk</title>
-        <meta name="description" content="Transform overwhelming stress and anxiety into calm confidence with our AI-powered 90-day program. Daily mindfulness, breathing techniques, and expert therapy support for just ₹4,499." />
+        <meta name="description" content="Transform overwhelming stress and anxiety into calm confidence with our AI-powered 90-day program. Daily mindfulness, breathing techniques, and expert therapy support for just ₹7,799." />
         <meta name="keywords" content="stress management, anxiety treatment, panic attacks, mindfulness, breathing techniques, anxiety therapy, stress relief program" />
         <meta property="og:title" content="Stress & Anxiety Recovery Program - 90 Days to Calm | MindTalk" />
         <meta property="og:description" content="Transform overwhelming stress and anxiety into calm confidence with our AI-powered 90-day program." />
@@ -34,7 +34,7 @@ const StressAnxietyPage = () => {
             icon={Zap}
             gradient="from-blue-500 to-purple-600"
             features={["12 Therapy Sessions", "Breathing Techniques", "Panic Management", "Sleep Improvement"]}
-            price="₹4,499"
+            price="₹7,799"
           />
         </div>
         <LeadCaptureForm />

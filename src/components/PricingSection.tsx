@@ -13,7 +13,7 @@ const PricingSection = () => {
             Revolutionary Value
           </h2>
           <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto px-4">
-            Traditional therapy costs ₹1,250-1,500 per session. Get 12 sessions + AI support + daily guidance for just ₹4,499
+            Traditional therapy costs ₹1,250-1,500 per session. Get 12 sessions + AI support + daily guidance for just ₹7,799
           </p>
         </div>
 
@@ -83,7 +83,7 @@ const PricingSection = () => {
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4 p-4 sm:p-6">
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-mindtalk-orange mb-1 sm:mb-2">₹4,499</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-mindtalk-orange mb-1 sm:mb-2">₹7,799</div>
                   <div className="text-sm sm:text-base text-gray-600">Complete 90-day program</div>
                   <div className="bg-green-100 text-green-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold mt-2 inline-block">
                     Save 70%

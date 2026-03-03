@@ -16,7 +16,7 @@ const DepressionPage = () => {
     <>
       <Helmet>
         <title>Depression Recovery Program - Emotional Reset in 90 Days | MindTalk</title>
-        <meta name="description" content="Rebuild emotional strength and rediscover joy with our structured 90-day depression recovery program. Mood tracking, behavioral activation, and professional support for ₹4,499." />
+        <meta name="description" content="Rebuild emotional strength and rediscover joy with our structured 90-day depression recovery program. Mood tracking, behavioral activation, and professional support for ₹7,799." />
         <meta name="keywords" content="depression treatment, emotional reset, mood tracking, behavioral activation, depression therapy, mental health recovery, joy restoration" />
         <meta property="og:title" content="Depression Recovery Program - Emotional Reset in 90 Days | MindTalk" />
         <meta property="og:description" content="Rebuild emotional strength and rediscover joy with our structured 90-day depression recovery program." />
@@ -34,7 +34,7 @@ const DepressionPage = () => {
             icon={Heart}
             gradient="from-pink-500 to-red-500"
             features={["12 Therapy Sessions", "Mood Tracking", "Behavioral Activation", "Energy Building"]}
-            price="₹4,499"
+            price="₹7,799"
           />
         </div>
         <LeadCaptureForm />

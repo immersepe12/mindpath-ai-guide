@@ -16,7 +16,7 @@ const RelationshipsPage = () => {
     <>
       <Helmet>
         <title>Relationships & Family Therapy Program - 90 Days to Better Bonds | MindTalk</title>
-        <meta name="description" content="Strengthen relationships and improve family communication with our targeted 90-day program. Learn communication skills, boundary setting, and conflict resolution for ₹4,499." />
+        <meta name="description" content="Strengthen relationships and improve family communication with our targeted 90-day program. Learn communication skills, boundary setting, and conflict resolution for ₹7,799." />
         <meta name="keywords" content="relationship therapy, family counseling, communication skills, boundary setting, conflict resolution, couples therapy, family bonds" />
         <meta property="og:title" content="Relationships & Family Therapy Program - 90 Days to Better Bonds | MindTalk" />
         <meta property="og:description" content="Strengthen relationships and improve family communication with our targeted 90-day program." />
@@ -34,7 +34,7 @@ const RelationshipsPage = () => {
             icon={Users}
             gradient="from-green-500 to-emerald-600"
             features={["12 Therapy Sessions", "Communication Skills", "Boundary Setting", "Conflict Resolution"]}
-            price="₹4,499"
+            price="₹7,799"
           />
         </div>
         <LeadCaptureForm />

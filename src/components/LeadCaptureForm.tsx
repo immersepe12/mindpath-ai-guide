@@ -334,7 +334,7 @@ const LeadCaptureForm = () => {
         email: data.email,
         conversion: 'lead_capture',
         program: 'MindTalk 90-Day Recovery Journey',
-        value: '4499',
+        value: '7799',
         submission_id: submissionId,
         db_saved: databaseSuccess.toString(),
         fw_success: freshworksSucess.toString()
@@ -368,7 +368,7 @@ const LeadCaptureForm = () => {
         email: data.email,
         conversion: 'lead_capture',
         program: 'MindTalk 90-Day Recovery Journey',
-        value: '4499',
+        value: '7799',
         submission_id: submissionId,
         db_saved: databaseSuccess.toString(),
         fw_success: freshworksSucess.toString(),
@@ -407,7 +407,7 @@ const LeadCaptureForm = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">Begin Your Recovery</h3>
-                      <p className="text-sm text-gray-600">Complete program for just ₹4,499</p>
+                      <p className="text-sm text-gray-600">Complete program for just ₹7,799</p>
                     </div>
                   </div>
 
@@ -545,7 +545,7 @@ const LeadCaptureForm = () => {
 
                   <div className="mt-8 p-4 bg-white/10 rounded-lg">
                     <div className="text-center">
-                      <div className="text-3xl font-bold mb-1">₹4,499</div>
+                      <div className="text-3xl font-bold mb-1">₹7,799</div>
                       <div className="text-sm text-white/90">Complete 90-day program</div>
                       <div className="text-xs text-white/70 mt-1">No hidden charges • Cancel anytime</div>
                     </div>

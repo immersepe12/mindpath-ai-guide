@@ -28,8 +28,8 @@ const CTASection = () => {
               onClick={scrollToForm}
             >
               <Heart className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="hidden sm:inline">Start Your 90-Day Journey - ₹4,499</span>
-              <span className="sm:hidden">Start Journey - ₹4,499</span>
+              <span className="hidden sm:inline"><span className="hidden sm:inline">Start Your 90-Day Journey - ₹7,799</span></span>
+              <span className="sm:hidden"><span className="sm:hidden">Start Journey - ₹7,799</span></span>
               <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
             </MindTalkButton>
             <MindTalkButton 

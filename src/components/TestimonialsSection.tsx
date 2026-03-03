@@ -24,7 +24,7 @@ const testimonials = [
     age: 42,
     journey: "Depression Recovery",
     rating: 5,
-    text: "For ₹4,499, I got more support than expensive therapy. The AI remembered everything and my therapist was always prepared. Worth every penny.",
+    text: "For ₹7,799, I got more support than expensive therapy. The AI remembered everything and my therapist was always prepared. Worth every penny.",
     improvement: "Mood improved 90%"
   }
 ];

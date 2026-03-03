@@ -88,7 +88,7 @@ const HeroSection = () => {
               <div className="text-sm sm:text-base text-white/80">Assessments, breathwork & visualizations</div>
             </div>
             <div className="p-3 sm:p-4">
-              <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">₹4,499</div>
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2"><div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">₹7,799</div></div>
               <div className="text-sm sm:text-base text-white/80">Complete 90-day recovery package</div>
             </div>
           </div>

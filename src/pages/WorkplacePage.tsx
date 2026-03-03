@@ -16,7 +16,7 @@ const WorkplacePage = () => {
     <>
       <Helmet>
         <title>Workplace Burnout Recovery Program - 90 Days to Work-Life Balance | MindTalk</title>
-        <meta name="description" content="Regain work-life balance and prevent burnout with our comprehensive 90-day program. Time management, stress reduction, and career clarity for ₹4,499." />
+        <meta name="description" content="Regain work-life balance and prevent burnout with our comprehensive 90-day program. Time management, stress reduction, and career clarity for ₹7,799." />
         <meta name="keywords" content="burnout recovery, work-life balance, workplace stress, time management, career counseling, professional burnout, stress reduction" />
         <meta property="og:title" content="Workplace Burnout Recovery Program - 90 Days to Work-Life Balance | MindTalk" />
         <meta property="og:description" content="Regain work-life balance and prevent burnout with our comprehensive 90-day program." />
@@ -34,7 +34,7 @@ const WorkplacePage = () => {
             icon={Briefcase}
             gradient="from-orange-500 to-amber-600"
             features={["12 Therapy Sessions", "Time Management", "Stress Reduction", "Career Clarity"]}
-            price="₹4,499"
+            price="₹7,799"
           />
         </div>
         <LeadCaptureForm />
