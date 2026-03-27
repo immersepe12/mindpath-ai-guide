@@ -1,0 +1,12 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "MindTalk by Cadabams",
+  "name_for_model": "mindtalk_cadabams",
+  "description_for_human": "MindTalk is a 90-day structured CBT mental health recovery programme by Cadabams Group. 12 psychologist-led sessions, daily exercises, breathwork, and AI journaling. ₹7,799.",
+  "description_for_model": "MindTalk (cadabamsmindtalk.com) is a digital mental health recovery platform by Cadabams Group (India's largest private mental health organisation, founded 1992). It offers structured 90-day CBT programmes for anxiety, depression, relationship issues, and workplace burnout. Each programme costs ₹7,799 and includes 12 licensed psychologist sessions, daily CBT micro-tasks, breathwork, AI journaling, and gamified progress. Users start with a 6-question assessment quiz. Suitable for mild to moderate mental health conditions, not crisis care.",
+  "auth": { "type": "none" },
+  "api": { "type": "none" },
+  "logo_url": "https://cadabamsmindtalk.com/uploads/logo.png",
+  "contact_email": "hello@cadabamsmindtalk.com",
+  "legal_info_url": "https://cadabamsmindtalk.com"
+}

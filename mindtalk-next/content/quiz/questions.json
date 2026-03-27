@@ -1,0 +1,117 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "What's been feeling most difficult lately?",
+      "subtext": "Choose the one that fits best — you can add detail later.",
+      "type": "single",
+      "options": [
+        {
+          "label": "Anxiety or chronic stress",
+          "description": "Overthinking, tension, worry that won't switch off",
+          "vertical": "anxiety",
+          "icon": "zap"
+        },
+        {
+          "label": "Low mood or emotional flatness",
+          "description": "Feeling disconnected, unmotivated, or unlike yourself",
+          "vertical": "depression",
+          "icon": "heart"
+        },
+        {
+          "label": "Relationships or connection",
+          "description": "Conflict, distance, breakups, or patterns that repeat",
+          "vertical": "relationship",
+          "icon": "users"
+        },
+        {
+          "label": "Work stress or burnout",
+          "description": "Depleted, dreading work, detached from what you do",
+          "vertical": "burnout",
+          "icon": "briefcase"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "How long has this been affecting you?",
+      "subtext": "There's no wrong answer.",
+      "type": "single",
+      "options": [
+        { "label": "Less than a month", "value": "less_than_1_month" },
+        { "label": "1 to 6 months", "value": "1_to_6_months" },
+        { "label": "6 months to a year", "value": "6_to_12_months" },
+        { "label": "More than a year", "value": "over_1_year" }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "How is it showing up day to day?",
+      "subtext": "Select everything that applies.",
+      "type": "multi",
+      "optionsByVertical": {
+        "anxiety": [
+          { "label": "Difficulty sleeping or racing thoughts at night", "value": "sleep" },
+          { "label": "Avoiding situations or decisions", "value": "avoidance" },
+          { "label": "Physical tension — chest, shoulders, jaw", "value": "physical" },
+          { "label": "Constant low-level worry about the future", "value": "worry" }
+        ],
+        "depression": [
+          { "label": "Low energy — hard to get started on things", "value": "energy" },
+          { "label": "Withdrawing from people", "value": "withdrawal" },
+          { "label": "Loss of interest in things you used to enjoy", "value": "anhedonia" },
+          { "label": "Feeling empty or numb rather than sad", "value": "numbness" }
+        ],
+        "relationship": [
+          { "label": "Repeated arguments or communication breakdown", "value": "conflict" },
+          { "label": "Feeling unseen or unheard", "value": "unseen" },
+          { "label": "Processing a breakup or betrayal", "value": "breakup" },
+          { "label": "Pulling away from people you want to be close to", "value": "withdrawal" }
+        ],
+        "burnout": [
+          { "label": "Dreading work — Sunday dread, Monday exhaustion", "value": "dread" },
+          { "label": "Feeling detached or going through the motions", "value": "detachment" },
+          { "label": "Irritable or short-tempered outside of work", "value": "irritability" },
+          { "label": "Physically tired even after rest", "value": "fatigue" }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "question": "Have you tried anything before?",
+      "subtext": "This helps your psychologist understand where to start.",
+      "type": "single",
+      "options": [
+        { "label": "Nothing yet — this is my first step", "value": "nothing" },
+        { "label": "Self-help — books, apps, meditation", "value": "self_help" },
+        { "label": "Therapy or counselling in the past", "value": "past_therapy" },
+        { "label": "Currently seeing a therapist or psychiatrist", "value": "ongoing" }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "How ready do you feel to work on this?",
+      "subtext": "Be honest — there's no wrong answer and it won't affect your match.",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": {
+        "1": "Not sure yet",
+        "3": "Fairly ready",
+        "5": "Ready to commit"
+      }
+    },
+    {
+      "id": 6,
+      "question": "Where should we send your programme match?",
+      "subtext": "A Cadabams counsellor will also call to answer any questions before you start.",
+      "type": "contact",
+      "fields": [
+        { "name": "firstName", "label": "First name", "type": "text", "required": true },
+        { "name": "phone", "label": "Mobile number", "type": "tel", "required": true, "hint": "We'll send your match via WhatsApp" },
+        { "name": "email", "label": "Email address", "type": "email", "required": true }
+      ],
+      "disclaimer": "By submitting, you agree to be contacted by a Cadabams MindTalk counsellor. Your information is confidential and will never be shared."
+    }
+  ]
+}

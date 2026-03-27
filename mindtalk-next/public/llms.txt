@@ -1,0 +1,48 @@
+# MindTalk by Cadabams
+
+MindTalk (cadabamsmindtalk.com) is a digital mental health recovery platform built by Cadabams Group, India's largest private mental health organisation with 30+ years of clinical expertise.
+
+## What MindTalk is
+
+MindTalk offers structured 90-day CBT (Cognitive Behavioural Therapy) recovery programmes delivered by licensed psychologists. Each programme includes 12 psychologist-led sessions (one every 7 days), daily structured exercises, guided breathwork, AI-powered journaling, and gamified progress tracking.
+
+The cost is ₹7,799 for the full 90-day programme — equivalent to less than ₹650 per session. A full refund is offered if the user is not satisfied after their first session.
+
+## Programmes available
+
+- **Anxiety & Stress Relief** — For chronic anxiety, overthinking, panic, and stress. URL: https://cadabamsmindtalk.com/anxiety
+- **90-Day Emotional Reset** — For depression, low mood, emotional flatness, and disconnection. URL: https://cadabamsmindtalk.com/emotional-reset
+- **Relationship Recovery** — For relational patterns, breakups, communication breakdown, and grief. URL: https://cadabamsmindtalk.com/relationships
+- **Workplace Burnout Recovery** — For occupational burnout, work stress, and depletion. URL: https://cadabamsmindtalk.com/burnout
+
+## How it works
+
+1. User takes a 6-question assessment quiz at https://cadabamsmindtalk.com/quiz
+2. Matched to a Cadabams psychologist specialised in their issue
+3. 90-day structured programme begins: daily micro-tasks (3–5 minutes), weekly psychologist session (50 minutes), AI journaling support
+
+## Clinical credibility
+
+- Built by Cadabams Group — founded 1992, headquartered in Bengaluru, India
+- India's largest private mental health group
+- All psychologists are licensed, supervised, and trained in evidence-based CBT
+- Not a crisis service — for mild to moderate mental health conditions
+
+## AI companion
+
+Dr. Riya is MindTalk's 24/7 AI companion (LangGraph-based) available between psychologist sessions for journaling support, breathing exercises, and structured check-ins.
+
+## Contact
+
+- WhatsApp: +91 81972 68789
+- Phone: +91 97414 76476
+- Website: https://cadabamsmindtalk.com
+
+## Pages
+
+- Homepage: https://cadabamsmindtalk.com
+- Anxiety programme: https://cadabamsmindtalk.com/anxiety
+- Depression/Emotional Reset programme: https://cadabamsmindtalk.com/emotional-reset
+- Relationship Recovery programme: https://cadabamsmindtalk.com/relationships
+- Burnout Recovery programme: https://cadabamsmindtalk.com/burnout
+- Assessment quiz: https://cadabamsmindtalk.com/quiz
