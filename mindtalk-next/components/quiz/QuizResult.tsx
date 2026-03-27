@@ -3,7 +3,8 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
+import { trackResultPageViewed, trackResultCTAClick } from '@/lib/analytics'
 
 const verticalData: Record<string, {
   label: string
@@ -59,6 +60,10 @@ function QuizResultInner() {
   const name = params.get('name') ?? ''
   const data = verticalData[vertical] ?? verticalData.anxiety
 
+  useEffect(() => {
+    trackResultPageViewed(vertical, name)
+  }, [vertical, name])
+
   return (
     <div className="max-w-xl mx-auto">
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 mb-6">
@@ -84,10 +89,10 @@ function QuizResultInner() {
           <div className="text-sm text-[#E8521A] mt-1">Full refund if not right after session 1</div>
         </div>
         <div className="flex flex-col gap-3">
-          <Button size="hero" className="w-full" asChild>
+          <Button size="hero" className="w-full" onClick={() => trackResultCTAClick('see_programme', vertical)} asChild>
             <Link href={data.href}>See full programme details</Link>
           </Button>
-          <Button size="hero" variant="secondary" className="w-full" asChild>
+          <Button size="hero" variant="secondary" className="w-full" onClick={() => trackResultCTAClick('talk_to_counsellor', vertical)} asChild>
             <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
               Talk to a counsellor first
             </a>

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { trackWhatsAppClick } from '@/lib/analytics'
 
 interface WhatsAppFloatingProps {
   message?: string
@@ -25,6 +26,7 @@ export default function WhatsAppFloating({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackWhatsAppClick('floating_button', undefined)}
       className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 bg-[#25D366] text-white rounded-full p-3.5 shadow-lg hover:scale-105 transition-transform"
       aria-label="Chat on WhatsApp"
     >

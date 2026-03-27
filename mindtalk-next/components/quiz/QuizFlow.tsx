@@ -1,11 +1,21 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
-import { trackQuizStep } from '@/lib/analytics'
+import {
+  trackQuizStarted,
+  trackQuizStepViewed,
+  trackQuizStep,
+  trackQuizAbandoned,
+  trackQuizContactFormViewed,
+  trackQuizContactFieldFocused,
+  trackQuizSubmitAttempted,
+  trackQuizSubmitError,
+  trackQuizCompleted,
+} from '@/lib/analytics'
 
 interface Option {
   label: string
@@ -45,6 +55,30 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
   const progress = ((step + 1) / questions.length) * 100
   const selectedVertical = (answers[1] as string) ?? 'anxiety'
 
+  useEffect(() => {
+    trackQuizStarted()
+    trackQuizStepViewed(1, questions[0].question)
+  }, [])
+
+  useEffect(() => {
+    if (step > 0) {
+      trackQuizStepViewed(step + 1, questions[step].question)
+    }
+    if (questions[step]?.type === 'contact') {
+      trackQuizContactFormViewed()
+    }
+  }, [step])
+
+  useEffect(() => {
+    const handleUnload = () => {
+      if (step < questions.length - 1) {
+        trackQuizAbandoned(step + 1, questions[step]?.question ?? '')
+      }
+    }
+    window.addEventListener('beforeunload', handleUnload)
+    return () => window.removeEventListener('beforeunload', handleUnload)
+  }, [step])
+
   function handleSingle(value: string, vertical?: string) {
     const val = vertical ?? value
     setAnswers(prev => ({ ...prev, [current.id]: val }))
@@ -71,10 +105,12 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
   async function handleContactSubmit() {
     if (!contact.firstName || !contact.phone || !contact.email) {
       setError('Please fill in all fields.')
+      trackQuizSubmitError('missing_fields')
       return
     }
     setError('')
     setSubmitting(true)
+    trackQuizSubmitAttempted()
 
     let utms: Record<string, string> = {}
     try {
@@ -101,8 +137,10 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
           pageUrl: window.location.href,
         }),
       })
+      trackQuizCompleted(selectedVertical, Number(answers[5]))
       router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}`)
     } catch {
+      trackQuizSubmitError('api_error')
       setError('Something went wrong. Please try again or WhatsApp us.')
       setSubmitting(false)
     }
@@ -211,6 +249,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
                 className="mt-1.5"
                 value={contact.firstName}
                 onChange={e => setContact(c => ({ ...c, firstName: e.target.value }))}
+                onFocus={() => trackQuizContactFieldFocused('firstName')}
                 placeholder="Your first name"
               />
             </div>
@@ -222,6 +261,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
                 className="mt-1.5"
                 value={contact.phone}
                 onChange={e => setContact(c => ({ ...c, phone: e.target.value }))}
+                onFocus={() => trackQuizContactFieldFocused('phone')}
                 placeholder="10-digit mobile number"
               />
               <p className="text-xs text-gray-400 mt-1">We'll send your match via WhatsApp</p>
@@ -234,6 +274,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
                 className="mt-1.5"
                 value={contact.email}
                 onChange={e => setContact(c => ({ ...c, email: e.target.value }))}
+                onFocus={() => trackQuizContactFieldFocused('email')}
                 placeholder="your@email.com"
               />
             </div>

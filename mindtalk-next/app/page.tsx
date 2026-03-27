@@ -13,6 +13,8 @@ import PricingSection from '@/components/sections/PricingSection'
 import FAQSection from '@/components/sections/FAQSection'
 import FinalCTA from '@/components/sections/FinalCTA'
 import { faqSchema, productSchema, breadcrumbSchema } from '@/lib/structured-data'
+import PageTracker from '@/components/PageTracker'
+import ScrollDepthTracker from '@/components/ScrollDepthTracker'
 import type { Metadata } from 'next'
 
 interface HomeFrontmatter {
@@ -75,6 +77,8 @@ export default function HomePage() {
 
   return (
     <>
+      <PageTracker page="homepage" />
+      <ScrollDepthTracker page="homepage" />
       {structuredData.map((schema, i) => (
         <script
           key={i}

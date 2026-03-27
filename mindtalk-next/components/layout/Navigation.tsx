@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { trackCTAClick } from '@/lib/analytics'
+import { trackCTAClick, trackNavClick } from '@/lib/analytics'
 
 interface NavigationProps {
   ctaText: string
@@ -18,10 +18,10 @@ export default function Navigation({ ctaText, ctaUrl }: NavigationProps) {
         </Link>
         <div className="flex items-center gap-6">
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-600">
-            <Link href="/anxiety" className="hover:text-[#E8521A] transition-colors">Anxiety</Link>
-            <Link href="/emotional-reset" className="hover:text-[#E8521A] transition-colors">Emotional Reset</Link>
-            <Link href="/relationships" className="hover:text-[#E8521A] transition-colors">Relationships</Link>
-            <Link href="/burnout" className="hover:text-[#E8521A] transition-colors">Burnout</Link>
+            <Link href="/anxiety" onClick={() => trackNavClick('Anxiety', '/anxiety')} className="hover:text-[#E8521A] transition-colors">Anxiety</Link>
+            <Link href="/emotional-reset" onClick={() => trackNavClick('Emotional Reset', '/emotional-reset')} className="hover:text-[#E8521A] transition-colors">Emotional Reset</Link>
+            <Link href="/relationships" onClick={() => trackNavClick('Relationships', '/relationships')} className="hover:text-[#E8521A] transition-colors">Relationships</Link>
+            <Link href="/burnout" onClick={() => trackNavClick('Burnout', '/burnout')} className="hover:text-[#E8521A] transition-colors">Burnout</Link>
           </div>
           <Button
             size="sm"

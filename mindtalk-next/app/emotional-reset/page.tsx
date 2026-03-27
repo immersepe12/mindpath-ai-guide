@@ -12,6 +12,8 @@ import CTASection from '@/components/sections/CTASection'
 import StickyMobileCTA from '@/components/layout/StickyMobileCTA'
 import WhatsAppFloating from '@/components/layout/WhatsAppFloating'
 import { faqSchema, medicalServiceSchema, productSchema, breadcrumbSchema } from '@/lib/structured-data'
+import PageTracker from '@/components/PageTracker'
+import ScrollDepthTracker from '@/components/ScrollDepthTracker'
 import type { Metadata } from 'next'
 
 interface VerticalFrontmatter {
@@ -75,6 +77,8 @@ export default function EmotionalResetPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
+      <PageTracker page="vertical" vertical={fm.vertical} />
+      <ScrollDepthTracker page={fm.vertical} />
       <MinimalNav />
       <main>
         <VerticalHero
