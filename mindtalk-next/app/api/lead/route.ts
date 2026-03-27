@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { name, phone, email, vertical, durationOfIssue, priorTherapy, readinessScore } = body
+  const {
+    name, phone, email, vertical,
+    durationOfIssue, symptoms, priorTherapy, readinessScore,
+    utmSource, utmMedium, utmCampaign, utmContent, pageUrl
+  } = body
 
   const normalisePhone = (raw: string) => {
     const digits = raw.replace(/\D/g, '')
@@ -34,11 +38,17 @@ export async function POST(req: NextRequest) {
             first_name: name,
             email,
             mobile_number: normalisedPhone,
+            lead_source: utmSource || 'MindTalk Website',
             custom_field: {
-              vertical,
-              duration_of_issue: durationOfIssue ?? '',
-              prior_therapy: priorTherapy ?? '',
-              readiness_score: readinessScore ?? '',
+              cf_form_source_custom: vertical,
+              cf_utm_id: utmMedium ?? '',
+              cf_utm_term: utmCampaign ?? '',
+              cf_utm_content: utmContent ?? '',
+              cf_score: readinessScore ?? '',
+              cf_customer_category: durationOfIssue ?? '',
+              cf_relationship: Array.isArray(symptoms) ? symptoms.join(', ') : '',
+              cf_gender: priorTherapy ?? '',
+              cf_caller_name: pageUrl ?? '',
             },
           },
         }),
@@ -69,6 +79,8 @@ export async function POST(req: NextRequest) {
               name,
               vertical,
               lp_url: lpUrls[vertical] ?? lpUrls.anxiety,
+              utm_source: utmSource ?? '',
+              utm_campaign: utmCampaign ?? '',
             },
           }),
         }

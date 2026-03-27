@@ -75,6 +75,12 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
     }
     setError('')
     setSubmitting(true)
+
+    let utms: Record<string, string> = {}
+    try {
+      utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}')
+    } catch {}
+
     try {
       await fetch('/api/lead', {
         method: 'POST',
@@ -85,8 +91,14 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
           email: contact.email,
           vertical: selectedVertical,
           durationOfIssue: answers[2] as string,
+          symptoms: answers[3] as string[],
           priorTherapy: answers[4] as string,
           readinessScore: Number(answers[5]),
+          utmSource: utms.utm_source ?? '',
+          utmMedium: utms.utm_medium ?? '',
+          utmCampaign: utms.utm_campaign ?? '',
+          utmContent: utms.utm_content ?? '',
+          pageUrl: window.location.href,
         }),
       })
       router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}`)
