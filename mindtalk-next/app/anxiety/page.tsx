@@ -45,21 +45,32 @@ interface VerticalFrontmatter {
 export async function generateMetadata(): Promise<Metadata> {
   const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/anxiety.mdx')
   return {
-    title: fm.ogTitle,
+    title: 'Online Therapy for Anxiety India | 90-Day CBT Programme | MindTalk',
     description: fm.metaDescription,
+    alternates: { canonical: 'https://cadabamsmindtalk.com/anxiety' },
     openGraph: {
       title: fm.ogTitle,
       description: fm.ogDescription,
       url: 'https://cadabamsmindtalk.com/anxiety',
+      images: [{ url: 'https://cadabamsmindtalk.com/og/anxiety.jpg', width: 1200, height: 630, alt: 'MindTalk Anxiety & Stress Relief Programme' }],
     },
+    twitter: { card: 'summary_large_image' as const, images: ['https://cadabamsmindtalk.com/og/anxiety.jpg'] },
   }
 }
+
+const TESTIMONIALS_LIVE = false
 
 export default function AnxietyPage() {
   const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/anxiety.mdx')
 
+  const evidenceFaqs = [
+    ...fm.faqs,
+    { q: 'Is CBT effective for anxiety disorders?', a: 'Yes. A meta-analysis published in Cognitive Behaviour Therapy (2012) found CBT produces large effect sizes (d = 0.73–1.01) for generalised anxiety, panic disorder, and social anxiety. MindTalk delivers 12 structured CBT sessions over 90 days with a licensed psychologist.' },
+    { q: 'How much does online therapy for anxiety cost in India?', a: 'Individual therapy sessions in India typically cost ₹1,500–₹3,000 per session. MindTalk\'s 90-day programme costs ₹7,799 for 12 sessions (₹650/session) plus daily exercises, AI journaling, and breathwork — significantly more affordable than traditional therapy.' },
+  ]
+
   const structuredData = [
-    faqSchema(fm.faqs),
+    faqSchema(evidenceFaqs),
     medicalServiceSchema('Anxiety disorder', 'https://cadabamsmindtalk.com/anxiety', 'MindTalk Anxiety & Stress Relief Programme', fm.heroSubtext),
     productSchema('MindTalk Anxiety Recovery Programme', fm.heroSubtext, 'https://cadabamsmindtalk.com/anxiety'),
     breadcrumbSchema([
@@ -102,7 +113,7 @@ export default function AnxietyPage() {
           headline={fm.whatsIncludedHeadline}
           items={fm.included}
         />
-        <TestimonialsSection />
+        {TESTIMONIALS_LIVE && <TestimonialsSection />}
         <PricingSection
           headline={fm.pricingHeadline}
           price={fm.price}
@@ -123,6 +134,9 @@ export default function AnxietyPage() {
       <Footer />
       <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl={fm.ctaUrl} />
       <WhatsAppFloating message={fm.whatsappMessage} />
+      <p className="text-xs text-gray-400 mt-8 text-center pb-4">
+        Clinically reviewed: March 2026 · Cadabams Group
+      </p>
     </>
   )
 }

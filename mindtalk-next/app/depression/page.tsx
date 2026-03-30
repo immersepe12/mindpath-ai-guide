@@ -43,39 +43,39 @@ interface VerticalFrontmatter {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/relationships.mdx')
+  const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/emotional-reset.mdx')
   return {
-    title: 'Online Relationship Therapy India | CBT for Breakups & Conflict | MindTalk',
+    title: 'Online Therapy for Depression India | 90-Day CBT | MindTalk',
     description: fm.metaDescription,
-    alternates: { canonical: 'https://cadabamsmindtalk.com/relationships' },
+    alternates: { canonical: 'https://cadabamsmindtalk.com/depression' },
     openGraph: {
       title: fm.ogTitle,
       description: fm.ogDescription,
-      url: 'https://cadabamsmindtalk.com/relationships',
-      images: [{ url: 'https://cadabamsmindtalk.com/og/relationships.jpg', width: 1200, height: 630, alt: 'MindTalk Relationship Recovery Programme' }],
+      url: 'https://cadabamsmindtalk.com/depression',
+      images: [{ url: 'https://cadabamsmindtalk.com/og/depression.jpg', width: 1200, height: 630, alt: 'MindTalk 90-Day Emotional Reset Programme' }],
     },
-    twitter: { card: 'summary_large_image' as const, images: ['https://cadabamsmindtalk.com/og/relationships.jpg'] },
+    twitter: { card: 'summary_large_image' as const, images: ['https://cadabamsmindtalk.com/og/depression.jpg'] },
   }
 }
 
 const TESTIMONIALS_LIVE = false
 
-export default function RelationshipsPage() {
-  const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/relationships.mdx')
+export default function DepressionPage() {
+  const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/emotional-reset.mdx')
 
   const evidenceFaqs = [
     ...fm.faqs,
-    { q: 'Can CBT help with relationship issues and breakups?', a: 'Yes. CBT is effective for relationship distress by addressing cognitive distortions (catastrophising, mind-reading) and building communication skills. Research in the Journal of Consulting and Clinical Psychology shows CBT-based interventions improve relationship satisfaction by 40–50%. MindTalk pairs you with a psychologist trained in relational CBT.' },
-    { q: 'How much does relationship therapy cost online in India?', a: 'Couples or individual relationship therapy typically costs ₹2,000–₹4,000 per session in India. MindTalk\'s 90-day programme costs ₹7,799 for 12 sessions (₹650/session) plus daily exercises, AI journaling, and breathwork — a structured, affordable alternative to traditional therapy.' },
+    { q: 'Is CBT effective for treating depression?', a: 'Yes. The American Psychological Association recognises CBT as a first-line treatment for depression. A 2019 Lancet Psychiatry meta-analysis found CBT reduces depressive symptoms by 50–60% in mild-to-moderate cases. MindTalk delivers 12 structured CBT sessions over 90 days with a licensed Cadabams psychologist.' },
+    { q: 'How much does online therapy for depression cost in India?', a: 'Traditional in-person therapy costs ₹1,500–₹3,000 per session in Indian metros. MindTalk\'s 90-day programme costs ₹7,799 for 12 sessions (₹650/session) plus daily exercises, AI journaling, and breathwork — making evidence-based depression treatment accessible and affordable.' },
   ]
 
   const structuredData = [
     faqSchema(evidenceFaqs),
-    medicalServiceSchema('Relationship issues', 'https://cadabamsmindtalk.com/relationships', 'MindTalk Relationship Recovery Programme', fm.heroSubtext),
-    productSchema('MindTalk Relationship Recovery Programme', fm.heroSubtext, 'https://cadabamsmindtalk.com/relationships'),
+    medicalServiceSchema('Depression', 'https://cadabamsmindtalk.com/depression', 'MindTalk 90-Day Emotional Reset Programme', fm.heroSubtext),
+    productSchema('MindTalk 90-Day Emotional Reset Programme', fm.heroSubtext, 'https://cadabamsmindtalk.com/depression'),
     breadcrumbSchema([
       { name: 'Home', url: 'https://cadabamsmindtalk.com' },
-      { name: 'Relationship Recovery', url: 'https://cadabamsmindtalk.com/relationships' },
+      { name: '90-Day Emotional Reset', url: 'https://cadabamsmindtalk.com/depression' },
     ]),
   ]
 

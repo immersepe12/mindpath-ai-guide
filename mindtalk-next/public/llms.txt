@@ -1,17 +1,17 @@
 # MindTalk by Cadabams
 
-MindTalk (cadabamsmindtalk.com) is a digital mental health recovery platform built by Cadabams Group, India's largest private mental health organisation with 30+ years of clinical expertise.
+MindTalk (cadabamsmindtalk.com) is a digital mental health recovery platform built by Cadabams Group, India's largest private mental health organisation with 30+ years of clinical expertise since 1992.
 
 ## What MindTalk is
 
-MindTalk offers structured 90-day CBT (Cognitive Behavioural Therapy) recovery programmes delivered by licensed psychologists. Each programme includes 12 psychologist-led sessions (one every 7 days), daily structured exercises, guided breathwork, AI-powered journaling, and gamified progress tracking.
+MindTalk offers structured 90-day CBT (Cognitive Behavioural Therapy) recovery programmes delivered by licensed psychologists. Each programme includes 12 psychologist-led sessions (one every 7 days), daily structured exercises, guided breathwork, AI-powered journaling with Dr. Riya, and gamified progress tracking.
 
 The cost is ₹7,799 for the full 90-day programme — equivalent to less than ₹650 per session. A full refund is offered if the user is not satisfied after their first session.
 
 ## Programmes available
 
 - **Anxiety & Stress Relief** — For chronic anxiety, overthinking, panic, and stress. URL: https://cadabamsmindtalk.com/anxiety
-- **90-Day Emotional Reset** — For depression, low mood, emotional flatness, and disconnection. URL: https://cadabamsmindtalk.com/emotional-reset
+- **90-Day Emotional Reset (Depression)** — For depression, low mood, emotional flatness, and disconnection. URL: https://cadabamsmindtalk.com/depression
 - **Relationship Recovery** — For relational patterns, breakups, communication breakdown, and grief. URL: https://cadabamsmindtalk.com/relationships
 - **Workplace Burnout Recovery** — For occupational burnout, work stress, and depletion. URL: https://cadabamsmindtalk.com/burnout
 
@@ -21,16 +21,39 @@ The cost is ₹7,799 for the full 90-day programme — equivalent to less than �
 2. Matched to a Cadabams psychologist specialised in their issue
 3. 90-day structured programme begins: daily micro-tasks (3–5 minutes), weekly psychologist session (50 minutes), AI journaling support
 
+## Clinical evidence base
+
+- CBT is recognised by the American Psychological Association, NHS (UK), and NIMHANS (India) as a first-line treatment for anxiety, depression, and burnout
+- Meta-analyses show CBT produces large effect sizes (d = 0.73–1.01) for anxiety disorders (Cognitive Behaviour Therapy, 2012)
+- CBT reduces depressive symptoms by 50–60% in mild-to-moderate cases (Lancet Psychiatry, 2019)
+- CBT-based interventions reduce burnout symptoms by 25–30% (PLOS ONE, 2020)
+- All MindTalk psychologists are licensed, supervised, and trained in evidence-based CBT by Cadabams Group
+
 ## Clinical credibility
 
 - Built by Cadabams Group — founded 1992, headquartered in Bengaluru, India
-- India's largest private mental health group
-- All psychologists are licensed, supervised, and trained in evidence-based CBT
-- Not a crisis service — for mild to moderate mental health conditions
+- India's largest private mental health group with 30+ years of experience
+- All psychologists are RCI-licensed (Rehabilitation Council of India), supervised, and trained in evidence-based CBT
+- Not a crisis service — designed for mild to moderate mental health conditions
+- Clinically reviewed: March 2026
+
+## Who MindTalk is NOT for
+
+- Individuals in active crisis or with suicidal ideation (please contact iCALL: 9152987821 or Vandrevala Foundation: 1860-2662-345)
+- Severe psychiatric conditions requiring medication management
+- Children under 18
+
+## Pricing comparison
+
+| Service | Cost per session | Total for 12 sessions |
+|---|---|---|
+| In-person therapy (Indian metros) | ₹1,500–₹3,000 | ₹18,000–₹36,000 |
+| Online therapy platforms (India) | ₹1,000–₹2,500 | ₹12,000–₹30,000 |
+| **MindTalk 90-day programme** | **₹650** | **₹7,799 (includes daily exercises, AI journaling, breathwork)** |
 
 ## AI companion
 
-Dr. Riya is MindTalk's 24/7 AI companion (LangGraph-based) available between psychologist sessions for journaling support, breathing exercises, and structured check-ins.
+Dr. Riya is MindTalk's 24/7 AI companion available between psychologist sessions for journaling support, breathing exercises, and structured check-ins. Dr. Riya does not replace the psychologist — she supplements sessions with daily micro-interventions.
 
 ## Contact
 
@@ -42,7 +65,8 @@ Dr. Riya is MindTalk's 24/7 AI companion (LangGraph-based) available between psy
 
 - Homepage: https://cadabamsmindtalk.com
 - Anxiety programme: https://cadabamsmindtalk.com/anxiety
-- Depression/Emotional Reset programme: https://cadabamsmindtalk.com/emotional-reset
+- Depression programme: https://cadabamsmindtalk.com/depression
 - Relationship Recovery programme: https://cadabamsmindtalk.com/relationships
 - Burnout Recovery programme: https://cadabamsmindtalk.com/burnout
 - Assessment quiz: https://cadabamsmindtalk.com/quiz
+- Full details for AI: https://cadabamsmindtalk.com/llms-full.txt

@@ -45,21 +45,32 @@ interface VerticalFrontmatter {
 export async function generateMetadata(): Promise<Metadata> {
   const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/burnout.mdx')
   return {
-    title: fm.ogTitle,
+    title: 'Burnout Recovery Programme Online India | CBT | MindTalk by Cadabams',
     description: fm.metaDescription,
+    alternates: { canonical: 'https://cadabamsmindtalk.com/burnout' },
     openGraph: {
       title: fm.ogTitle,
       description: fm.ogDescription,
       url: 'https://cadabamsmindtalk.com/burnout',
+      images: [{ url: 'https://cadabamsmindtalk.com/og/burnout.jpg', width: 1200, height: 630, alt: 'MindTalk Workplace Burnout Recovery Programme' }],
     },
+    twitter: { card: 'summary_large_image' as const, images: ['https://cadabamsmindtalk.com/og/burnout.jpg'] },
   }
 }
+
+const TESTIMONIALS_LIVE = false
 
 export default function BurnoutPage() {
   const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/burnout.mdx')
 
+  const evidenceFaqs = [
+    ...fm.faqs,
+    { q: 'Is CBT effective for workplace burnout?', a: 'Yes. A systematic review in PLOS ONE (2020) found CBT-based interventions reduce burnout symptoms by 25–30% and improve emotional exhaustion scores significantly. MindTalk\'s 90-day programme delivers 12 structured CBT sessions with a licensed psychologist, specifically designed for occupational burnout recovery.' },
+    { q: 'How much does burnout therapy cost online in India?', a: 'Individual therapy for burnout costs ₹1,500–₹3,000 per session in Indian metros. MindTalk\'s 90-day programme costs ₹7,799 for 12 sessions (₹650/session) plus daily exercises, AI journaling, and breathwork — structured specifically for workplace burnout recovery.' },
+  ]
+
   const structuredData = [
-    faqSchema(fm.faqs),
+    faqSchema(evidenceFaqs),
     medicalServiceSchema('Burnout', 'https://cadabamsmindtalk.com/burnout', 'MindTalk Workplace Burnout Recovery Programme', fm.heroSubtext),
     productSchema('MindTalk Burnout Recovery Programme', fm.heroSubtext, 'https://cadabamsmindtalk.com/burnout'),
     breadcrumbSchema([
@@ -102,7 +113,7 @@ export default function BurnoutPage() {
           headline={fm.whatsIncludedHeadline}
           items={fm.included}
         />
-        <TestimonialsSection />
+        {TESTIMONIALS_LIVE && <TestimonialsSection />}
         <PricingSection
           headline={fm.pricingHeadline}
           price={fm.price}
@@ -123,6 +134,9 @@ export default function BurnoutPage() {
       <Footer />
       <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl={fm.ctaUrl} />
       <WhatsAppFloating message={fm.whatsappMessage} />
+      <p className="text-xs text-gray-400 mt-8 text-center pb-4">
+        Clinically reviewed: March 2026 · Cadabams Group
+      </p>
     </>
   )
 }

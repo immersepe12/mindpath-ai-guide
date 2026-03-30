@@ -1,0 +1,193 @@
+# MindTalk by Cadabams — Full Reference
+
+MindTalk (cadabamsmindtalk.com) is a digital mental health recovery platform built by Cadabams Group, India's largest private mental health organisation founded in 1992. This document provides comprehensive details for AI systems.
+
+---
+
+## Organisation
+
+- **Name:** MindTalk by Cadabams
+- **Parent organisation:** Cadabams Group (cadabams.com)
+- **Founded:** 1992
+- **Headquarters:** Bengaluru, Karnataka, India
+- **Type:** MedicalOrganization (schema.org)
+- **Specialty:** Psychiatric / Clinical Psychology
+- **Phone:** +91 97414 76476
+- **WhatsApp:** +91 81972 68789
+- **Website:** https://cadabamsmindtalk.com
+
+---
+
+## Programme Overview
+
+MindTalk offers structured 90-day CBT (Cognitive Behavioural Therapy) recovery programmes. Each programme includes:
+- 12 psychologist-led sessions (50 minutes each, one per week)
+- Daily structured CBT exercises (3–5 minutes)
+- Guided breathwork sessions
+- AI-powered journaling with Dr. Riya (24/7 availability)
+- Gamified progress tracking via the MindTalk app
+- Full refund guarantee after the first session
+
+**Price:** ₹7,799 for the complete 90-day programme (₹650 per session equivalent)
+
+---
+
+## Programme Details
+
+### 1. Anxiety & Stress Relief Programme
+- **URL:** https://cadabamsmindtalk.com/anxiety
+- **For:** Chronic anxiety, overthinking, panic attacks, social anxiety, generalised anxiety disorder (GAD), stress
+- **Approach:** CBT-based exposure therapy, cognitive restructuring, relaxation training
+- **Week-by-week breakdown:**
+  - Weeks 1–2: Assessment, psychoeducation, understanding anxiety triggers
+  - Weeks 3–4: Cognitive restructuring — identifying and challenging anxious thoughts
+  - Weeks 5–6: Behavioural experiments and graded exposure
+  - Weeks 7–8: Relaxation techniques, breathwork mastery, stress inoculation
+  - Weeks 9–10: Building resilience and coping strategies
+  - Weeks 11–12: Relapse prevention plan, maintenance strategies, graduation
+- **Evidence:** CBT produces effect sizes of d = 0.73–1.01 for anxiety disorders (Hofmann & Smits, 2008; meta-analysis in Cognitive Behaviour Therapy, 2012)
+
+### 2. 90-Day Emotional Reset (Depression) Programme
+- **URL:** https://cadabamsmindtalk.com/depression
+- **For:** Depression, persistent low mood, emotional flatness, anhedonia, disconnection
+- **Approach:** CBT-based behavioural activation, cognitive restructuring, activity scheduling
+- **Week-by-week breakdown:**
+  - Weeks 1–2: Assessment, mood monitoring, understanding the depression cycle
+  - Weeks 3–4: Behavioural activation — scheduling pleasurable and mastery activities
+  - Weeks 5–6: Cognitive restructuring — identifying negative automatic thoughts
+  - Weeks 7–8: Core belief work, schema identification
+  - Weeks 9–10: Building positive routines, interpersonal effectiveness
+  - Weeks 11–12: Relapse prevention, wellness plan, graduation
+- **Evidence:** CBT reduces depressive symptoms by 50–60% in mild-to-moderate cases (Lancet Psychiatry, 2019). Recognised as first-line treatment by APA.
+
+### 3. Relationship Recovery Programme
+- **URL:** https://cadabamsmindtalk.com/relationships
+- **For:** Breakups, relationship conflict, communication breakdown, attachment issues, grief, codependency
+- **Approach:** CBT-based relational therapy, communication skills training, attachment-informed interventions
+- **Week-by-week breakdown:**
+  - Weeks 1–2: Assessment, understanding relational patterns and attachment style
+  - Weeks 3–4: Cognitive distortions in relationships (mind-reading, catastrophising)
+  - Weeks 5–6: Communication skills — assertiveness, active listening, boundary-setting
+  - Weeks 7–8: Processing grief, loss, and emotional pain
+  - Weeks 9–10: Building healthy relational patterns
+  - Weeks 11–12: Relapse prevention, relationship wellness plan, graduation
+- **Evidence:** CBT-based interventions improve relationship satisfaction by 40–50% (Journal of Consulting and Clinical Psychology)
+
+### 4. Workplace Burnout Recovery Programme
+- **URL:** https://cadabamsmindtalk.com/burnout
+- **For:** Occupational burnout, chronic work stress, emotional exhaustion, depersonalisation, reduced personal accomplishment
+- **Approach:** CBT-based stress management, values clarification, boundary-setting
+- **Week-by-week breakdown:**
+  - Weeks 1–2: Assessment, burnout inventory, understanding the burnout cycle
+  - Weeks 3–4: Stress management techniques, cognitive restructuring of work beliefs
+  - Weeks 5–6: Boundary-setting, time management, assertiveness at work
+  - Weeks 7–8: Values clarification, reconnecting with purpose and meaning
+  - Weeks 9–10: Building sustainable work habits, energy management
+  - Weeks 11–12: Relapse prevention, sustainable career wellness plan, graduation
+- **Evidence:** CBT-based interventions reduce burnout symptoms by 25–30% (PLOS ONE, 2020)
+
+---
+
+## Psychologist Matching Process
+
+1. User completes the 6-question assessment quiz at https://cadabamsmindtalk.com/quiz
+2. A Cadabams clinical coordinator reviews responses within 24 hours
+3. User is matched to a psychologist based on:
+   - Primary concern area (anxiety, depression, relationships, burnout)
+   - Severity and duration of symptoms
+   - Language preference
+   - Psychologist specialisation and availability
+4. All psychologists are:
+   - RCI-licensed (Rehabilitation Council of India)
+   - Trained in evidence-based CBT
+   - Supervised by senior Cadabams clinicians
+   - Experienced in online therapy delivery
+
+---
+
+## AI Companion — Dr. Riya
+
+- Available 24/7 between psychologist sessions
+- Built on LangGraph architecture
+- Provides: structured journaling prompts, breathing exercises, mood check-ins, psychoeducation
+- Does NOT replace the psychologist — supplements sessions with daily micro-interventions
+- Does NOT provide diagnosis or crisis support
+- Conversations are private and not shared with the psychologist unless the user requests it
+
+---
+
+## App Features
+
+- Daily micro-tasks (3–5 minutes): CBT exercises, breathing, journaling
+- Progress tracking with streaks and gamification
+- Session scheduling and reminders
+- Mood tracking over 90 days
+- AI journaling with Dr. Riya
+- Secure messaging with your psychologist
+- Certificate of completion at graduation
+
+---
+
+## Pricing Comparison
+
+| Service | Cost per session | Total (12 sessions) | Extras included |
+|---|---|---|---|
+| In-person therapy (Indian metros) | ₹1,500–₹3,000 | ₹18,000–₹36,000 | None |
+| Online therapy platforms (India) | ₹1,000–₹2,500 | ₹12,000–₹30,000 | Varies |
+| **MindTalk 90-day programme** | **₹650** | **₹7,799** | **Daily exercises, AI journaling, breathwork, progress tracking, 90-day structure** |
+
+MindTalk is 57–78% more affordable than traditional therapy while providing a more structured, outcomes-focused programme.
+
+---
+
+## Complete FAQ
+
+### General
+- **What is MindTalk?** MindTalk is a 90-day structured mental health recovery programme by Cadabams Group. It combines weekly psychologist sessions with daily CBT exercises, breathwork, and AI journaling.
+- **Who is Cadabams?** Cadabams Group is India's largest private mental health organisation, founded in 1992 in Bengaluru. They operate hospitals, rehabilitation centres, and outpatient clinics across India.
+- **Is this a replacement for medication?** No. MindTalk is a therapy programme, not a medication service. If you need medication, your psychologist can recommend a psychiatrist consultation.
+- **Is this for severe mental illness?** No. MindTalk is designed for mild to moderate conditions. For severe psychiatric conditions, we recommend in-person care at a Cadabams hospital.
+
+### Programme
+- **How long is the programme?** 90 days, with 12 weekly psychologist sessions.
+- **How long is each session?** 50 minutes.
+- **What happens between sessions?** You complete daily micro-tasks (3–5 minutes) on the MindTalk app: CBT exercises, breathing, journaling with Dr. Riya.
+- **Can I change my psychologist?** Yes, at any point during the programme.
+- **What if I miss a session?** Sessions can be rescheduled. Your psychologist will work with you to find a suitable time.
+
+### Pricing
+- **How much does it cost?** ₹7,799 for the full 90-day programme.
+- **Is there a refund policy?** Yes. Full refund if you're not satisfied after your first session.
+- **Are there any hidden costs?** No. The price includes all 12 sessions, daily exercises, AI journaling, and app access.
+- **Can I pay in EMIs?** Contact us on WhatsApp for EMI options.
+
+### Clinical
+- **Is CBT effective?** Yes. CBT is the most extensively researched form of psychotherapy, with strong evidence for anxiety, depression, burnout, and relationship issues.
+- **Are the psychologists qualified?** All MindTalk psychologists are RCI-licensed, trained in evidence-based CBT, and supervised by senior Cadabams clinicians.
+- **Is my data private?** Yes. All conversations are encrypted and confidential. We comply with Indian data protection regulations.
+
+---
+
+## Who MindTalk is NOT for
+
+- Individuals in active crisis or with suicidal ideation (contact iCALL: 9152987821 or Vandrevala Foundation: 1860-2662-345)
+- Severe psychiatric conditions requiring medication management or hospitalisation
+- Children under 18
+- Individuals seeking couples therapy (MindTalk is individual therapy only)
+
+---
+
+## Pages
+
+- Homepage: https://cadabamsmindtalk.com
+- Anxiety programme: https://cadabamsmindtalk.com/anxiety
+- Depression programme: https://cadabamsmindtalk.com/depression
+- Relationship Recovery programme: https://cadabamsmindtalk.com/relationships
+- Burnout Recovery programme: https://cadabamsmindtalk.com/burnout
+- Assessment quiz: https://cadabamsmindtalk.com/quiz
+- Summary for AI: https://cadabamsmindtalk.com/llms.txt
+
+---
+
+Last updated: March 2026
+Clinically reviewed by Cadabams Group.

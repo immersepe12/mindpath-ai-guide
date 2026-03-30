@@ -13,7 +13,11 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
       {
-        userAgent: 'Claude-Web',
+        userAgent: 'ClaudeBot',
+        allow: '/',
+      },
+      {
+        userAgent: 'anthropic-ai',
         allow: '/',
       },
       {
@@ -21,7 +25,15 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
       {
+        userAgent: 'Google-Extended',
+        allow: '/',
+      },
+      {
         userAgent: 'Googlebot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Bingbot',
         allow: '/',
       },
     ],

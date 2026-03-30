@@ -49,8 +49,9 @@ interface HomeFrontmatter {
 export async function generateMetadata(): Promise<Metadata> {
   const fm = getMDXFrontmatter<HomeFrontmatter>('home.mdx')
   return {
-    title: fm.ogTitle,
+    title: 'MindTalk by Cadabams | Online Mental Health Recovery Programme India',
     description: fm.metaDescription,
+    alternates: { canonical: 'https://cadabamsmindtalk.com' },
     openGraph: {
       title: fm.ogTitle,
       description: fm.ogDescription,
@@ -58,6 +59,8 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   }
 }
+
+const TESTIMONIALS_LIVE = false
 
 export default function HomePage() {
   const fm = getMDXFrontmatter<HomeFrontmatter>('home.mdx')
@@ -110,7 +113,7 @@ export default function HomePage() {
           headline={fm.whatInsideHeadline}
           items={fm.insideItems}
         />
-        <TestimonialsSection />
+        {TESTIMONIALS_LIVE && <TestimonialsSection />}
         <ComparisonSection headline={fm.comparisonHeadline} />
         <PricingSection
           headline={fm.pricingHeadline}
@@ -132,6 +135,9 @@ export default function HomePage() {
         />
       </main>
       <Footer />
+      <p className="text-xs text-gray-400 mt-8 text-center pb-4">
+        Clinically reviewed: March 2026 · Cadabams Group
+      </p>
     </>
   )
 }

@@ -1,10 +1,18 @@
 export function organizationSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': 'MedicalOrganization',
     name: 'MindTalk by Cadabams',
     url: 'https://cadabamsmindtalk.com',
     logo: 'https://cadabamsmindtalk.com/uploads/logo.png',
+    medicalSpecialty: 'Psychiatric',
+    telephone: '+91-97414-76476',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Bengaluru',
+      addressRegion: 'Karnataka',
+      addressCountry: 'IN',
+    },
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+91-97414-76476',
@@ -12,11 +20,11 @@ export function organizationSchema() {
       availableLanguage: ['English', 'Hindi', 'Kannada'],
     },
     parentOrganization: {
-      '@type': 'Organization',
+      '@type': 'MedicalOrganization',
       name: 'Cadabams Group',
       url: 'https://cadabams.com',
       foundingDate: '1992',
-      description: "India's largest private mental health organisation",
+      description: "India's largest private mental health organisation with 30+ years of clinical expertise",
     },
     sameAs: [
       'https://www.instagram.com/cadabamsmindtalk',

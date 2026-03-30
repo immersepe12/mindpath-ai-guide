@@ -45,15 +45,20 @@ interface VerticalFrontmatter {
 export async function generateMetadata(): Promise<Metadata> {
   const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/emotional-reset.mdx')
   return {
-    title: fm.ogTitle,
+    title: 'Online Therapy for Depression India | 90-Day Emotional Reset | MindTalk',
     description: fm.metaDescription,
+    alternates: { canonical: 'https://cadabamsmindtalk.com/emotional-reset' },
     openGraph: {
       title: fm.ogTitle,
       description: fm.ogDescription,
       url: 'https://cadabamsmindtalk.com/emotional-reset',
+      images: [{ url: 'https://cadabamsmindtalk.com/og/depression.jpg', width: 1200, height: 630, alt: 'MindTalk 90-Day Emotional Reset Programme' }],
     },
+    twitter: { card: 'summary_large_image' as const, images: ['https://cadabamsmindtalk.com/og/depression.jpg'] },
   }
 }
+
+const TESTIMONIALS_LIVE = false
 
 export default function EmotionalResetPage() {
   const fm = getMDXFrontmatter<VerticalFrontmatter>('verticals/emotional-reset.mdx')
@@ -102,7 +107,7 @@ export default function EmotionalResetPage() {
           headline={fm.whatsIncludedHeadline}
           items={fm.included}
         />
-        <TestimonialsSection />
+        {TESTIMONIALS_LIVE && <TestimonialsSection />}
         <PricingSection
           headline={fm.pricingHeadline}
           price={fm.price}
@@ -123,6 +128,9 @@ export default function EmotionalResetPage() {
       <Footer />
       <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl={fm.ctaUrl} />
       <WhatsAppFloating message={fm.whatsappMessage} />
+      <p className="text-xs text-gray-400 mt-8 text-center pb-4">
+        Clinically reviewed: March 2026 · Cadabams Group
+      </p>
     </>
   )
 }
