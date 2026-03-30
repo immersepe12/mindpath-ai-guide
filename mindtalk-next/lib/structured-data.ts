@@ -86,9 +86,10 @@ export function productSchema(name: string, description: string, url: string) {
       priceCurrency: 'INR',
       availability: 'https://schema.org/InStock',
       url,
+      priceValidUntil: '2026-12-31',
       seller: {
         '@type': 'Organization',
-        name: 'Cadabams Group',
+        name: 'MindTalk by Cadabams',
       },
     },
     aggregateRating: {
