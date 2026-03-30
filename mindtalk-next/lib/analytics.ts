@@ -12,13 +12,16 @@ export function initAnalytics() {
   }
   mixpanel.init(MIXPANEL_TOKEN, {
     debug: process.env.NODE_ENV === 'development',
-    track_pageview: false,
     persistence: 'localStorage',
     ignore_dnt: false,
     api_host: 'https://api-eu.mixpanel.com',
   })
   console.log('[MindTalk Analytics] token value:',
     process.env.NEXT_PUBLIC_MIXPANEL_TOKEN ? 'present' : 'MISSING - check Vercel env vars')
+  setTimeout(() => {
+    mixpanel.track('analytics_test', { source: 'init_check' })
+    console.log('[MindTalk Analytics] Test event fired')
+  }, 1000)
 }
 
 export function captureUTMs() {
