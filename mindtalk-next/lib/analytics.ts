@@ -1,10 +1,11 @@
 import mixpanel from 'mixpanel-browser'
 
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
+const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || 'DEBUG_NO_TOKEN'
 const FYNO_WORKSPACE = process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID
 const FYNO_API_KEY   = process.env.NEXT_PUBLIC_FYNO_API_KEY
 
 export function initAnalytics() {
+  if (typeof window === 'undefined') return
   if (!MIXPANEL_TOKEN) {
     console.warn('[Analytics] NEXT_PUBLIC_MIXPANEL_TOKEN not set')
     return
@@ -14,7 +15,10 @@ export function initAnalytics() {
     track_pageview: false,
     persistence: 'localStorage',
     ignore_dnt: false,
+    api_host: 'https://api-eu.mixpanel.com',
   })
+  console.log('[MindTalk Analytics] token value:',
+    process.env.NEXT_PUBLIC_MIXPANEL_TOKEN ? 'present' : 'MISSING - check Vercel env vars')
 }
 
 export function captureUTMs() {
@@ -56,7 +60,7 @@ function normalisePhone(raw: string): string {
 
 const LP_URLS: Record<Vertical,string> = {
   anxiety:      'https://cadabamsmindtalk.com/anxiety',
-  depression:   'https://cadabamsmindtalk.com/emotional-reset',
+  depression:   'https://cadabamsmindtalk.com/depression',
   relationship: 'https://cadabamsmindtalk.com/relationships',
   burnout:      'https://cadabamsmindtalk.com/burnout',
 }
@@ -69,7 +73,8 @@ function track(event: string, props?: Record<string,unknown>) {
 // ─── PAGE EVENTS ─────────────────────────────────────────────────────────────
 
 export function trackPageView(pageName: string, props?: Record<string,unknown>) {
-  track('page_viewed', { page: pageName, url: typeof window !== 'undefined' ? window.location.href : '', ...props })
+  if (typeof window === 'undefined') return
+  track('page_viewed', { page: pageName, url: window.location.href, ...props })
 }
 
 export function trackScrollDepth(page: string, depth: 25 | 50 | 75 | 100) {
@@ -79,6 +84,7 @@ export function trackScrollDepth(page: string, depth: 25 | 50 | 75 | 100) {
 // ─── NAVIGATION / CTA EVENTS ─────────────────────────────────────────────────
 
 export function trackCTAClick(ctaLabel: string, location: string, destination?: string) {
+  if (typeof window === 'undefined') return
   track('cta_clicked', { cta_label: ctaLabel, location, destination })
 }
 
@@ -101,6 +107,7 @@ export function trackQuizStepViewed(step: number, questionText: string) {
 }
 
 export function trackQuizStep(step: number, question: string, answer: string | string[]) {
+  if (typeof window === 'undefined') return
   track('quiz_step_completed', {
     step,
     question,
@@ -166,6 +173,7 @@ export interface LeadData {
 }
 
 export async function trackLeadSubmitted(data: LeadData): Promise<void> {
+  if (typeof window === 'undefined') return
   const vertical = normaliseVertical(data.verticalRaw)
   const phone    = normalisePhone(data.phone)
   const utms     = getStoredUTMs()
