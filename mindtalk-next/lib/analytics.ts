@@ -1,11 +1,14 @@
 import mixpanel from 'mixpanel-browser'
 
-const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN || 'DEBUG_NO_TOKEN'
+const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 const FYNO_WORKSPACE = process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID
 const FYNO_API_KEY   = process.env.NEXT_PUBLIC_FYNO_API_KEY
 
 export function initAnalytics() {
   if (typeof window === 'undefined') return
+  if (window.location.hostname !== 'cadabamsmindtalk.com') {
+    return
+  }
   if (!MIXPANEL_TOKEN) {
     console.warn('[Analytics] NEXT_PUBLIC_MIXPANEL_TOKEN not set')
     return
@@ -18,10 +21,6 @@ export function initAnalytics() {
   })
   console.log('[MindTalk Analytics] token value:',
     process.env.NEXT_PUBLIC_MIXPANEL_TOKEN ? 'present' : 'MISSING - check Vercel env vars')
-  setTimeout(() => {
-    mixpanel.track('analytics_test', { source: 'init_check' })
-    console.log('[MindTalk Analytics] Test event fired')
-  }, 1000)
 }
 
 export function captureUTMs() {
