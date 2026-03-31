@@ -22,6 +22,7 @@ export default function Navigation({ ctaText, ctaUrl }: NavigationProps) {
             <Link href="/emotional-reset" onClick={() => trackNavClick('Emotional Reset', '/emotional-reset')} className="hover:text-[#E8521A] transition-colors">Emotional Reset</Link>
             <Link href="/relationships" onClick={() => trackNavClick('Relationships', '/relationships')} className="hover:text-[#E8521A] transition-colors">Relationships</Link>
             <Link href="/burnout" onClick={() => trackNavClick('Burnout', '/burnout')} className="hover:text-[#E8521A] transition-colors">Burnout</Link>
+            <Link href="/team" onClick={() => trackNavClick('Our Psychologists', '/team')} className="hover:text-[#E8521A] transition-colors">Our Psychologists</Link>
           </div>
           <Button
             size="sm"

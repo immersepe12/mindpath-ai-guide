@@ -26,6 +26,13 @@ export function organizationSchema() {
       foundingDate: '1992',
       description: "India's largest private mental health organisation with 30+ years of clinical expertise",
     },
+    employee: [
+      { '@type': 'Person', name: 'Ms. Aparna Rani', jobTitle: 'Clinical Psychologist' },
+      { '@type': 'Person', name: 'Ms. Vijayalaxmi Umate', jobTitle: 'Clinical Psychologist' },
+      { '@type': 'Person', name: 'Ms. Sufia Nusrat', jobTitle: 'Clinical Psychologist' },
+      { '@type': 'Person', name: 'Ms. Srishti Agrawal', jobTitle: 'Clinical Psychologist' },
+      { '@type': 'Person', name: 'Dr. Rayani M Dessa', jobTitle: 'Clinical Psychologist' },
+    ],
     sameAs: [
       'https://www.instagram.com/cadabamsmindtalk',
       'https://www.facebook.com/cadabamsmindtalk',
