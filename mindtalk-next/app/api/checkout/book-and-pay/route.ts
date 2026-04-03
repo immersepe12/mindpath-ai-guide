@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { lead_id, package_id, caller_name, patient_name } = await req.json();
 
   // ── Step 1: Book the package ──────────────────────────────────────────
-  const bookRes = await fetch(`${CRM_BASE}/book_package&user_id=1`, {
+  const bookRes = await fetch(`${CRM_BASE}/book_package?user_id=1`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -28,13 +28,14 @@ export async function POST(req: NextRequest) {
     }),
   });
 
-  const bookData = await bookRes.json();
+  let bookData: any = {};
+  try { const t = await bookRes.text(); console.log('[book-and-pay] book response:', t.slice(0, 500)); if (t) bookData = JSON.parse(t); } catch {}
   const booking_id: number = bookData?.result?.[0]?.booking_id;
 
   if (!booking_id) {
-    console.error('Book package failed:', bookData);
+    console.error('[book-and-pay] Book package failed:', JSON.stringify(bookData));
     return NextResponse.json(
-      { error: 'Failed to book package. Please try again.' },
+      { error: 'Failed to book package. Please try again.', _debug: JSON.stringify(bookData).slice(0, 200) },
       { status: 500 }
     );
   }
