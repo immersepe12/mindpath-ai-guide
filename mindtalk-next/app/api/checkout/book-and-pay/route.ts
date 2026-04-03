@@ -5,11 +5,24 @@ const CRM_BASE = 'https://crm.cadabams.com';
 const BEARER   = process.env.CRM_BEARER_TOKEN!;
 const CAMPUS_MINDTALK = 4;
 
+async function safeFetch(url: string, options: RequestInit): Promise<any> {
+  try {
+    const res = await fetch(url, options);
+    const text = await res.text();
+    console.log(`[book-and-pay] ${options.method} ${url} → ${res.status}: ${text.slice(0, 300)}`);
+    if (!text) return { _status: res.status, _empty: true };
+    try { return JSON.parse(text); } catch { return { _status: res.status, _raw: text.slice(0, 200) }; }
+  } catch (e: any) {
+    console.error(`[book-and-pay] fetch error ${url}:`, e?.message);
+    return { _error: e?.message };
+  }
+}
+
 export async function POST(req: NextRequest) {
   const { lead_id, package_id, caller_name, patient_name } = await req.json();
 
-  // ── Step 1: Book the package ──────────────────────────────────────────
-  const bookRes = await fetch(`${CRM_BASE}/book_package`, {
+  // ── Step 1: Book the package ──
+  const bookData = await safeFetch(`${CRM_BASE}/book_package`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,53 +42,49 @@ export async function POST(req: NextRequest) {
     }),
   });
 
-  let bookData: any = {};
-  try { const t = await bookRes.text(); console.log('[book-and-pay] book response:', t.slice(0, 500)); if (t) bookData = JSON.parse(t); } catch {}
   const booking_id: number = bookData?.result?.[0]?.booking_id;
 
   if (!booking_id) {
-    console.error('[book-and-pay] Book package failed:', JSON.stringify(bookData));
     return NextResponse.json(
-      { error: 'Failed to book package. Please try again.', _debug: JSON.stringify(bookData).slice(0, 200) },
+      { error: 'Failed to book package. Please try again.', _debug: JSON.stringify(bookData).slice(0, 300) },
       { status: 500 }
     );
   }
 
-  // ── Step 2: Get Razorpay payment link ────────────────────────────────
-  const expiry = Math.floor(Date.now() / 1000) + 60 * 30; // 30 min expiry
+  // ── Step 2: Get Razorpay payment link ──
+  const expiry = Math.floor(Date.now() / 1000) + 60 * 30;
 
-  const payUrl = new URL(`${CRM_BASE}/razorpay/payment`);
-  payUrl.searchParams.set('user_id', '1');
-  payUrl.searchParams.set('lead_id', String(lead_id));
-  payUrl.searchParams.set('booked_package_id', String(booking_id));
-  payUrl.searchParams.set('campus_id', String(CAMPUS_MINDTALK));
-  payUrl.searchParams.set('expiry_date', String(expiry));
+  const payData = await safeFetch(
+    `${CRM_BASE}/razorpay/payment?user_id=1`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${BEARER}`,
+      },
+      body: JSON.stringify({
+        lead_id,
+        booked_package_id: booking_id,
+        campus_id: CAMPUS_MINDTALK,
+        expiry_date: expiry,
+      }),
+    }
+  );
 
-  const payRes = await fetch(payUrl.toString(), {
-    method: 'GET',
-    headers: { Authorization: `Bearer ${BEARER}` },
-  });
-
-  const payData = await payRes.json();
-
-  // Razorpay returns short_url or payment_link in the response
   const payment_link =
     payData?.short_url ??
     payData?.payment_link_url ??
     payData?.payment_link ??
+    payData?.result?.short_url ??
+    payData?.result?.payment_link ??
     null;
 
   if (!payment_link) {
-    console.error('Razorpay link failed:', payData);
     return NextResponse.json(
-      { error: 'Could not generate payment link. Please contact support.' },
+      { error: 'Could not generate payment link. Please contact support.', _debug: JSON.stringify(payData).slice(0, 300) },
       { status: 500 }
     );
   }
 
-  return NextResponse.json({
-    success: true,
-    booking_id,
-    payment_link,
-  });
+  return NextResponse.json({ success: true, booking_id, payment_link });
 }
