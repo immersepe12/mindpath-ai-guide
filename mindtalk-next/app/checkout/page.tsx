@@ -81,7 +81,9 @@ function CheckoutContent() {
   const [step, setStep]         = useState<'phone' | 'otp' | 'confirm' | 'paying'>('phone');
   const [phone, setPhone]       = useState('');
   const [email, setEmail]       = useState('');
+  const [name, setName]         = useState('');
   const [needEmail, setNeedEmail] = useState(false);
+  const [mode, setMode]         = useState<'login'|'signup'>('login');
   const [otp, setOtp]           = useState('');
   const [uid, setUid]           = useState('');
   const [verifiedName, setVerifiedName] = useState('');
@@ -108,6 +110,7 @@ function CheckoutContent() {
       if (!res.ok) throw new Error(data.error);
       setNeedEmail(false);
       setUid(data.uid);
+      setMode(data.mode ?? 'login');
       setStep('otp');
     } catch (e: any) {
       setError(e.message ?? 'Failed to send OTP');
@@ -123,7 +126,7 @@ function CheckoutContent() {
       const res  = await fetch('/api/checkout/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, otp, uid }),
+        body: JSON.stringify({ phone, otp, uid, mode, name, email }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -315,24 +318,38 @@ function CheckoutContent() {
                   />
                 </div>
                 {needEmail && (
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    style={{
-                      width: '100%', padding: '12px 14px',
-                      border: '1.5px solid rgba(0,0,0,0.15)', borderRadius: '8px',
-                      fontSize: '15px', outline: 'none', marginBottom: '12px',
-                      boxSizing: 'border-box'
-                    }}
-                  />
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Your full name"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      style={{
+                        width: '100%', padding: '12px 14px',
+                        border: '1.5px solid rgba(0,0,0,0.15)', borderRadius: '8px',
+                        fontSize: '15px', outline: 'none', marginBottom: '12px',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                    <input
+                      type="email"
+                      placeholder="Your email address"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      style={{
+                        width: '100%', padding: '12px 14px',
+                        border: '1.5px solid rgba(0,0,0,0.15)', borderRadius: '8px',
+                        fontSize: '15px', outline: 'none', marginBottom: '12px',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </>
                 )}
                 {error && error !== 'phone_not_found' && <div style={{ fontSize: '13px', color: '#d00', marginBottom: '12px' }}>{error}</div>}
                 {needEmail && <div style={{ fontSize: '13px', color: 'rgba(0,0,0,0.50)', marginBottom: '12px' }}>We'll create your account and send an OTP.</div>}
                 <button
                   onClick={sendOTP}
-                  disabled={phone.length !== 10 || loading}
+                  disabled={phone.length !== 10 || loading || (needEmail && (!email || !name))}
                   style={{
                     width: '100%', padding: '16px',
                     background: phone.length === 10 && !loading ? accent : '#ccc',
