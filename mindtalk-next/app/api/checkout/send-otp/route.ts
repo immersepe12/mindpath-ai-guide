@@ -13,25 +13,32 @@ export async function POST(req: NextRequest) {
 
   const uid = crypto.randomUUID();
 
-  // CRM expects JSON body, not query params
-  const loginRes = await fetch(`${CRM_BASE}/crm_lead/login?type=login&user_id=1`, {
+  // Match exactly what the app sends — type in JSON body, phone as number
+  const loginRes = await fetch(`${CRM_BASE}/crm_lead/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${BEARER}`,
     },
     body: JSON.stringify({
-      phone_number: phone,
+      type: 'login',
+      phone_number: Number(phone),
       uid,
       country_code: 91,
+      user_id: 1,
     }),
   });
 
-  let loginText = await loginRes.text();
   let loginData: any = {};
-  try { if (loginText) loginData = JSON.parse(loginText); } catch {}
+  try {
+    const text = await loginRes.text();
+    if (text) loginData = JSON.parse(text);
+  } catch {}
 
-  if (loginData.success) {
+  // Response comes nested: { result: { success: true } }
+  const result = loginData?.result ?? loginData;
+
+  if (result.success) {
     return NextResponse.json({ success: true, uid, mode: 'login' });
   }
 
@@ -43,28 +50,35 @@ export async function POST(req: NextRequest) {
     }, { status: 404 });
   }
 
-  // Signup — create new lead
-  const signupRes = await fetch(`${CRM_BASE}/crm_lead/login?type=signup&user_id=1`, {
+  // Signup — match app's /mobile/signup endpoint and payload
+  const signupRes = await fetch(`${CRM_BASE}/mobile/signup?user_id=1`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${BEARER}`,
     },
     body: JSON.stringify({
-      phone_number: phone,
-      uid,
-      country_code: 91,
+      f_name: '',
+      l_name: '',
       email_id: email,
+      mobile: Number(phone),
+      country_code: 91,
+      uid,
+      otp: 0, // placeholder — real OTP entered after
     }),
   });
 
-  let signupText = await signupRes.text();
   let signupData: any = {};
-  try { if (signupText) signupData = JSON.parse(signupText); } catch {}
+  try {
+    const text = await signupRes.text();
+    if (text) signupData = JSON.parse(text);
+  } catch {}
 
-  if (!signupData.success) {
+  const signupResult = signupData?.result ?? signupData;
+
+  if (!signupResult.success) {
     return NextResponse.json({
-      error: signupData.message ?? 'Could not send OTP. Please try again.',
+      error: signupResult.message ?? 'Could not send OTP. Please try again.',
     }, { status: 400 });
   }
 
