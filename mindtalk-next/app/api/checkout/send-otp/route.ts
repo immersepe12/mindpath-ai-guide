@@ -21,7 +21,11 @@ export async function POST(req: NextRequest) {
     headers: { Authorization: `Bearer ${BEARER}` },
   });
 
-  const loginData = await loginRes.json();
+  let loginData: any = {};
+  try {
+    const loginText = await loginRes.text();
+    if (loginText) loginData = JSON.parse(loginText);
+  } catch {}
 
   if (loginData.success) {
     return NextResponse.json({ success: true, uid, mode: 'login' });
@@ -43,7 +47,11 @@ export async function POST(req: NextRequest) {
     headers: { Authorization: `Bearer ${BEARER}` },
   });
 
-  const signupData = await signupRes.json();
+  let signupData: any = {};
+  try {
+    const signupText = await signupRes.text();
+    if (signupText) signupData = JSON.parse(signupText);
+  } catch {}
 
   if (!signupData.success) {
     return NextResponse.json({ error: signupData.message ?? 'Could not send OTP. Please try again.' }, { status: 400 });

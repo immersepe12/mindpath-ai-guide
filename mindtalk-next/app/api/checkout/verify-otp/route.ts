@@ -9,10 +9,15 @@ export async function POST(req: NextRequest) {
   const url = `${CRM_BASE}/crm_lead/send_otp?phone_number=${phone}&uid=${uid}&country_code=91&otp=${otp}`;
 
   const res = await fetch(url, { method: 'POST' });
-  const data = await res.json();
+
+  let data: any = {};
+  try {
+    const text = await res.text();
+    if (text) data = JSON.parse(text);
+  } catch {}
 
   if (!data.success) {
-    return NextResponse.json({ error: 'Invalid OTP' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid OTP. Please try again.' }, { status: 400 });
   }
 
   return NextResponse.json({
