@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const { lead_id, package_id, caller_name, patient_name } = await req.json();
 
   // ── Step 1: Book the package ──────────────────────────────────────────
-  const bookRes = await fetch(`${CRM_BASE}/book_package?user_id=1`, {
+  const bookRes = await fetch(`${CRM_BASE}/book_package`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       campus_id: CAMPUS_MINDTALK,
       sequence_booking: true,
       package_stage: 'booked',
+      user_id: 1,
     }),
   });
 
