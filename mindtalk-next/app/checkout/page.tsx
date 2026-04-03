@@ -1,9 +1,8 @@
 // app/checkout/page.tsx
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { trackPurchaseConfirmed } from '@/lib/analytics';
+import { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 // ── Package config ────────────────────────────────────────────────────────────
 const PACKAGES = {
@@ -83,6 +82,8 @@ function CheckoutContent() {
   // OTP flow state
   const [step, setStep]         = useState<'phone' | 'otp' | 'confirm' | 'paying'>('phone');
   const [phone, setPhone]       = useState('');
+  const [email, setEmail]       = useState('');
+  const [needEmail, setNeedEmail] = useState(false);
   const [otp, setOtp]           = useState('');
   const [uid, setUid]           = useState('');
   const [verifiedName, setVerifiedName] = useState('');
@@ -97,10 +98,17 @@ function CheckoutContent() {
       const res  = await fetch('/api/checkout/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone }),
+        body: JSON.stringify({ phone, email: email || undefined }),
       });
       const data = await res.json();
+      if (res.status === 404 && data.error === 'phone_not_found') {
+        setNeedEmail(true);
+        setError(data.message);
+        setLoading(false);
+        return;
+      }
       if (!res.ok) throw new Error(data.error);
+      setNeedEmail(false);
       setUid(data.uid);
       setStep('otp');
     } catch (e: any) {
@@ -308,7 +316,22 @@ function CheckoutContent() {
                     }}
                   />
                 </div>
-                {error && <div style={{ fontSize: '13px', color: '#d00', marginBottom: '12px' }}>{error}</div>}
+                {needEmail && (
+                  <input
+                    type="email"
+                    placeholder="Your email address"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    style={{
+                      width: '100%', padding: '12px 14px',
+                      border: '1.5px solid rgba(0,0,0,0.15)', borderRadius: '8px',
+                      fontSize: '15px', outline: 'none', marginBottom: '12px',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                )}
+                {error && error !== 'phone_not_found' && <div style={{ fontSize: '13px', color: '#d00', marginBottom: '12px' }}>{error}</div>}
+                {needEmail && <div style={{ fontSize: '13px', color: 'rgba(0,0,0,0.50)', marginBottom: '12px' }}>We'll create your account and send an OTP.</div>}
                 <button
                   onClick={sendOTP}
                   disabled={phone.length !== 10 || loading}
