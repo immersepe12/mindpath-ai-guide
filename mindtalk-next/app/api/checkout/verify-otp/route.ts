@@ -6,10 +6,8 @@ const CRM_BASE = 'https://crm.cadabams.com';
 export async function POST(req: NextRequest) {
   const { phone, otp, uid } = await req.json();
 
-  // Match exact payload the app sends to verify OTP
-  const url = `${CRM_BASE}/crm_lead/send_otp`;
-
-  const res = await fetch(url, {
+  // Match exact payload the app sends — all in JSON body, phone and otp as numbers
+  const res = await fetch(`${CRM_BASE}/crm_lead/send_otp`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -26,7 +24,7 @@ export async function POST(req: NextRequest) {
     if (text) data = JSON.parse(text);
   } catch {}
 
-  // Handle nested result: { jsonrpc, result: { success, lead_id, patient_name } }
+  // Response is nested: { jsonrpc, result: { success, lead_id, patient_name } }
   const result = data?.result ?? data;
 
   if (!result.success) {
