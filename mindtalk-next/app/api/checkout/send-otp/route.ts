@@ -17,18 +17,25 @@ export async function POST(req: NextRequest) {
   const loginRes = await fetch(`${CRM_BASE}/crm_lead/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${BEARER}` },
-    body: JSON.stringify({ type: 'login', phone_number: Number(phone), uid, country_code: 91, user_id: 1 }),
+    body: JSON.stringify({
+      type: 'login',
+      phone_number: Number(phone),
+      uid,
+      country_code: 91,
+      user_id: 1,
+    }),
   });
-
+  const loginText = await loginRes.text();
+  console.log('[send-otp] login response:', loginText);
   let loginData: any = {};
-  try { const t = await loginRes.text(); if (t) loginData = JSON.parse(t); } catch {}
+  try { if (loginText) loginData = JSON.parse(loginText); } catch {}
   const loginResult = loginData?.result ?? loginData;
 
   if (loginResult.success) {
     return NextResponse.json({ success: true, uid, mode: 'login' });
   }
 
-  // Step 2: Lead not found — create lead in CRM then send OTP
+  // Step 2: No email yet — ask for it
   if (!email) {
     return NextResponse.json({
       error: 'phone_not_found',
@@ -36,29 +43,32 @@ export async function POST(req: NextRequest) {
     }, { status: 404 });
   }
 
-  // Create lead via CRM
-  const createRes = await fetch(
-    `${CRM_BASE}/restapi/1.0/object/crm.lead?vals={'caller_mobile':'${phone}','partner_name':'MindTalk Lead','contact_name':'MindTalk Lead','caller_zip':''}&user_id=1`,
-    { method: 'POST', headers: { Authorization: `Bearer ${BEARER}` } }
-  );
-
-  let createData: any = {};
-  try { const t = await createRes.text(); if (t) createData = JSON.parse(t); } catch {}
-
-  // Now send login OTP for the newly created lead
+  // Step 3: New lead — use type=signup which creates lead AND sends OTP
+  // Same endpoint, same JSON body pattern, add email_id
   const uid2 = crypto.randomUUID();
-  const otpRes = await fetch(`${CRM_BASE}/crm_lead/login`, {
+  const signupRes = await fetch(`${CRM_BASE}/crm_lead/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${BEARER}` },
-    body: JSON.stringify({ type: 'login', phone_number: Number(phone), uid: uid2, country_code: 91, user_id: 1 }),
+    body: JSON.stringify({
+      type: 'signup',
+      phone_number: Number(phone),
+      uid: uid2,
+      country_code: 91,
+      user_id: 1,
+      email_id: email,
+    }),
   });
+  const signupText = await signupRes.text();
+  console.log('[send-otp] signup response:', signupText);
+  let signupData: any = {};
+  try { if (signupText) signupData = JSON.parse(signupText); } catch {}
+  const signupResult = signupData?.result ?? signupData;
 
-  let otpData: any = {};
-  try { const t = await otpRes.text(); if (t) otpData = JSON.parse(t); } catch {}
-  const otpResult = otpData?.result ?? otpData;
-
-  if (!otpResult.success) {
-    return NextResponse.json({ error: 'Could not send OTP. Please try again.' }, { status: 400 });
+  if (!signupResult.success) {
+    return NextResponse.json({
+      error: 'Could not send OTP. Please try again.',
+      _debug: signupText.slice(0, 300),
+    }, { status: 400 });
   }
 
   return NextResponse.json({ success: true, uid: uid2, mode: 'signup' });
