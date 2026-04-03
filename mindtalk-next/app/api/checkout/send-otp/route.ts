@@ -13,48 +13,63 @@ export async function POST(req: NextRequest) {
 
   const uid = crypto.randomUUID().replace(/-/g, '').slice(0, 16);
 
-  // Step 1: Try login first (existing lead)
-  const loginUrl = `${CRM_BASE}/crm_lead/login?type=login&phone_number=${phone}&uid=${uid}&country_code=91&user_id=1`;
+  // CRM expects phone with country code: 919XXXXXXXXX
+  const fullPhone = `91${phone}`;
 
-  const loginRes = await fetch(loginUrl, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${BEARER}` },
-  });
+  const loginUrl = `${CRM_BASE}/crm_lead/login?type=login&phone_number=${fullPhone}&uid=${uid}&country_code=91&user_id=1`;
 
+  let loginText = '';
   let loginData: any = {};
+
   try {
-    const loginText = await loginRes.text();
+    const loginRes = await fetch(loginUrl, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${BEARER}` },
+    });
+    loginText = await loginRes.text();
     if (loginText) loginData = JSON.parse(loginText);
-  } catch {}
+  } catch (e) {
+    // Return raw response for debugging
+    return NextResponse.json({
+      error: 'CRM error',
+      debug: loginText,
+    }, { status: 500 });
+  }
 
   if (loginData.success) {
     return NextResponse.json({ success: true, uid, mode: 'login' });
   }
 
-  // Step 2: Lead not found — create via signup (requires email)
+  // Lead not found — ask for email to create
   if (!email) {
-    // Ask frontend to collect email before retrying
     return NextResponse.json({
       error: 'phone_not_found',
       message: 'We could not find an account with this number. Please enter your email to continue.',
+      debug: loginText, // temporary debug
     }, { status: 404 });
   }
 
-  const signupUrl = `${CRM_BASE}/crm_lead/login?type=signup&phone_number=${phone}&uid=${uid}&country_code=91&user_id=1&email_id=${encodeURIComponent(email)}`;
+  // Signup with email
+  const signupUrl = `${CRM_BASE}/crm_lead/login?type=signup&phone_number=${fullPhone}&uid=${uid}&country_code=91&user_id=1&email_id=${encodeURIComponent(email)}`;
 
-  const signupRes = await fetch(signupUrl, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${BEARER}` },
-  });
-
+  let signupText = '';
   let signupData: any = {};
+
   try {
-    const signupText = await signupRes.text();
+    const signupRes = await fetch(signupUrl, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${BEARER}` },
+    });
+    signupText = await signupRes.text();
     if (signupText) signupData = JSON.parse(signupText);
-  } catch {}
+  } catch (e) {
+    return NextResponse.json({ error: 'Signup failed', debug: signupText }, { status: 500 });
+  }
 
   if (!signupData.success) {
-    return NextResponse.json({ error: signupData.message ?? 'Could not send OTP. Please try again.' }, { status: 400 });
+    return NextResponse.json({
+      error: signupData.message ?? 'Could not send OTP. Please try again.',
+    }, { status: 400 });
   }
 
   return NextResponse.json({ success: true, uid, mode: 'signup' });
