@@ -73,8 +73,6 @@ type Vertical = keyof typeof PACKAGES;
 // ── Main page ─────────────────────────────────────────────────────────────────
 function CheckoutContent() {
   const params = useSearchParams();
-  const router = useRouter();
-
   const vertical = (params.get('vertical') ?? 'anxiety') as Vertical;
   const lead_id  = params.get('lead_id');
   const pkg      = PACKAGES[vertical] ?? PACKAGES.anxiety;
