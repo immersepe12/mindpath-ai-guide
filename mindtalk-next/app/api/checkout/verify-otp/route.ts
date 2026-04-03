@@ -6,17 +6,15 @@ const CRM_BASE = 'https://crm.cadabams.com';
 export async function POST(req: NextRequest) {
   const { phone, otp, uid } = await req.json();
 
-  // CRM send_otp requires phone WITH country code: 919632680280
-  const fullPhone = Number(`91${phone}`);
-
+  // Match exactly what the app sends — 10 digit phone, user_id: 1, JSON body
   const res = await fetch(`${CRM_BASE}/crm_lead/send_otp`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      phone_number: fullPhone,
+      phone_number: Number(phone),
       uid,
-      country_code: 91,
       otp: Number(otp),
+      user_id: 1,
     }),
   });
 
