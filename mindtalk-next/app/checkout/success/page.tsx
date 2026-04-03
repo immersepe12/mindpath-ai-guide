@@ -3,7 +3,6 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { trackPurchaseConfirmed } from '@/lib/analytics';
 
 const APP_BASE = 'https://app.cadabamsmindtalk.com';
 
@@ -50,15 +49,19 @@ function SuccessContent() {
     const pkg = PACKAGE_MAP[booking.vertical] ?? PACKAGE_MAP.anxiety;
 
     // Fire purchase_confirmed → stops lead nurture, starts journey welcome WA
-    trackPurchaseConfirmed({
-      name:        booking.name,
-      phone:       booking.phone ?? '',
-      email:       booking.email ?? '',
-      orderId:     String(booking.booking_id),
-      vertical:    booking.vertical,
-      journeyName: pkg.name,
-      appLink:     `${APP_BASE}/journey/${pkg.journey_id}`,
-    });
+    fetch('/api/checkout/purchase-confirmed', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:        booking.name,
+        phone:       booking.phone ?? '',
+        email:       booking.email ?? '',
+        orderId:     String(booking.booking_id),
+        vertical:    booking.vertical,
+        journeyName: pkg.name,
+        appLink:     `${APP_BASE}/journey/${pkg.journey_id}`,
+      }),
+    }).catch(console.warn);
 
     // Clear session storage
     sessionStorage.removeItem('mindtalk_booking');
