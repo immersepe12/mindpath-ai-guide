@@ -178,6 +178,14 @@ function CheckoutContent() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8f6f2', fontFamily: "'Barlow', sans-serif" }}>
+      <style>{`
+        .checkout-grid { grid-template-columns: 1fr; }
+        .checkout-price { font-size: 36px; }
+        @media (min-width: 768px) {
+          .checkout-grid { grid-template-columns: 1fr 400px !important; }
+          .checkout-price { font-size: 48px !important; }
+        }
+      `}</style>
       {/* Header */}
       <header style={{
         background: '#fff', borderBottom: '1px solid rgba(0,0,0,0.08)',
@@ -192,7 +200,7 @@ function CheckoutContent() {
         </span>
       </header>
 
-      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '40px 24px', display: 'grid', gridTemplateColumns: '1fr 400px', gap: '32px' }}>
+      <div className="checkout-grid" style={{ maxWidth: '960px', margin: '0 auto', padding: '24px 16px', display: 'grid', gap: '32px' }}>
 
         {/* ── Left: Package summary ── */}
         <div>
@@ -281,7 +289,7 @@ function CheckoutContent() {
               <div style={{ fontSize: '13px', color: 'rgba(0,0,0,0.35)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Programme total
               </div>
-              <div style={{ fontSize: '48px', fontWeight: 900, color: '#1a1a1a', lineHeight: 1 }}>₹7,799</div>
+              <div className="checkout-price" style={{ fontWeight: 900, color: '#1a1a1a', lineHeight: 1 }}>₹7,799</div>
               <div style={{ fontSize: '13px', color: 'rgba(0,0,0,0.40)', marginTop: '4px' }}>
                 = ₹650/session · Full 90-day programme
               </div>

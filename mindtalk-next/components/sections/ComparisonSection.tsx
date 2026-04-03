@@ -21,7 +21,9 @@ export default function ComparisonSection({ headline }: ComparisonSectionProps) 
         <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-12">
           {headline}
         </h2>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+        {/* Desktop: 4-column table */}
+        <div className="hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-100">
             <div className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">Feature</div>
             <div className="p-4 text-xs font-semibold text-[#E8521A] uppercase tracking-wide text-center">MindTalk</div>
@@ -42,6 +44,38 @@ export default function ComparisonSection({ headline }: ComparisonSectionProps) 
               </div>
               <div className="p-4 flex justify-center">
                 {traditional ? <Check className="w-5 h-5 text-gray-400" /> : <X className="w-4 h-4 text-gray-300" />}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile: stacked cards per feature */}
+        <div className="md:hidden space-y-3">
+          {rows.map(({ feature, mindtalk, apps, traditional }) => (
+            <div
+              key={feature}
+              className="bg-white rounded-xl border border-gray-100 shadow-sm p-4"
+            >
+              <div className="text-sm font-semibold text-gray-900 mb-3">{feature}</div>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <div className="flex justify-center mb-1">
+                    {mindtalk ? <Check className="w-5 h-5 text-[#E8521A]" /> : <X className="w-4 h-4 text-gray-300" />}
+                  </div>
+                  <div className="text-[10px] font-semibold text-[#E8521A] uppercase tracking-wide">MindTalk</div>
+                </div>
+                <div>
+                  <div className="flex justify-center mb-1">
+                    {apps ? <Check className="w-5 h-5 text-gray-400" /> : <X className="w-4 h-4 text-gray-300" />}
+                  </div>
+                  <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Other apps</div>
+                </div>
+                <div>
+                  <div className="flex justify-center mb-1">
+                    {traditional ? <Check className="w-5 h-5 text-gray-400" /> : <X className="w-4 h-4 text-gray-300" />}
+                  </div>
+                  <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Traditional</div>
+                </div>
               </div>
             </div>
           ))}

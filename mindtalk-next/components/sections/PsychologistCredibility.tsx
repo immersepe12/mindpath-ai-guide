@@ -8,7 +8,7 @@ export default function PsychologistCredibility() {
         <p className="text-gray-500 mb-10 max-w-xl mx-auto">
           Cadabams Group has 30 years of clinical practice across psychiatry, psychology, and rehabilitation. Every MindTalk psychologist is licensed, supervised, and trained in CBT.
         </p>
-        <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-lg mx-auto">
           {[
             { stat: '30+', label: 'Years of clinical expertise' },
             { stat: '12', label: 'Sessions per programme' },

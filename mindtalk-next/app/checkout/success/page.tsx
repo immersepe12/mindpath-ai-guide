@@ -81,15 +81,20 @@ function SuccessContent() {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '40px 24px',
+      padding: '24px 16px',
     }}>
+      <style>{`
+        .success-card { padding: 24px 16px; }
+        @media (min-width: 768px) {
+          .success-card { padding: 48px 40px !important; }
+        }
+      `}</style>
 
       {/* Success card */}
-      <div style={{
+      <div className="success-card" style={{
         background: '#fff',
         borderRadius: '16px',
         border: `2px solid ${accent}30`,
-        padding: '48px 40px',
         maxWidth: '560px',
         width: '100%',
         textAlign: 'center',
