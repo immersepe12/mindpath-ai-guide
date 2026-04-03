@@ -13,64 +13,38 @@ export async function POST(req: NextRequest) {
 
   const uid = crypto.randomUUID().replace(/-/g, '').slice(0, 16);
 
-  // CRM expects phone with country code: 919XXXXXXXXX
-  const fullPhone = `91${phone}`;
-
-  const loginUrl = `${CRM_BASE}/crm_lead/login?type=login&phone_number=${fullPhone}&uid=${uid}&country_code=91&user_id=1`;
+  // Try with just 10 digits first (as per send_otp API example)
+  const loginUrl = `${CRM_BASE}/crm_lead/login?type=login&phone_number=${phone}&uid=${uid}&country_code=91&user_id=1`;
 
   let loginText = '';
-  let loginData: any = {};
+  let loginStatus = 0;
+  let loginError = '';
 
   try {
     const loginRes = await fetch(loginUrl, {
       method: 'POST',
       headers: { Authorization: `Bearer ${BEARER}` },
     });
+    loginStatus = loginRes.status;
     loginText = await loginRes.text();
+  } catch (e: any) {
+    loginError = e?.message ?? 'fetch failed';
+  }
+
+  // Try to parse JSON
+  let loginData: any = {};
+  try {
     if (loginText) loginData = JSON.parse(loginText);
-  } catch (e) {
-    // Return raw response for debugging
-    return NextResponse.json({
-      error: 'CRM error',
-      debug: loginText,
-    }, { status: 500 });
-  }
+  } catch {}
 
-  if (loginData.success) {
-    return NextResponse.json({ success: true, uid, mode: 'login' });
-  }
-
-  // Lead not found — ask for email to create
-  if (!email) {
+  // Return debug info so we can see exactly what CRM returns
+  if (!loginData.success) {
     return NextResponse.json({
       error: 'phone_not_found',
       message: 'We could not find an account with this number. Please enter your email to continue.',
-      debug: loginText, // temporary debug
+      _debug: { loginStatus, loginText: loginText.slice(0, 300), loginError },
     }, { status: 404 });
   }
 
-  // Signup with email
-  const signupUrl = `${CRM_BASE}/crm_lead/login?type=signup&phone_number=${fullPhone}&uid=${uid}&country_code=91&user_id=1&email_id=${encodeURIComponent(email)}`;
-
-  let signupText = '';
-  let signupData: any = {};
-
-  try {
-    const signupRes = await fetch(signupUrl, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${BEARER}` },
-    });
-    signupText = await signupRes.text();
-    if (signupText) signupData = JSON.parse(signupText);
-  } catch (e) {
-    return NextResponse.json({ error: 'Signup failed', debug: signupText }, { status: 500 });
-  }
-
-  if (!signupData.success) {
-    return NextResponse.json({
-      error: signupData.message ?? 'Could not send OTP. Please try again.',
-    }, { status: 400 });
-  }
-
-  return NextResponse.json({ success: true, uid, mode: 'signup' });
+  return NextResponse.json({ success: true, uid, mode: 'login' });
 }
