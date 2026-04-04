@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const FYNO_WORKSPACE = process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID!;
-const FYNO_API_KEY   = process.env.NEXT_PUBLIC_FYNO_API_KEY!;
+const FYNO_API_KEY   = process.env.FYNO_API_KEY!;
 
 const LP_URLS: Record<string, string> = {
   anxiety:      'https://cadabamsmindtalk.com/anxiety',
