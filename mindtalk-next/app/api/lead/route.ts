@@ -48,7 +48,6 @@ export async function POST(req: NextRequest) {
               cf_customer_category: durationOfIssue ?? '',
               cf_relationship: Array.isArray(symptoms) ? symptoms.join(', ') : '',
               cf_gender: priorTherapy ?? '',
-              cf_caller_name: pageUrl ?? '',
             },
           },
         }),
