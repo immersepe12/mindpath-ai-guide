@@ -3,6 +3,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { trackMetaPixel, newClientEventId } from '@/lib/meta-pixel';
 
 const APP_BASE = 'https://app.cadabamsmindtalk.com';
 
@@ -48,7 +49,36 @@ function SuccessContent() {
 
     const pkg = PACKAGE_MAP[booking.vertical] ?? PACKAGE_MAP.anxiety;
 
-    // Fire purchase_confirmed → stops lead nurture, starts journey welcome WA
+    // Mint shared event_ids for Pixel ↔ CAPI dedup
+    const purchaseEventId  = newClientEventId();
+    const subscribeEventId = `${purchaseEventId}_sub`;
+    const value    = booking.value    ?? 7799;
+    const currency = booking.currency ?? 'INR';
+
+    // Browser Pixel: Purchase + Subscribe (server CAPI mirrors via API below)
+    try {
+      trackMetaPixel('Purchase', {
+        value,
+        currency,
+        content_name:     pkg.name,
+        content_category: booking.vertical,
+        content_ids:      [String(booking.booking_id)],
+        content_type:     'product',
+        num_items:        1,
+        order_id:         String(booking.booking_id),
+      }, purchaseEventId);
+
+      trackMetaPixel('Subscribe', {
+        value,
+        currency,
+        content_name:     pkg.name,
+        content_category: booking.vertical,
+        predicted_ltv:    value,
+        subscription_id:  String(booking.booking_id),
+      }, subscribeEventId);
+    } catch {}
+
+    // Fire purchase_confirmed → CAPI Purchase + Subscribe + Mixpanel + Fyno nurture
     fetch('/api/checkout/purchase-confirmed', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -60,6 +90,9 @@ function SuccessContent() {
         vertical:    booking.vertical,
         journeyName: pkg.name,
         appLink:     `${APP_BASE}/journey/${pkg.journey_id}`,
+        value,
+        currency,
+        eventId:     purchaseEventId,   // server uses this id (and `${id}_sub` for Subscribe)
       }),
     }).catch(console.warn);
 

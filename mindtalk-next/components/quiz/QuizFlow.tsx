@@ -15,6 +15,8 @@ import {
   trackQuizSubmitAttempted,
   trackQuizSubmitError,
   trackQuizCompleted,
+  trackLeadSubmitted,
+  trackMetaViewContent,
 } from '@/lib/analytics'
 
 interface Option {
@@ -58,6 +60,8 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
   useEffect(() => {
     trackQuizStarted()
     trackQuizStepViewed(1, questions[0].question)
+    // Meta ViewContent — user has entered the assessment funnel
+    try { trackMetaViewContent('quiz') } catch {}
   }, [])
 
   useEffect(() => {
@@ -136,6 +140,16 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
           utmContent: utms.utm_content ?? '',
           pageUrl: window.location.href,
         }),
+      })
+      // Mixpanel + Fyno + Meta Lead (Pixel + CAPI)
+      trackLeadSubmitted({
+        name:            contact.firstName,
+        phone:           contact.phone,
+        email:           contact.email,
+        verticalRaw:     selectedVertical,
+        durationOfIssue: answers[2] as string,
+        priorTherapy:    answers[4] as string,
+        readinessScore:  Number(answers[5]),
       })
       trackQuizCompleted(selectedVertical, Number(answers[5]))
       router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}`)

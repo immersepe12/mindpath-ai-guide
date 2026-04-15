@@ -86,5 +86,11 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Note: Meta InitiateCheckout already fires (Pixel + CAPI relay) on /checkout
+  // mount via lib/analytics → trackMetaInitiateCheckout. We deliberately do NOT
+  // re-fire it server-side here; that would double-count in Meta because the
+  // event_ids would differ. Server-side AddPaymentInfo / Purchase / Subscribe
+  // remain the canonical server events.
+
   return NextResponse.json({ success: true, booking_id, payment_link });
 }

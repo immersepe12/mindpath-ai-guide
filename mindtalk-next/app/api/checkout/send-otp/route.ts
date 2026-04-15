@@ -1,5 +1,7 @@
 // app/api/checkout/send-otp/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { sendMetaEvent, extractRequestUserData, newEventId } from '@/lib/meta-capi';
+import { trackMixpanelServer } from '@/lib/mixpanel-server';
 
 const CRM_BASE = 'https://crm.cadabams.com';
 const BEARER   = process.env.CRM_BEARER_TOKEN!;
@@ -71,5 +73,30 @@ export async function POST(req: NextRequest) {
     }, { status: 400 });
   }
 
-  return NextResponse.json({ success: true, uid: uid2, mode: 'signup' });
+  // Meta CAPI: CompleteRegistration (new lead created via signup)
+  const reqUser = extractRequestUserData(req);
+  const regEventId = newEventId();
+  await sendMetaEvent({
+    eventName:       'CompleteRegistration',
+    eventId:         regEventId,
+    eventSourceUrl:  req.headers.get('referer') ?? undefined,
+    customData: {
+      content_name: 'otp_signup',
+      currency:     'INR',
+      value:        0,
+    },
+    userData: {
+      email,
+      phone:   String(phone),
+      country: 'in',
+      ...reqUser,
+    },
+  });
+  await trackMixpanelServer({
+    event:      'meta_complete_registration_server',
+    distinctId: email || String(phone),
+    properties: { method: 'otp_signup', event_id: regEventId },
+  });
+
+  return NextResponse.json({ success: true, uid: uid2, mode: 'signup', eventId: regEventId });
 }

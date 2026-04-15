@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import { Suspense, useEffect } from 'react'
-import { trackResultPageViewed, trackResultCTAClick } from '@/lib/analytics'
+import { trackResultPageViewed, trackResultCTAClick, trackMetaViewContent, trackWhatsAppClick } from '@/lib/analytics'
 
 const verticalData: Record<string, {
   label: string
@@ -62,6 +62,8 @@ function QuizResultInner() {
 
   useEffect(() => {
     trackResultPageViewed(vertical, name)
+    // Meta ViewContent — user is being shown a specific recommended programme
+    try { trackMetaViewContent(vertical, 7799) } catch {}
   }, [vertical, name])
 
   return (
@@ -92,7 +94,17 @@ function QuizResultInner() {
           <Button size="hero" className="w-full" onClick={() => trackResultCTAClick('see_programme', vertical)} asChild>
             <Link href={data.href}>See full programme details</Link>
           </Button>
-          <Button size="hero" variant="secondary" className="w-full" onClick={() => trackResultCTAClick('talk_to_counsellor', vertical)} asChild>
+          <Button
+            size="hero"
+            variant="secondary"
+            className="w-full"
+            onClick={() => {
+              trackResultCTAClick('talk_to_counsellor', vertical)
+              // Meta Contact — user has chosen to reach out via WhatsApp
+              trackWhatsAppClick('quiz_result', vertical)
+            }}
+            asChild
+          >
             <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
               Talk to a counsellor first
             </a>
