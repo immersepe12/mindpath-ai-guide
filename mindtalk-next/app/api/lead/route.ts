@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   const {
     name, phone, email, vertical,
     durationOfIssue, symptoms, priorTherapy, readinessScore,
-    utmSource, utmMedium, utmCampaign, utmContent, pageUrl
+    utmSource, utmMedium, utmCampaign, utmContent, pageUrl,
   } = body
 
   const normalisePhone = (raw: string) => {
@@ -88,6 +88,11 @@ export async function POST(req: NextRequest) {
       console.error('[lead] Fyno error:', err)
     }
   }
+
+  // Note: Meta Lead (Pixel + CAPI) fires from the browser via lib/analytics →
+  // trackMetaLead → /api/track/meta, with keepalive: true so it survives
+  // navigation. We deliberately do NOT re-fire CAPI here — that would
+  // double-count in Meta because the event_ids would differ.
 
   return NextResponse.json({ success: true })
 }

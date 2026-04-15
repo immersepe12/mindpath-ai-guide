@@ -1,8 +1,14 @@
 // app/checkout/page.tsx
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import {
+  trackMetaInitiateCheckout,
+  trackMetaAddToCart,
+  trackMetaCompleteRegistration,
+  trackMetaAddPaymentInfo,
+} from '@/lib/analytics';
 
 // ── Package config ────────────────────────────────────────────────────────────
 const PACKAGES = {
@@ -91,6 +97,25 @@ function CheckoutContent() {
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
 
+  // Meta: InitiateCheckout + AddToCart on first mount (vertical chosen via URL)
+  useEffect(() => {
+    try {
+      trackMetaInitiateCheckout({
+        vertical,
+        value:       7799,
+        contentName: pkg.name,
+      });
+      trackMetaAddToCart({
+        vertical,
+        value:       7799,
+        contentName: pkg.name,
+        packageId:   pkg.id,
+      });
+    } catch {}
+    // run once per mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function sendOTP() {
     setError('');
     setLoading(true);
@@ -111,6 +136,17 @@ function CheckoutContent() {
       setNeedEmail(false);
       setUid(data.uid);
       setMode(data.mode ?? 'login');
+      // Meta: CompleteRegistration fires when a signup is created (OTP sent for new lead)
+      // Reuse the server-returned eventId so Pixel and CAPI dedup against each other.
+      if (data.mode === 'signup') {
+        try {
+          trackMetaCompleteRegistration({
+            phone, email, name,
+            method:  'otp_signup',
+            eventId: data.eventId,
+          });
+        } catch {}
+      }
       setStep('otp');
     } catch (e: any) {
       setError(e.message ?? 'Failed to send OTP');
@@ -144,6 +180,19 @@ function CheckoutContent() {
     setError('');
     setLoading(true);
     setStep('paying');
+
+    // Meta: AddPaymentInfo — user has clicked Pay and is being redirected to
+    // Razorpay to enter payment info. Pixel + CAPI relay (single shared event_id).
+    try {
+      trackMetaAddPaymentInfo({
+        vertical,
+        value:   7799,
+        phone,
+        email,
+        leadId:  verifiedLeadId,
+      });
+    } catch {}
+
     try {
       const res  = await fetch('/api/checkout/book-and-pay', {
         method: 'POST',
@@ -153,18 +202,26 @@ function CheckoutContent() {
           package_id: pkg.id,
           caller_name: verifiedName,
           patient_name: verifiedName,
+          vertical,
+          email,
+          phone,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      // Store booking info for success page
+      // Store booking info for success page (Purchase + Subscribe fire there)
       sessionStorage.setItem('mindtalk_booking', JSON.stringify({
-        booking_id: data.booking_id,
-        lead_id: verifiedLeadId,
+        booking_id:   data.booking_id,
+        lead_id:      verifiedLeadId,
         vertical,
-        journey_id: pkg.journey_id,
-        name: verifiedName,
+        journey_id:   pkg.journey_id,
+        name:         verifiedName,
+        email,
+        phone,
+        value:        7799,
+        currency:     'INR',
+        journey_name: pkg.name,
       }));
 
       // Redirect to Razorpay

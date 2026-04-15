@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import AnalyticsProvider from '@/components/AnalyticsProvider'
+import MetaPixel from '@/components/MetaPixel'
 import { organizationSchema, howToSchema } from '@/lib/structured-data'
 import './globals.css'
 
@@ -104,6 +105,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <Suspense fallback={null}>
           <AnalyticsProvider />
         </Suspense>
+        <MetaPixel />
         {children}
         <Analytics />
       </body>

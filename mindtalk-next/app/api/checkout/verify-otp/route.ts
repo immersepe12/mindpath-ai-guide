@@ -1,4 +1,8 @@
 // app/api/checkout/verify-otp/route.ts
+// Note: AddPaymentInfo is intentionally NOT fired here. It fires from the
+// browser when the user clicks Pay (proceedToPayment in /checkout) — that's
+// the canonical Meta semantic. CompleteRegistration for new signups fires
+// from /api/checkout/send-otp.
 import { NextRequest, NextResponse } from 'next/server';
 
 const CRM_BASE = 'https://crm.cadabams.com';
