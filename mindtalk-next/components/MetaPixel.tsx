@@ -39,17 +39,16 @@ export default function MetaPixel() {
 
   if (!PIXEL_ID) return null
 
-  // noscript fallback for tracking when JS is disabled
+  // noscript fallback for tracking when JS is disabled.
+  // Rendered via dangerouslySetInnerHTML so React 18's <link rel="preload">
+  // auto-discovery (Float) does NOT scan the <img> and emit a preload hint
+  // into <head> — which was causing the PageView URL to fetch on every load
+  // in JS-enabled browsers and double-counting PageView in Meta.
   return (
-    <noscript>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        height="1"
-        width="1"
-        style={{ display: 'none' }}
-        alt=""
-        src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
-      />
-    </noscript>
+    <noscript
+      dangerouslySetInnerHTML={{
+        __html: `<img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1" />`,
+      }}
+    />
   )
 }
