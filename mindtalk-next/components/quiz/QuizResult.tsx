@@ -10,7 +10,6 @@ const verticalData: Record<string, {
   label: string
   headline: string
   reasons: string[]
-  href: string
   checkoutVertical: string
 }> = {
   anxiety: {
@@ -21,7 +20,6 @@ const verticalData: Record<string, {
       'CBT is the most evidence-backed approach for anxiety and overthinking',
       'The structured daily practice is what makes the difference — not just weekly sessions',
     ],
-    href: '/anxiety',
     checkoutVertical: 'anxiety',
   },
   depression: {
@@ -32,7 +30,6 @@ const verticalData: Record<string, {
       'Behavioural activation combined with CBT is the evidence-backed first-line treatment',
       'Daily structured engagement is what breaks the withdrawal cycle',
     ],
-    href: '/emotional-reset',
     checkoutVertical: 'depression',
   },
   relationship: {
@@ -43,7 +40,6 @@ const verticalData: Record<string, {
       'Individual CBT is more effective than couples work when the goal is changing your own patterns',
       'The programme addresses what you bring to relationships — the part you can actually change',
     ],
-    href: '/relationships',
     checkoutVertical: 'relationships',
   },
   burnout: {
@@ -54,7 +50,6 @@ const verticalData: Record<string, {
       'CBT for burnout addresses identity and boundaries, not just stress management techniques',
       'The programme is designed to run alongside a full-time job — 50-min sessions, 5-min daily tasks',
     ],
-    href: '/burnout',
     checkoutVertical: 'burnout',
   },
 }
@@ -109,21 +104,21 @@ function QuizResultInner() {
           <Button size="hero" className="w-full" onClick={() => trackResultCTAClick('start_programme', vertical)} asChild>
             <Link href={checkoutUrl}>Start the programme — ₹7,799</Link>
           </Button>
-          {/* Secondary — see LP for more detail */}
-          <Button size="hero" variant="secondary" className="w-full" onClick={() => trackResultCTAClick('see_programme', vertical)} asChild>
-            <Link href={data.href}>See full programme details</Link>
-          </Button>
-          {/* Tertiary — talk to someone first */}
-          <button
+          {/* Secondary — talk to someone first */}
+          <Button
+            size="hero"
+            variant="secondary"
+            className="w-full"
             onClick={() => {
               trackResultCTAClick('talk_to_counsellor', vertical)
               trackWhatsAppClick('quiz_result', vertical)
-              window.open('https://wa.me/918197268789', '_blank', 'noopener,noreferrer')
             }}
-            className="text-sm text-gray-500 hover:text-[#E8521A] transition-colors underline underline-offset-2"
+            asChild
           >
-            Or talk to a counsellor first via WhatsApp
-          </button>
+            <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
+              Talk to a counsellor first
+            </a>
+          </Button>
         </div>
       </div>
       <p className="text-center text-xs text-gray-400">
