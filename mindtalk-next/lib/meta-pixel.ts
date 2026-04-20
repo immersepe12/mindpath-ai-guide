@@ -30,7 +30,7 @@ export function newClientEventId(): string {
 
 function isProdHost(): boolean {
   if (typeof window === 'undefined') return false
-  return window.location.hostname === 'cadabamsmindtalk.com'
+  return window.location.hostname.endsWith('cadabamsmindtalk.com')
 }
 
 export function trackMetaPixel(
