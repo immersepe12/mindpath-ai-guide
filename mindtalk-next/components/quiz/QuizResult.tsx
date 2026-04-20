@@ -11,6 +11,7 @@ const verticalData: Record<string, {
   headline: string
   reasons: string[]
   href: string
+  checkoutVertical: string
 }> = {
   anxiety: {
     label: 'Anxiety & Stress Relief',
@@ -21,6 +22,7 @@ const verticalData: Record<string, {
       'The structured daily practice is what makes the difference — not just weekly sessions',
     ],
     href: '/anxiety',
+    checkoutVertical: 'anxiety',
   },
   depression: {
     label: '90-Day Emotional Reset',
@@ -31,6 +33,7 @@ const verticalData: Record<string, {
       'Daily structured engagement is what breaks the withdrawal cycle',
     ],
     href: '/emotional-reset',
+    checkoutVertical: 'depression',
   },
   relationship: {
     label: 'Relationship Recovery',
@@ -41,6 +44,7 @@ const verticalData: Record<string, {
       'The programme addresses what you bring to relationships — the part you can actually change',
     ],
     href: '/relationships',
+    checkoutVertical: 'relationships',
   },
   burnout: {
     label: 'Workplace Burnout Recovery',
@@ -51,6 +55,7 @@ const verticalData: Record<string, {
       'The programme is designed to run alongside a full-time job — 50-min sessions, 5-min daily tasks',
     ],
     href: '/burnout',
+    checkoutVertical: 'burnout',
   },
 }
 
@@ -58,7 +63,16 @@ function QuizResultInner() {
   const params = useSearchParams()
   const vertical = params.get('vertical') ?? 'anxiety'
   const name = params.get('name') ?? ''
+  const phone = params.get('phone') ?? ''
+  const email = params.get('email') ?? ''
   const data = verticalData[vertical] ?? verticalData.anxiety
+
+  // Build checkout URL with pre-filled phone so user skips re-entering it
+  const checkoutParams = new URLSearchParams({ vertical: data.checkoutVertical })
+  if (phone) checkoutParams.set('phone', phone)
+  if (email) checkoutParams.set('email', email)
+  if (name) checkoutParams.set('name', name)
+  const checkoutUrl = `/checkout?${checkoutParams.toString()}`
 
   useEffect(() => {
     trackResultPageViewed(vertical, name)
@@ -91,24 +105,25 @@ function QuizResultInner() {
           <div className="text-sm text-[#E8521A] mt-1">Full refund if not right after session 1</div>
         </div>
         <div className="flex flex-col gap-3">
-          <Button size="hero" className="w-full" onClick={() => trackResultCTAClick('see_programme', vertical)} asChild>
+          {/* Primary CTA — buy the programme */}
+          <Button size="hero" className="w-full" onClick={() => trackResultCTAClick('start_programme', vertical)} asChild>
+            <Link href={checkoutUrl}>Start the programme — ₹7,799</Link>
+          </Button>
+          {/* Secondary — see LP for more detail */}
+          <Button size="hero" variant="secondary" className="w-full" onClick={() => trackResultCTAClick('see_programme', vertical)} asChild>
             <Link href={data.href}>See full programme details</Link>
           </Button>
-          <Button
-            size="hero"
-            variant="secondary"
-            className="w-full"
+          {/* Tertiary — talk to someone first */}
+          <button
             onClick={() => {
               trackResultCTAClick('talk_to_counsellor', vertical)
-              // Meta Contact — user has chosen to reach out via WhatsApp
               trackWhatsAppClick('quiz_result', vertical)
+              window.open('https://wa.me/918197268789', '_blank', 'noopener,noreferrer')
             }}
-            asChild
+            className="text-sm text-gray-500 hover:text-[#E8521A] transition-colors underline underline-offset-2"
           >
-            <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
-              Talk to a counsellor first
-            </a>
-          </Button>
+            Or talk to a counsellor first via WhatsApp
+          </button>
         </div>
       </div>
       <p className="text-center text-xs text-gray-400">

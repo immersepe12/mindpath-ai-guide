@@ -83,11 +83,16 @@ function CheckoutContent() {
   const lead_id  = params.get('lead_id');
   const pkg      = PACKAGES[vertical] ?? PACKAGES.anxiety;
 
+  // Pre-fill from quiz result page URL params (phone, email, name)
+  const prefillPhone = params.get('phone') ?? '';
+  const prefillEmail = params.get('email') ?? '';
+  const prefillName  = params.get('name') ?? '';
+
   // OTP flow state
   const [step, setStep]         = useState<'phone' | 'otp' | 'confirm' | 'paying'>('phone');
-  const [phone, setPhone]       = useState('');
-  const [email, setEmail]       = useState('');
-  const [name, setName]         = useState('');
+  const [phone, setPhone]       = useState(prefillPhone);
+  const [email, setEmail]       = useState(prefillEmail);
+  const [name, setName]         = useState(prefillName);
   const [needEmail, setNeedEmail] = useState(false);
   const [mode, setMode]         = useState<'login'|'signup'>('login');
   const [otp, setOtp]           = useState('');
