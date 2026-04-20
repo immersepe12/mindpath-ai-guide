@@ -24,6 +24,21 @@ export async function POST(req: NextRequest) {
     burnout:      'https://cadabamsmindtalk.com/burnout',
   }
 
+  // Build cf_medium — pack as much context as possible, truncated to 230 chars
+  const mediumParts = [
+    pageUrl,
+    utmSource   ? `src=${utmSource}`     : '',
+    utmMedium   ? `med=${utmMedium}`     : '',
+    utmCampaign ? `cmp=${utmCampaign}`   : '',
+    utmContent  ? `cnt=${utmContent}`    : '',
+    vertical    ? `vert=${vertical}`     : '',
+    durationOfIssue ? `dur=${durationOfIssue}` : '',
+    priorTherapy    ? `prior=${priorTherapy}`  : '',
+    readinessScore  ? `score=${readinessScore}` : '',
+    Array.isArray(symptoms) && symptoms.length ? `sym=${symptoms.join('+')}` : '',
+  ].filter(Boolean).join(' | ')
+  const cfMedium = mediumParts.length > 230 ? mediumParts.slice(0, 227) + '...' : mediumParts
+
   // 1. Freshsales
   if (process.env.FRESHSALES_API_KEY) {
     try {
@@ -40,7 +55,8 @@ export async function POST(req: NextRequest) {
             mobile_number: normalisedPhone,
             lead_source: utmSource || 'MindTalk Website',
             custom_field: {
-              cf_form_source_custom: vertical,
+              cf_form_source_custom: 'packages',
+              cf_medium: cfMedium,
               cf_utm_id: utmMedium ?? '',
               cf_utm_term: utmCampaign ?? '',
               cf_utm_content: utmContent ?? '',
