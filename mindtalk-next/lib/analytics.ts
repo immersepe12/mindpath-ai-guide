@@ -158,7 +158,7 @@ export function trackResultPageViewed(vertical: string, name: string) {
   track('result_page_viewed', { vertical, has_name: !!name })
 }
 
-export function trackResultCTAClick(ctaType: 'see_programme' | 'talk_to_counsellor', vertical: string) {
+export function trackResultCTAClick(ctaType: 'start_programme' | 'see_programme' | 'talk_to_counsellor', vertical: string) {
   track('result_cta_clicked', { cta_type: ctaType, vertical })
 }
 

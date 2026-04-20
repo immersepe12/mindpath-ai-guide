@@ -112,6 +112,12 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
       trackQuizSubmitError('missing_fields')
       return
     }
+    const digits = contact.phone.replace(/\D/g, '')
+    if (digits.length !== 10) {
+      setError('Please enter a valid 10-digit mobile number.')
+      trackQuizSubmitError('invalid_phone')
+      return
+    }
     setError('')
     setSubmitting(true)
     trackQuizSubmitAttempted()
@@ -152,7 +158,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
         readinessScore:  Number(answers[5]),
       })
       trackQuizCompleted(selectedVertical, Number(answers[5]))
-      router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}`)
+      router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}&phone=${encodeURIComponent(digits)}&email=${encodeURIComponent(contact.email)}`)
     } catch {
       trackQuizSubmitError('api_error')
       setError('Something went wrong. Please try again or WhatsApp us.')
