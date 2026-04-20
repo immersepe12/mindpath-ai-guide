@@ -7,7 +7,7 @@ const FYNO_API_KEY   = process.env.NEXT_PUBLIC_FYNO_API_KEY
 
 export function initAnalytics() {
   if (typeof window === 'undefined') return
-  if (window.location.hostname !== 'cadabamsmindtalk.com') {
+  if (!window.location.hostname.endsWith('cadabamsmindtalk.com')) {
     return
   }
   if (!MIXPANEL_TOKEN) {
@@ -288,7 +288,7 @@ interface MetaCustom {
 
 function postCapi(eventName: MetaPixelEvent, eventId: string, customData?: MetaCustom, userData?: MetaUserPii) {
   if (typeof window === 'undefined') return
-  if (window.location.hostname !== 'cadabamsmindtalk.com') return
+  if (!window.location.hostname.endsWith('cadabamsmindtalk.com')) return
   const fb = readFbCookies()
   // fire-and-forget; never break business flow
   fetch('/api/track/meta', {
