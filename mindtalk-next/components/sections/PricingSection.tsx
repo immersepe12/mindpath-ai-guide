@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 
@@ -21,7 +20,7 @@ const included = [
   'Gamified milestones — streaks, stars, XP',
 ]
 
-export default function PricingSection({ headline, price, priceNote, refundNote, ctaText, ctaUrl }: PricingSectionProps) {
+export default function PricingSection({ headline, price, priceNote, refundNote, ctaText }: PricingSectionProps) {
   const formatted = new Intl.NumberFormat('en-IN').format(Number(price))
 
   return (
@@ -47,7 +46,7 @@ export default function PricingSection({ headline, price, priceNote, refundNote,
             ))}
           </ul>
           <Button size="hero" className="w-full" asChild>
-            <Link href={ctaUrl}>{ctaText}</Link>
+            <a href="#lead-form">{ctaText}</a>
           </Button>
           <p className="text-center text-xs text-gray-400 mt-4">{refundNote}</p>
         </div>

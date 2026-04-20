@@ -92,6 +92,16 @@ export function trackScrollDepth(page: string, depth: 25 | 50 | 75 | 100) {
   track('scroll_depth_reached', { page, depth_percent: depth })
 }
 
+// ─── INLINE LEAD FORM EVENTS (landing page, not quiz) ────────────────────────
+
+export function trackInlineFormSubmitted(vertical: string) {
+  track('inline_form_submitted', { vertical, url: typeof window !== 'undefined' ? window.location.href : '' })
+}
+
+export function trackInlineFormError(vertical: string, error: string) {
+  track('inline_form_error', { vertical, error })
+}
+
 // ─── NAVIGATION / CTA EVENTS ─────────────────────────────────────────────────
 
 export function trackCTAClick(ctaLabel: string, location: string, destination?: string) {

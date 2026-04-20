@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { CheckCircle } from 'lucide-react'
 
@@ -9,7 +8,7 @@ interface ProblemAgitationProps {
   ctaUrl: string
 }
 
-export default function ProblemAgitation({ headline, problems, ctaText, ctaUrl }: ProblemAgitationProps) {
+export default function ProblemAgitation({ headline, problems, ctaText }: ProblemAgitationProps) {
   return (
     <section className="py-20 px-4 sm:px-6 bg-white">
       <div className="max-w-2xl mx-auto text-center">
@@ -25,7 +24,7 @@ export default function ProblemAgitation({ headline, problems, ctaText, ctaUrl }
           ))}
         </ul>
         <Button size="lg" asChild>
-          <Link href={ctaUrl}>{ctaText}</Link>
+          <a href="#lead-form">{ctaText}</a>
         </Button>
       </div>
     </section>

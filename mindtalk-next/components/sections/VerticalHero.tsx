@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import LeadCaptureForm from '@/components/LeadCaptureForm'
 
 interface VerticalHeroProps {
   headline: string
@@ -29,27 +29,45 @@ export default function VerticalHero({ headline, subtext, ctaText, ctaUrl, verti
 
   return (
     <section className="bg-[#FDF8F4] pt-14 pb-18 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto">
-        <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium mb-6 ${accent}`}>
-          {label} · ₹7,799
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+          {/* Left — copy */}
+          <div>
+            <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium mb-6 ${accent}`}>
+              {label} · ₹7,799
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight tracking-tight mb-5 text-balance">
+              {headline}
+            </h1>
+            <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
+              {subtext}
+            </p>
+            {/* Mobile-only: scroll-to-form CTA (form is below on mobile) */}
+            <div className="flex flex-col sm:flex-row gap-3 lg:hidden">
+              <Button size="hero" asChild>
+                <a href="#lead-form">{ctaText}</a>
+              </Button>
+              <Button size="hero" variant="secondary" asChild>
+                <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
+                  Talk to us first
+                </a>
+              </Button>
+            </div>
+            {/* Desktop-only: trust signals below copy */}
+            <div className="hidden lg:block">
+              <p className="text-sm text-gray-400">
+                90 days · 12 psychologist sessions · Full refund after session 1 if not right for you
+              </p>
+            </div>
+          </div>
+
+          {/* Right — inline lead form */}
+          <div className="lg:pt-4">
+            <LeadCaptureForm vertical={vertical} ctaText={ctaText} />
+          </div>
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight tracking-tight mb-5 text-balance">
-          {headline}
-        </h1>
-        <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
-          {subtext}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button size="hero" asChild>
-            <Link href={ctaUrl}>{ctaText}</Link>
-          </Button>
-          <Button size="hero" variant="secondary" asChild>
-            <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
-              Talk to us first
-            </a>
-          </Button>
-        </div>
-        <p className="mt-5 text-sm text-gray-400">
+
+        <p className="mt-5 text-sm text-gray-400 lg:hidden">
           90 days · 12 psychologist sessions · Full refund after session 1 if not right for you
         </p>
       </div>
