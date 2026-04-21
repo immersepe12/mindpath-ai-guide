@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import LeadCaptureForm from '@/components/LeadCaptureForm'
+import WhatsAppGate from '@/components/WhatsAppGate'
 
 interface VerticalHeroProps {
   headline: string
@@ -47,11 +48,11 @@ export default function VerticalHero({ headline, subtext, ctaText, ctaUrl, verti
               <Button size="hero" asChild>
                 <a href="#lead-form">{ctaText}</a>
               </Button>
-              <Button size="hero" variant="secondary" asChild>
-                <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
+              <WhatsAppGate location="vertical_hero" vertical={vertical}>
+                <Button size="hero" variant="secondary">
                   Talk to us first
-                </a>
-              </Button>
+                </Button>
+              </WhatsAppGate>
             </div>
             {/* Desktop-only: trust signals below copy */}
             <div className="hidden lg:block">

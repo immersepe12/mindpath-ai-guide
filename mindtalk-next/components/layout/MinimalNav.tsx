@@ -1,4 +1,6 @@
+'use client'
 import Link from 'next/link'
+import WhatsAppGate from '@/components/WhatsAppGate'
 
 export default function MinimalNav() {
   return (
@@ -8,14 +10,14 @@ export default function MinimalNav() {
           <span className="text-lg font-bold text-[#E8521A]">MindTalk</span>
           <span className="text-xs text-gray-400 font-normal mt-0.5">by Cadabams</span>
         </Link>
-        <a
-          href="https://wa.me/918197268789"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-gray-500 hover:text-[#E8521A] transition-colors"
-        >
-          Questions? WhatsApp us
-        </a>
+        <WhatsAppGate location="nav">
+          <button
+            type="button"
+            className="text-sm text-gray-500 hover:text-[#E8521A] transition-colors"
+          >
+            Questions? WhatsApp us
+          </button>
+        </WhatsAppGate>
       </div>
     </nav>
   )

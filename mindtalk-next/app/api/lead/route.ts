@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
     name, phone, email, vertical,
     durationOfIssue, symptoms, priorTherapy, readinessScore,
     utmSource, utmMedium, utmCampaign, utmContent, pageUrl,
+    source,
   } = body
 
   const normalisePhone = (raw: string) => {
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
             mobile_number: normalisedPhone,
             lead_source: utmSource || 'MindTalk Website',
             custom_field: {
-              cf_form_source_custom: 'packages',
+              cf_form_source_custom: typeof source === 'string' && source ? source : 'packages',
               cf_medium: cfMedium,
               cf_utm_id: utmMedium ?? '',
               cf_utm_term: utmCampaign ?? '',

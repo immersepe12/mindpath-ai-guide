@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { CheckCircle } from 'lucide-react'
 import type { Metadata } from 'next'
+import ThankYouWhatsAppLink from './ThankYouWhatsAppLink'
 
 export const metadata: Metadata = {
   title: 'You\'re in — MindTalk',
@@ -47,10 +48,7 @@ export default function ThankYouPage() {
           </div>
         </div>
         <p className="text-sm text-gray-400 mb-6">
-          Questions? WhatsApp us at{' '}
-          <a href="https://wa.me/918197268789" className="text-[#E8521A] hover:underline">
-            +91 81972 68789
-          </a>
+          Questions? WhatsApp us at <ThankYouWhatsAppLink />
         </p>
         <Button variant="ghost" asChild>
           <Link href="/">← Back to MindTalk</Link>

@@ -238,21 +238,10 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
     })
   } catch {}
 
-  if (FYNO_WORKSPACE && FYNO_API_KEY) {
-    try {
-      await fetch(`https://api.fyno.io/v1/${FYNO_WORKSPACE}/event`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${FYNO_API_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          event: 'lead_created',
-          to: { phone_number: phone, email: data.email },
-          data: { name: data.name, vertical, lp_url: LP_URLS[vertical], duration: data.durationOfIssue ?? '' },
-        }),
-      })
-    } catch (err) {
-      console.error('[Analytics] Fyno trigger failed:', err)
-    }
-  }
+  // Note: Fyno lead_created is fired server-side from /api/lead/route.ts
+  // (single canonical source). Previously this helper also fired Fyno
+  // client-side, which caused duplicate lead_created events per submit.
+  void phone // normalisedPhone is computed for Mixpanel people.set above
 }
 
 export function trackPurchaseConfirmed(email: string, vertical: string, price: number) {

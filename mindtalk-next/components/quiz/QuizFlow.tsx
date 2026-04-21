@@ -159,18 +159,6 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
       })
       trackQuizCompleted(selectedVertical, Number(answers[5]))
       router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}&phone=${encodeURIComponent(digits)}&email=${encodeURIComponent(contact.email)}`)
-
-      // Fire Fyno lead_created — non-blocking
-      fetch('/api/lead-submitted', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name:        contact.firstName,
-          phone:       contact.phone,
-          email:       contact.email,
-          verticalRaw: selectedVertical,
-        }),
-      }).catch(console.warn)
     } catch {
       trackQuizSubmitError('api_error')
       setError('Something went wrong. Please try again or WhatsApp us.')

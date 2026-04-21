@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { trackLeadSubmitted, trackWhatsAppClick, trackInlineFormSubmitted, trackInlineFormError } from '@/lib/analytics'
+import { trackLeadSubmitted, trackInlineFormSubmitted, trackInlineFormError } from '@/lib/analytics'
+import WhatsAppGate from '@/components/WhatsAppGate'
 
 interface LeadCaptureFormProps {
   vertical: string
@@ -164,15 +165,14 @@ export default function LeadCaptureForm({
 
         <div className="mt-3 flex items-center justify-center gap-2">
           <span className="text-xs text-gray-400">or</span>
-          <a
-            href="https://wa.me/918197268789"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackWhatsAppClick('lead_form', vertical)}
-            className="text-xs text-[#E8521A] font-medium hover:underline"
-          >
-            Talk to a counsellor on WhatsApp
-          </a>
+          <WhatsAppGate location="lead_form" vertical={vertical}>
+            <button
+              type="button"
+              className="text-xs text-[#E8521A] font-medium hover:underline"
+            >
+              Talk to a counsellor on WhatsApp
+            </button>
+          </WhatsAppGate>
         </div>
 
         <p className="text-xs text-gray-400 text-center mt-3 leading-relaxed">

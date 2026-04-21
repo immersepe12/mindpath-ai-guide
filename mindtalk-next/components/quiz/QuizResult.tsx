@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import { Suspense, useEffect } from 'react'
-import { trackResultPageViewed, trackResultCTAClick, trackMetaViewContent, trackWhatsAppClick } from '@/lib/analytics'
+import { trackResultPageViewed, trackResultCTAClick, trackMetaViewContent } from '@/lib/analytics'
+import WhatsAppGate from '@/components/WhatsAppGate'
 
 const verticalData: Record<string, {
   label: string
@@ -104,21 +105,23 @@ function QuizResultInner() {
           <Button size="hero" className="w-full" onClick={() => trackResultCTAClick('start_programme', vertical)} asChild>
             <Link href={checkoutUrl}>Start the programme — ₹7,799</Link>
           </Button>
-          {/* Secondary — talk to someone first */}
-          <Button
-            size="hero"
-            variant="secondary"
-            className="w-full"
-            onClick={() => {
-              trackResultCTAClick('talk_to_counsellor', vertical)
-              trackWhatsAppClick('quiz_result', vertical)
-            }}
-            asChild
+          {/* Secondary — talk to someone first. Phone is already known from the
+              quiz URL, so the WhatsAppGate skips the modal and opens WA directly. */}
+          <WhatsAppGate
+            location="quiz_result"
+            vertical={vertical}
+            knownPhone={phone}
+            knownName={name}
           >
-            <a href="https://wa.me/918197268789" target="_blank" rel="noopener noreferrer">
+            <Button
+              size="hero"
+              variant="secondary"
+              className="w-full"
+              onClick={() => trackResultCTAClick('talk_to_counsellor', vertical)}
+            >
               Talk to a counsellor first
-            </a>
-          </Button>
+            </Button>
+          </WhatsAppGate>
         </div>
       </div>
       <p className="text-center text-xs text-gray-400">
