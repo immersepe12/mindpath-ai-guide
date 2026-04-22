@@ -275,15 +275,29 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
             </div>
             <div>
               <Label htmlFor="phone">Mobile number</Label>
-              <Input
-                id="phone"
-                type="tel"
-                className="mt-1.5"
-                value={contact.phone}
-                onChange={e => setContact(c => ({ ...c, phone: e.target.value }))}
-                onFocus={() => trackQuizContactFieldFocused('phone')}
-                placeholder="10-digit mobile number"
-              />
+              <div className="relative mt-1.5">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500 text-base pointer-events-none select-none">
+                  +91
+                </span>
+                <Input
+                  id="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  className="pl-14"
+                  value={contact.phone}
+                  onChange={e => {
+                    let digits = e.target.value.replace(/\D/g, '')
+                    if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
+                    if (digits.startsWith('0')) digits = digits.slice(1)
+                    digits = digits.slice(0, 10)
+                    setContact(c => ({ ...c, phone: digits }))
+                  }}
+                  onFocus={() => trackQuizContactFieldFocused('phone')}
+                  placeholder="98765 43210"
+                  autoComplete="tel-national"
+                  maxLength={10}
+                />
+              </div>
               <p className="text-xs text-gray-400 mt-1">We'll send your match via WhatsApp</p>
             </div>
             <div>

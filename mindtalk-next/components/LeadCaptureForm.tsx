@@ -14,6 +14,19 @@ interface LeadCaptureFormProps {
   showPrice?: boolean
 }
 
+/**
+ * Normalise phone input so only 10 local digits remain in the field, even
+ * when the browser autofills a full international number like "+919876543210".
+ */
+function normalisePhoneInput(raw: string): string {
+  let digits = raw.replace(/\D/g, '')
+  // Autofill often includes country code — strip leading 91 if over 10 digits
+  if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
+  // Some users include leading 0 for local dialling
+  if (digits.startsWith('0')) digits = digits.slice(1)
+  return digits.slice(0, 10)
+}
+
 export default function LeadCaptureForm({
   vertical,
   ctaText = 'Get my programme match',
@@ -127,14 +140,22 @@ export default function LeadCaptureForm({
           </div>
           <div>
             <Label htmlFor="lead-phone" className="sr-only">Mobile number</Label>
-            <Input
-              id="lead-phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="10-digit mobile number"
-              autoComplete="tel"
-            />
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500 text-base pointer-events-none select-none">
+                +91
+              </span>
+              <Input
+                id="lead-phone"
+                type="tel"
+                inputMode="numeric"
+                value={phone}
+                onChange={(e) => setPhone(normalisePhoneInput(e.target.value))}
+                placeholder="98765 43210"
+                autoComplete="tel-national"
+                maxLength={10}
+                className="pl-14"
+              />
+            </div>
           </div>
           <div>
             <Label htmlFor="lead-email" className="sr-only">Email address</Label>
