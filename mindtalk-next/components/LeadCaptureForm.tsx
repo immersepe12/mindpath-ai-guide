@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,6 +38,27 @@ export default function LeadCaptureForm({
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const phoneRef = useRef<HTMLInputElement>(null)
+
+  // Safety net: Chrome autofill can bypass React's onChange synthesis. Poll
+  // the raw DOM value for the first 2s after mount and re-normalise if it
+  // ever contains the country code.
+  useEffect(() => {
+    const el = phoneRef.current
+    if (!el) return
+    const syncFromDOM = () => {
+      const normalised = normalisePhoneInput(el.value)
+      if (normalised !== el.value) {
+        el.value = normalised
+      }
+      if (normalised !== phone) setPhone(normalised)
+    }
+    syncFromDOM()
+    const interval = setInterval(syncFromDOM, 200)
+    const stop = setTimeout(() => clearInterval(interval), 2000)
+    return () => { clearInterval(interval); clearTimeout(stop) }
+
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -145,11 +166,13 @@ export default function LeadCaptureForm({
                 +91
               </span>
               <Input
+                ref={phoneRef}
                 id="lead-phone"
                 type="tel"
                 inputMode="numeric"
                 value={phone}
                 onChange={(e) => setPhone(normalisePhoneInput(e.target.value))}
+                onBlur={(e) => setPhone(normalisePhoneInput(e.target.value))}
                 placeholder="98765 43210"
                 autoComplete="tel-national"
                 maxLength={10}
