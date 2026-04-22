@@ -10,7 +10,7 @@ export default function MetaPixel() {
   useEffect(() => {
     if (!PIXEL_ID) return
     if (typeof window === 'undefined') return
-    if (window.location.hostname !== 'cadabamsmindtalk.com') return
+    if (!window.location.hostname.endsWith('cadabamsmindtalk.com')) return
     if ((window as any).fbq) return // already loaded
 
     // Standard Meta Pixel snippet
