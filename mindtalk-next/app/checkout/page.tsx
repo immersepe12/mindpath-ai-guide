@@ -368,10 +368,17 @@ function CheckoutContent() {
                   }}>+91</div>
                   <input
                     type="tel"
+                    inputMode="numeric"
                     maxLength={10}
-                    placeholder="10-digit mobile number"
+                    placeholder="98765 43210"
+                    autoComplete="tel-national"
                     value={phone}
-                    onChange={e => setPhone(e.target.value.replace(/\D/g, ''))}
+                    onChange={e => {
+                      let digits = e.target.value.replace(/\D/g, '')
+                      if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
+                      if (digits.startsWith('0')) digits = digits.slice(1)
+                      setPhone(digits.slice(0, 10))
+                    }}
                     style={{
                       flex: 1, padding: '12px 14px',
                       border: '1.5px solid rgba(0,0,0,0.15)', borderRadius: '8px',
