@@ -205,6 +205,10 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
 
   if (MIXPANEL_TOKEN) {
     try {
+      // Alias before identify: links the current anonymous $device
+      // profile to the email profile so past events (page views,
+      // scroll depth, form errors) stay attached to this user.
+      try { mixpanel.alias(data.email) } catch {}
       mixpanel.identify(data.email)
       mixpanel.people.set({
         $name:  data.name,
@@ -217,6 +221,12 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
         ...utms,
       })
       track('lead_submitted', {
+        // Contact details embedded on the event itself so leads can be
+        // debugged from the event feed even when the anonymous $device
+        // profile is separate from the identified one.
+        name:              data.name,
+        email:             data.email,
+        phone,
         vertical,
         duration_of_issue: data.durationOfIssue,
         prior_therapy:     data.priorTherapy,
