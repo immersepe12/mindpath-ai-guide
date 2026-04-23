@@ -25,12 +25,25 @@ export async function POST(req: NextRequest) {
   }
 
   const reqUser = extractRequestUserData(req)
+
+  // Final fbc fallback: if neither body nor cookie has one, try parsing
+  // fbclid out of the event source URL. Keeps coverage high for the very
+  // first page view where the Pixel cookie may not have landed yet.
+  let fbc = body.userData?.fbc ?? reqUser.fbc
+  if (!fbc && body.eventSourceUrl) {
+    try {
+      const u = new URL(body.eventSourceUrl)
+      const fbclid = u.searchParams.get('fbclid')
+      if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`
+    } catch {}
+  }
+
   const userData: MetaUserData = {
     ...(body.userData ?? {}),
     clientIp:  reqUser.clientIp,
     userAgent: reqUser.userAgent,
     fbp:       body.userData?.fbp ?? reqUser.fbp,
-    fbc:       body.userData?.fbc ?? reqUser.fbc,
+    fbc,
   }
 
   await sendMetaEvent({

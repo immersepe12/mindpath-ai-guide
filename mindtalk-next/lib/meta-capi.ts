@@ -131,16 +131,29 @@ export async function sendMetaEvent(input: SendMetaEventInput): Promise<void> {
   }
 }
 
-// Helper for API routes — extract IP, UA, fbp, fbc from a NextRequest
+// Helper for API routes — extract IP, UA, fbp, fbc from a NextRequest.
+// _fbp / _fbc cookies are often URL-encoded by the browser (fbclid contains
+// characters like +, =, _). Meta's event match quality drops and it flags
+// "modified fbclid in fbc" if we send the encoded form, so decode before
+// forwarding. Also strips any whitespace the regex may have captured.
 export function extractRequestUserData(req: Request): Pick<MetaUserData, 'clientIp'|'userAgent'|'fbp'|'fbc'> {
   const headers   = req.headers
   const userAgent = headers.get('user-agent') ?? undefined
   const xff       = headers.get('x-forwarded-for') ?? ''
   const clientIp  = xff.split(',')[0].trim() || headers.get('x-real-ip') || undefined
   const cookies   = headers.get('cookie') ?? ''
-  const fbp = /(?:^|;\s*)_fbp=([^;]+)/.exec(cookies)?.[1]
-  const fbc = /(?:^|;\s*)_fbc=([^;]+)/.exec(cookies)?.[1]
-  return { clientIp: clientIp ?? undefined, userAgent, fbp, fbc }
+  const rawFbp = /(?:^|;\s*)_fbp=([^;]+)/.exec(cookies)?.[1]
+  const rawFbc = /(?:^|;\s*)_fbc=([^;]+)/.exec(cookies)?.[1]
+  const decode = (v?: string) => {
+    if (!v) return undefined
+    try { return decodeURIComponent(v.trim()) } catch { return v.trim() }
+  }
+  return {
+    clientIp:  clientIp ?? undefined,
+    userAgent,
+    fbp:       decode(rawFbp),
+    fbc:       decode(rawFbc),
+  }
 }
 
 export function newEventId(): string {
