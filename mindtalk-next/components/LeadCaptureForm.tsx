@@ -92,7 +92,7 @@ export default function LeadCaptureForm({
 
     try {
       // Submit lead to CRM + Fyno
-      await fetch('/api/lead', {
+      const leadResp = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -107,6 +107,12 @@ export default function LeadCaptureForm({
           pageUrl: window.location.href,
         }),
       })
+      const leadData = await leadResp.json().catch(() => ({}))
+      if (!leadResp.ok || !leadData?.success) {
+        console.warn('[lead-form] /api/lead did not succeed:', leadResp.status, leadData)
+      } else {
+        console.log('[lead-form] /api/lead ok:', leadData)
+      }
 
       // Track inline form submission (distinct from quiz contact form)
       trackInlineFormSubmitted(vertical)
