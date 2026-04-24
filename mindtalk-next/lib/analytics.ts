@@ -1,5 +1,6 @@
 import mixpanel from 'mixpanel-browser'
 import { trackMetaPixel, newClientEventId, readFbCookies, type MetaPixelEvent } from '@/lib/meta-pixel'
+import { getAllVariantProps } from '@/lib/ab-test'
 
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 const FYNO_WORKSPACE = process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID
@@ -22,6 +23,17 @@ export function initAnalytics() {
   })
   console.log('[MindTalk Analytics] token value:',
     process.env.NEXT_PUBLIC_MIXPANEL_TOKEN ? 'present' : 'MISSING - check Vercel env vars')
+
+  // Register active A/B test variants as super properties — every event
+  // from here on automatically carries ab_price_framing etc., so funnels
+  // can be split by variant in Mixpanel without touching each track call.
+  try {
+    const variants = getAllVariantProps()
+    if (Object.keys(variants).length > 0) {
+      mixpanel.register(variants)
+      console.log('[MindTalk Analytics] A/B variants:', variants)
+    }
+  } catch {}
 }
 
 export function captureUTMs() {
@@ -342,12 +354,16 @@ function fireMetaEvent(
   // that same id — fire only Pixel + Mixpanel here so we don't duplicate on CAPI.
   const eventId      = opts?.eventId ?? newClientEventId()
   const skipRelay    = opts?.skipCapiRelay ?? !!opts?.eventId
+  // Tag every Meta event with active A/B variants so ad-platform reports
+  // can also be sliced by variant via custom_data.
+  const variants = getAllVariantProps()
+  const enrichedData: MetaCustom = { ...customData, ...variants }
   // 1. Mixpanel mirror
-  track(mixpanelEvent, { ...customData, event_id: eventId })
+  track(mixpanelEvent, { ...enrichedData, event_id: eventId })
   // 2. Meta Pixel (browser)
-  trackMetaPixel(eventName, customData ?? {}, eventId)
+  trackMetaPixel(eventName, enrichedData, eventId)
   // 3. CAPI server relay (browser → /api/track/meta) unless skipped
-  if (!skipRelay) postCapi(eventName, eventId, customData, userData)
+  if (!skipRelay) postCapi(eventName, eventId, enrichedData, userData)
   return eventId
 }
 

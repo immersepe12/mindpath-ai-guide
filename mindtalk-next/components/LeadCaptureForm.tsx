@@ -276,8 +276,12 @@ export default function LeadCaptureForm({
 
         <p className="text-xs text-gray-400 text-center mt-3 leading-relaxed">
           A Cadabams counsellor will call you within a few hours.
-          <br />
-          Full refund after session 1 if not right for you.
+          {showPrice && (
+            <>
+              <br />
+              Full refund after session 1 if not right for you.
+            </>
+          )}
         </p>
       </form>
     </div>
