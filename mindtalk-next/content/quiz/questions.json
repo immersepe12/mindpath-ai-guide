@@ -109,7 +109,7 @@
       "fields": [
         { "name": "firstName", "label": "First name", "type": "text", "required": true },
         { "name": "phone", "label": "Mobile number", "type": "tel", "required": true, "hint": "We'll send your match via WhatsApp" },
-        { "name": "email", "label": "Email address", "type": "email", "required": true }
+        { "name": "email", "label": "Email address (optional)", "type": "email", "required": false }
       ],
       "disclaimer": "By submitting, you agree to be contacted by a Cadabams MindTalk counsellor. Your information is confidential and will never be shared."
     }

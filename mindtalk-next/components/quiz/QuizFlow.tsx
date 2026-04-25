@@ -107,8 +107,8 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
   }
 
   async function handleContactSubmit() {
-    if (!contact.firstName || !contact.phone || !contact.email) {
-      setError('Please fill in all fields.')
+    if (!contact.firstName || !contact.phone) {
+      setError('Please enter your name and mobile number.')
       trackQuizSubmitError('missing_fields')
       return
     }
@@ -116,6 +116,13 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
     if (digits.length !== 10) {
       setError('Please enter a valid 10-digit mobile number.')
       trackQuizSubmitError('invalid_phone')
+      return
+    }
+    // Email is optional. Only validate format if the user typed something.
+    const trimmedEmail = contact.email.trim()
+    if (trimmedEmail && (!trimmedEmail.includes('@') || !trimmedEmail.includes('.'))) {
+      setError('Please enter a valid email address (or leave it blank).')
+      trackQuizSubmitError('invalid_email')
       return
     }
     setError('')
@@ -134,7 +141,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
         body: JSON.stringify({
           name: contact.firstName,
           phone: contact.phone,
-          email: contact.email,
+          email: trimmedEmail,
           vertical: selectedVertical,
           durationOfIssue: answers[2] as string,
           symptoms: answers[3] as string[],
@@ -151,14 +158,14 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
       trackLeadSubmitted({
         name:            contact.firstName,
         phone:           contact.phone,
-        email:           contact.email,
+        email:           trimmedEmail,
         verticalRaw:     selectedVertical,
         durationOfIssue: answers[2] as string,
         priorTherapy:    answers[4] as string,
         readinessScore:  Number(answers[5]),
       })
       trackQuizCompleted(selectedVertical, Number(answers[5]))
-      router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}&phone=${encodeURIComponent(digits)}&email=${encodeURIComponent(contact.email)}`)
+      router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}&phone=${encodeURIComponent(digits)}&email=${encodeURIComponent(trimmedEmail)}`)
     } catch {
       trackQuizSubmitError('api_error')
       setError('Something went wrong. Please try again or WhatsApp us.')
@@ -301,7 +308,9 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
               <p className="text-xs text-gray-400 mt-1">We'll send your match via WhatsApp</p>
             </div>
             <div>
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email">
+                Email address <span className="text-gray-400 font-normal">(optional)</span>
+              </Label>
               <Input
                 id="email"
                 type="email"

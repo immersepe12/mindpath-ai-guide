@@ -64,8 +64,8 @@ export default function LeadCaptureForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    if (!name.trim() || !phone.trim() || !email.trim()) {
-      setError('Please fill in all fields.')
+    if (!name.trim() || !phone.trim()) {
+      setError('Please enter your name and mobile number.')
       trackInlineFormError(vertical, 'missing_fields')
       return
     }
@@ -77,8 +77,10 @@ export default function LeadCaptureForm({
       return
     }
 
-    if (!email.includes('@') || !email.includes('.')) {
-      setError('Please enter a valid email address.')
+    // Email is optional. Only validate format if the user typed something.
+    const trimmedEmail = email.trim()
+    if (trimmedEmail && (!trimmedEmail.includes('@') || !trimmedEmail.includes('.'))) {
+      setError('Please enter a valid email address (or leave it blank).')
       trackInlineFormError(vertical, 'invalid_email')
       return
     }
@@ -99,7 +101,7 @@ export default function LeadCaptureForm({
         body: JSON.stringify({
           name: name.trim(),
           phone: digits,
-          email: email.trim(),
+          email: trimmedEmail,
           vertical,
           utmSource: utms.utm_source ?? '',
           utmMedium: utms.utm_medium ?? '',
@@ -188,13 +190,13 @@ export default function LeadCaptureForm({
             </div>
           </div>
           <div>
-            <Label htmlFor="lead-email" className="sr-only">Email address</Label>
+            <Label htmlFor="lead-email" className="sr-only">Email address (optional)</Label>
             <Input
               id="lead-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder="Email (optional)"
               autoComplete="email"
             />
           </div>
