@@ -38,8 +38,10 @@ export default function LeadCaptureForm({
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const phoneRef = useRef<HTMLInputElement>(null)
+  const nameRef  = useRef<HTMLInputElement>(null)
 
   // Safety net: Chrome autofill can bypass React's onChange synthesis. Poll
   // the raw DOM value for the first 2s after mount and re-normalise if it
@@ -60,6 +62,27 @@ export default function LeadCaptureForm({
     return () => { clearInterval(interval); clearTimeout(stop) }
 
   }, [])
+
+  // Auto-focus the name field on desktop only. On mobile this would force
+  // the keyboard up immediately, covering the hero copy and feeling
+  // aggressive — desktop visitors get a clear "start here" cue instead.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (window.matchMedia('(min-width: 768px)').matches) {
+      nameRef.current?.focus({ preventScroll: true })
+    }
+  }, [])
+
+  // Inline email validation on blur — only complain about format if the
+  // user actually typed something. Empty stays valid (email is optional).
+  function handleEmailBlur() {
+    const t = email.trim()
+    if (t && (!t.includes('@') || !t.includes('.'))) {
+      setEmailError("That doesn't look like a valid email — or leave it blank.")
+    } else {
+      setEmailError('')
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -168,6 +191,7 @@ export default function LeadCaptureForm({
             <Label htmlFor="lead-name" className="sr-only">First name</Label>
             <Input
               id="lead-name"
+              ref={nameRef}
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your first name"
@@ -201,10 +225,19 @@ export default function LeadCaptureForm({
               id="lead-email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (emailError) setEmailError('')
+              }}
+              onBlur={handleEmailBlur}
               placeholder="Email (optional)"
               autoComplete="email"
+              aria-invalid={!!emailError}
+              className={emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}
             />
+            {emailError && (
+              <p className="text-xs text-red-500 mt-1">{emailError}</p>
+            )}
           </div>
         </div>
 
@@ -216,15 +249,14 @@ export default function LeadCaptureForm({
           type="submit"
           size="hero"
           className="w-full mt-4"
-          // Disable until both name and a 10-digit phone are present.
-          // Stops rage-clicking when fields are blank — previously a single
-          // user could fire 10+ missing_fields events in seconds by mashing
-          // the CTA. Email validation still runs in handleSubmit because
-          // email is optional and only validated for shape if present.
+          // Disable until name + 10-digit phone are valid AND any inline
+          // email error is cleared. Stops rage-clicking on empty forms and
+          // also blocks submit while the email format is wrong.
           disabled={
             submitting ||
             !name.trim() ||
-            phone.replace(/\D/g, '').length !== 10
+            phone.replace(/\D/g, '').length !== 10 ||
+            !!emailError
           }
         >
           {submitting ? 'Submitting...' : ctaText}

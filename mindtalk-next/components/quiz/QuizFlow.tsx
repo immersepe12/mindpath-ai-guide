@@ -52,6 +52,31 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
   const [contact, setContact] = useState({ firstName: '', phone: '', email: '' })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [emailError, setEmailError] = useState('')
+
+  // Inline email validation on blur — only complains about format if the
+  // user actually typed something. Email is optional, so empty stays valid.
+  function handleContactEmailBlur() {
+    const t = contact.email.trim()
+    if (t && (!t.includes('@') || !t.includes('.'))) {
+      setEmailError("That doesn't look like a valid email — or leave it blank.")
+    } else {
+      setEmailError('')
+    }
+  }
+
+  // Auto-focus the name field when the contact step appears on desktop.
+  // Mobile is intentionally skipped — popping up the keyboard the moment
+  // the contact step renders is jarring on a flow the user just landed in.
+  // Callback ref so it fires when the input mounts (the input is
+  // conditionally rendered on the contact step).
+  function focusNameOnDesktop(el: HTMLInputElement | null) {
+    if (!el) return
+    if (typeof window === 'undefined') return
+    if (window.matchMedia('(min-width: 768px)').matches) {
+      el.focus({ preventScroll: true })
+    }
+  }
 
   const current = questions[step]
   const progress = ((step + 1) / questions.length) * 100
@@ -276,6 +301,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
               <Label htmlFor="firstName">First name</Label>
               <Input
                 id="firstName"
+                ref={focusNameOnDesktop}
                 className="mt-1.5"
                 value={contact.firstName}
                 onChange={e => setContact(c => ({ ...c, firstName: e.target.value }))}
@@ -317,25 +343,34 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
               <Input
                 id="email"
                 type="email"
-                className="mt-1.5"
+                className={`mt-1.5 ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                 value={contact.email}
-                onChange={e => setContact(c => ({ ...c, email: e.target.value }))}
+                onChange={e => {
+                  setContact(c => ({ ...c, email: e.target.value }))
+                  if (emailError) setEmailError('')
+                }}
+                onBlur={handleContactEmailBlur}
                 onFocus={() => trackQuizContactFieldFocused('email')}
                 placeholder="your@email.com"
+                aria-invalid={!!emailError}
               />
+              {emailError && (
+                <p className="text-xs text-red-500 mt-1">{emailError}</p>
+              )}
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button
               className="w-full mt-2"
               size="lg"
               onClick={handleContactSubmit}
-              // Disable until name + 10-digit phone are present. Stops
-              // rage-clicking when fields are blank — see commit 6ebad07
-              // diagnosis. Email is optional so excluded from this check.
+              // Disable until name + 10-digit phone are valid AND any
+              // inline email error is cleared. Stops rage-clicking on empty
+              // forms and blocks submit when the email format is wrong.
               disabled={
                 submitting ||
                 !contact.firstName.trim() ||
-                contact.phone.replace(/\D/g, '').length !== 10
+                contact.phone.replace(/\D/g, '').length !== 10 ||
+                !!emailError
               }
             >
               {submitting ? 'Submitting...' : 'Show my programme match'}
