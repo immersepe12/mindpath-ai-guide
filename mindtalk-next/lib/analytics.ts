@@ -203,20 +203,25 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
   const phone    = normalisePhone(data.phone)
   const utms     = getStoredUTMs()
 
-  if (MIXPANEL_TOKEN && data.email) {
+  // Email is optional. Use it as the canonical Mixpanel identity when
+  // present; fall back to the normalised phone so phone-only leads still
+  // get a Person profile (otherwise they stay as anonymous $device IDs).
+  const cleanEmail = data.email && data.email.trim() ? data.email.trim() : undefined
+  const identityId = cleanEmail ?? phone
+  if (MIXPANEL_TOKEN && identityId) {
     try {
       // Alias before identify: in "Original" identity mode Mixpanel
-      // needs this to link the anonymous $device profile to the email
+      // needs this to link the anonymous $device profile to the
       // canonical ID. Without it people.set() can silently no-op.
-      try { mixpanel.alias(data.email) } catch {}
-      mixpanel.identify(data.email)
+      try { mixpanel.alias(identityId) } catch {}
+      mixpanel.identify(identityId)
 
       // Strip undefined/empty values — some SDK versions reject the
       // whole batch when undefined keys are present, which was
       // preventing the profile from being created.
       const profile: Record<string, unknown> = {
         $name:  data.name,
-        $email: data.email,
+        $email: cleanEmail,
         $phone: phone,
         vertical,
         readiness_score:   data.readinessScore,
@@ -228,14 +233,14 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
         if (profile[k] === undefined || profile[k] === '') delete profile[k]
       })
       mixpanel.people.set(profile)
-      console.log('[Analytics] Mixpanel profile upserted for', data.email)
+      console.log('[Analytics] Mixpanel profile upserted for', identityId)
 
       track('lead_submitted', {
         // Contact details embedded on the event itself so leads can be
         // debugged from the event feed even when the anonymous $device
         // profile is separate from the identified one.
         name:              data.name,
-        email:             data.email,
+        email:             cleanEmail,
         phone,
         vertical,
         duration_of_issue: data.durationOfIssue,

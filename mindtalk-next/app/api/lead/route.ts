@@ -40,13 +40,20 @@ export async function POST(req: NextRequest) {
   ].filter(Boolean).join(' | ')
   const cfMedium = mediumParts.length > 230 ? mediumParts.slice(0, 227) + '...' : mediumParts
 
+  // Email is optional on the lead capture forms. Freshsales rejects the
+  // whole contact when `email: ""` is present (must be a valid address or
+  // omitted). Fyno's `to` channel block likewise needs the email key absent
+  // when there's no value. Normalise to either a non-empty trimmed string or
+  // undefined, then conditionally include below.
+  const cleanEmail = typeof email === 'string' && email.trim() ? email.trim() : undefined
+
   // 1. Freshsales
   let freshsalesStatus: { ok: boolean; status?: number; body?: string; error?: string } = { ok: false, error: 'no_api_key' }
   if (process.env.FRESHSALES_API_KEY) {
     const freshsalesPayload = {
       contact: {
         first_name: name,
-        email,
+        ...(cleanEmail ? { email: cleanEmail } : {}),
         mobile_number: normalisedPhone,
         lead_source: utmSource || 'MindTalk Website',
         custom_field: {
@@ -107,7 +114,7 @@ export async function POST(req: NextRequest) {
         }
       } else {
         freshsalesStatus = { ok: true, status: resp.status }
-        console.log('[lead] Freshsales created contact', email)
+        console.log('[lead] Freshsales created contact', cleanEmail ?? `(phone-only ${normalisedPhone})`)
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
@@ -132,7 +139,7 @@ export async function POST(req: NextRequest) {
             event: 'lead_created',
             to: {
               phone_number: normalisedPhone,
-              email,
+              ...(cleanEmail ? { email: cleanEmail } : {}),
             },
             data: {
               name,
@@ -148,7 +155,7 @@ export async function POST(req: NextRequest) {
       if (!resp.ok) {
         console.error('[lead] Fyno HTTP', resp.status, respBody.slice(0, 300))
       } else {
-        console.log('[lead] Fyno lead_created fired for', email)
+        console.log('[lead] Fyno lead_created fired for', cleanEmail ?? normalisedPhone)
       }
       fynoStatus = { ok: resp.ok, status: resp.status, body: respBody.slice(0, 300) }
     } catch (err) {
