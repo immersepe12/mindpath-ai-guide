@@ -108,21 +108,24 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
 
   async function handleContactSubmit() {
     if (!contact.firstName || !contact.phone) {
+      const missing: string[] = []
+      if (!contact.firstName) missing.push('name')
+      if (!contact.phone)     missing.push('phone')
       setError('Please enter your name and mobile number.')
-      trackQuizSubmitError('missing_fields')
+      trackQuizSubmitError(`missing_fields:${missing.join(',')}`, selectedVertical)
       return
     }
     const digits = contact.phone.replace(/\D/g, '')
     if (digits.length !== 10) {
       setError('Please enter a valid 10-digit mobile number.')
-      trackQuizSubmitError('invalid_phone')
+      trackQuizSubmitError('invalid_phone', selectedVertical)
       return
     }
     // Email is optional. Only validate format if the user typed something.
     const trimmedEmail = contact.email.trim()
     if (trimmedEmail && (!trimmedEmail.includes('@') || !trimmedEmail.includes('.'))) {
       setError('Please enter a valid email address (or leave it blank).')
-      trackQuizSubmitError('invalid_email')
+      trackQuizSubmitError('invalid_email', selectedVertical)
       return
     }
     setError('')
@@ -167,7 +170,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
       trackQuizCompleted(selectedVertical, Number(answers[5]))
       router.push(`/quiz/result?vertical=${selectedVertical}&name=${encodeURIComponent(contact.firstName)}&phone=${encodeURIComponent(digits)}&email=${encodeURIComponent(trimmedEmail)}`)
     } catch {
-      trackQuizSubmitError('api_error')
+      trackQuizSubmitError('api_error', selectedVertical)
       setError('Something went wrong. Please try again or WhatsApp us.')
       setSubmitting(false)
     }

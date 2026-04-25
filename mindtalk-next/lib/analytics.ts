@@ -154,8 +154,8 @@ export function trackQuizSubmitAttempted() {
   track('quiz_submit_attempted')
 }
 
-export function trackQuizSubmitError(errorMessage: string) {
-  track('quiz_submit_error', { error: errorMessage })
+export function trackQuizSubmitError(errorMessage: string, vertical?: string) {
+  track('quiz_submit_error', { error: errorMessage, vertical })
 }
 
 export function trackQuizCompleted(vertical: string, readinessScore: number) {

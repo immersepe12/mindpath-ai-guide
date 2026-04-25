@@ -65,8 +65,14 @@ export default function LeadCaptureForm({
     e.preventDefault()
 
     if (!name.trim() || !phone.trim()) {
+      const missing: string[] = []
+      if (!name.trim())  missing.push('name')
+      if (!phone.trim()) missing.push('phone')
       setError('Please enter your name and mobile number.')
-      trackInlineFormError(vertical, 'missing_fields')
+      // Per-field detail so Mixpanel actually tells us which field bounced
+      // people, e.g. `missing_fields:phone` (autofill timing) vs
+      // `missing_fields:name,phone` (tapped CTA without typing anything).
+      trackInlineFormError(vertical, `missing_fields:${missing.join(',')}`)
       return
     }
 
