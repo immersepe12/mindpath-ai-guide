@@ -216,7 +216,16 @@ export default function LeadCaptureForm({
           type="submit"
           size="hero"
           className="w-full mt-4"
-          disabled={submitting}
+          // Disable until both name and a 10-digit phone are present.
+          // Stops rage-clicking when fields are blank — previously a single
+          // user could fire 10+ missing_fields events in seconds by mashing
+          // the CTA. Email validation still runs in handleSubmit because
+          // email is optional and only validated for shape if present.
+          disabled={
+            submitting ||
+            !name.trim() ||
+            phone.replace(/\D/g, '').length !== 10
+          }
         >
           {submitting ? 'Submitting...' : ctaText}
         </Button>

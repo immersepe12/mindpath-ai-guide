@@ -329,7 +329,14 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
               className="w-full mt-2"
               size="lg"
               onClick={handleContactSubmit}
-              disabled={submitting}
+              // Disable until name + 10-digit phone are present. Stops
+              // rage-clicking when fields are blank — see commit 6ebad07
+              // diagnosis. Email is optional so excluded from this check.
+              disabled={
+                submitting ||
+                !contact.firstName.trim() ||
+                contact.phone.replace(/\D/g, '').length !== 10
+              }
             >
               {submitting ? 'Submitting...' : 'Show my programme match'}
             </Button>
