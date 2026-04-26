@@ -25,7 +25,10 @@ export async function POST(req: NextRequest) {
     burnout:      'https://cadabamsmindtalk.com/burnout',
   }
 
-  // Build cf_medium — pack as much context as possible, truncated to 230 chars
+  // Build the breadcrumb that goes into Freshsales' standard `medium` field
+  // (single-line text on the contact). Pack page URL + UTMs + quiz context
+  // so the sales/care team can see the journey at a glance. Truncated to
+  // 230 chars to stay under typical text-field limits.
   const mediumParts = [
     pageUrl,
     utmSource   ? `src=${utmSource}`     : '',
@@ -38,7 +41,7 @@ export async function POST(req: NextRequest) {
     readinessScore  ? `score=${readinessScore}` : '',
     Array.isArray(symptoms) && symptoms.length ? `sym=${symptoms.join('+')}` : '',
   ].filter(Boolean).join(' | ')
-  const cfMedium = mediumParts.length > 230 ? mediumParts.slice(0, 227) + '...' : mediumParts
+  const mediumValue = mediumParts.length > 230 ? mediumParts.slice(0, 227) + '...' : mediumParts
 
   // Email is optional on the lead capture forms. Freshsales rejects the
   // whole contact when `email: ""` is present (must be a valid address or
@@ -50,18 +53,24 @@ export async function POST(req: NextRequest) {
   // 1. Freshsales
   let freshsalesStatus: { ok: boolean; status?: number; body?: string; error?: string } = { ok: false, error: 'no_api_key' }
   if (process.env.FRESHSALES_API_KEY) {
+    // Freshsales has `medium`, `campaign`, `keyword` as STANDARD fields on
+    // the contact — they live at the top level, NOT inside custom_field.
+    // The previous version incorrectly nested cf_medium / cf_utm_id /
+    // cf_utm_term inside custom_field, so Freshsales rejected the request,
+    // and the silent retry-strip-cf_medium hid the failure while creating
+    // contacts with no marketing context.
     const freshsalesPayload = {
       contact: {
         first_name: name,
         ...(cleanEmail ? { email: cleanEmail } : {}),
         mobile_number: normalisedPhone,
         lead_source: utmSource || 'MindTalk Website',
+        // Standard Freshsales marketing fields (top-level)
+        ...(mediumValue   ? { medium:   mediumValue }   : {}),
+        ...(utmCampaign   ? { campaign: utmCampaign }   : {}),
+        ...(utmContent    ? { keyword:  utmContent }    : {}),
         custom_field: {
           cf_form_source_custom: typeof source === 'string' && source ? source : 'packages',
-          cf_medium: cfMedium,
-          cf_utm_id: utmMedium ?? '',
-          cf_utm_term: utmCampaign ?? '',
-          cf_utm_content: utmContent ?? '',
           cf_score: readinessScore ?? '',
           cf_customer_category: durationOfIssue ?? '',
           cf_relationship: Array.isArray(symptoms) ? symptoms.join(', ') : '',
@@ -81,37 +90,10 @@ export async function POST(req: NextRequest) {
       const respBody = await resp.text()
       if (!resp.ok) {
         console.error('[lead] Freshsales HTTP', resp.status, respBody.slice(0, 500))
-
-        // Retry WITHOUT cf_medium in case the field doesn't exist on the
-        // Freshsales contact schema. Any 400/422 is most likely a field
-        // validation problem, so strip the new field and try again.
-        if (resp.status === 400 || resp.status === 422) {
-          const retry = await fetch('https://cadabams.myfreshworks.com/crm/sales/api/contacts', {
-            method: 'POST',
-            headers: {
-              Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              contact: {
-                ...freshsalesPayload.contact,
-                custom_field: {
-                  ...freshsalesPayload.contact.custom_field,
-                  cf_medium: undefined,
-                },
-              },
-            }),
-          })
-          const retryBody = await retry.text()
-          freshsalesStatus = { ok: retry.ok, status: retry.status, body: retryBody.slice(0, 300) }
-          if (!retry.ok) {
-            console.error('[lead] Freshsales retry HTTP', retry.status, retryBody.slice(0, 500))
-          } else {
-            console.log('[lead] Freshsales succeeded on retry (cf_medium likely missing from schema)')
-          }
-        } else {
-          freshsalesStatus = { ok: false, status: resp.status, body: respBody.slice(0, 300) }
-        }
+        // No more silent retry-strip-cf_medium. If the request fails, log
+        // the actual response so the cause is debuggable rather than papered
+        // over. Future schema mismatches will surface as real errors.
+        freshsalesStatus = { ok: false, status: resp.status, body: respBody.slice(0, 300) }
       } else {
         freshsalesStatus = { ok: true, status: resp.status }
         console.log('[lead] Freshsales created contact', cleanEmail ?? `(phone-only ${normalisedPhone})`)
