@@ -76,7 +76,11 @@ export interface SendMetaEventInput {
 
 export async function sendMetaEvent(input: SendMetaEventInput): Promise<void> {
   if (!PIXEL_ID || !ACCESS_TOKEN) {
-    console.warn('[meta-capi] META_CAPI_PIXEL_ID or META_CAPI_ACCESS_TOKEN not set — skipping')
+    console.error('[meta-capi] CRITICAL: META_CAPI_PIXEL_ID or META_CAPI_ACCESS_TOKEN missing — Meta CAPI is NOT firing.', {
+      hasPixelId: !!PIXEL_ID,
+      hasToken:   !!ACCESS_TOKEN,
+      eventName:  input.eventName,
+    })
     return
   }
 
@@ -122,12 +126,15 @@ export async function sendMetaEvent(input: SendMetaEventInput): Promise<void> {
     })
     const text = await res.text()
     if (!res.ok) {
-      console.warn(`[meta-capi] ${input.eventName} ${res.status}: ${text.slice(0, 300)}`)
-    } else if (process.env.NODE_ENV !== 'production') {
-      console.log(`[meta-capi] ${input.eventName} OK: ${text.slice(0, 200)}`)
+      console.error(`[meta-capi] ${input.eventName} ${res.status}: ${text.slice(0, 500)}`)
+    } else {
+      // Always log success (including production) so Vercel Function logs
+      // are a definitive source of truth — we can verify CAPI actually
+      // fired for every event without trusting Meta's UI alone.
+      console.log(`[meta-capi] ${input.eventName} OK pixel=${PIXEL_ID} eid=${input.eventId} body=${text.slice(0, 200)}`)
     }
   } catch (e: any) {
-    console.warn('[meta-capi] fetch error:', e?.message)
+    console.error('[meta-capi] fetch error:', e?.message)
   }
 }
 
