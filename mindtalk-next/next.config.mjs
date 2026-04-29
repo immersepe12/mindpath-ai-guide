@@ -13,7 +13,7 @@ const nextConfig = {
       { source: '/workplace', destination: '/burnout', permanent: true },
       { source: '/emotional-reset', destination: '/depression', permanent: true },
       { source: '/assessment', destination: '/quiz', permanent: true },
-      { source: '/app', destination: '/', permanent: true },
+      // /app is now the primary app sales surface — do not redirect.
     ]
   },
   async headers() {

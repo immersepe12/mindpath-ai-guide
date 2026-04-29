@@ -14,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/team`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/quiz`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/app`, lastModified: now, changeFrequency: 'weekly', priority: 0.95 },
+    { url: `${base}/features/doctor-rhea`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/features/journeys`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/features/self-care`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/features/therapy`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/features/progress`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
   ]
 
   const blogPosts: MetadataRoute.Sitemap = getAllPosts().map(post => ({
