@@ -268,6 +268,10 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
 
   // Meta Lead (Pixel + CAPI + Mixpanel mirror as `meta_lead`)
   try {
+    console.log('[META LEAD FIRED]', vertical, {
+      hasFbq: typeof (window as { fbq?: unknown }).fbq,
+      url:    window.location.href,
+    })
     trackMetaLead({
       vertical,
       phone:  data.phone,
@@ -275,7 +279,9 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
       name:   data.name,
       value:  0,
     })
-  } catch {}
+  } catch (err) {
+    console.error('[META LEAD] trackMetaLead threw:', err)
+  }
 
   // Note: Fyno lead_created is fired server-side from /api/lead/route.ts
   // (single canonical source). Previously this helper also fired Fyno
