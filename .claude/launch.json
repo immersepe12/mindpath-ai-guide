@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mindtalk-next (Next.js / Vercel)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "mindtalk-next", "run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "vite_react_shadcn_ts (Vite / Lovable root)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 8080
+    }
+  ]
+}

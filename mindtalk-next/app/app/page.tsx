@@ -14,14 +14,14 @@ import {
 } from '@/components/three/dynamic'
 
 export const metadata: Metadata = {
-  title: 'MindTalk App | Free CBT Mental Health Companion · Doctor Rhea AI',
+  title: 'MindTalk App | Free CBT Mental Health Companion · Doctor Riya AI',
   description:
-    "MindTalk is a free mental health app — Doctor Rhea AI, daily CBT tools, guided journeys, and mood tracking. Upgrade to a coach-led 90-day programme when you're ready. Built by Cadabams Group.",
+    "MindTalk is a free mental health app — Doctor Riya AI, daily CBT tools, guided journeys, and mood tracking. Upgrade to a coach-led 90-day programme when you're ready. Built by Cadabams Group.",
   alternates: { canonical: 'https://cadabamsmindtalk.com/app' },
   openGraph: {
     title: 'MindTalk — Free CBT Mental Health App',
     description:
-      "Doctor Rhea AI, daily CBT tools, journeys, and mood tracking — all free. Upgrade to a coach-led programme when you're ready.",
+      "Doctor Riya AI, daily CBT tools, journeys, and mood tracking — all free. Upgrade to a coach-led programme when you're ready.",
     url: 'https://cadabamsmindtalk.com/app',
     type: 'website',
   },
@@ -37,7 +37,7 @@ const freeFeatures: {
   emoji: string
 }[] = [
   {
-    title: 'Doctor Rhea AI',
+    title: 'Doctor Riya AI',
     copy: 'Your 24/7 CBT-guided AI companion. Free forever.',
     iconBg: 'bg-[#F1EBFF]',
     iconFg: 'text-[#6C5CE7]',
@@ -81,7 +81,7 @@ const freeFeatures: {
 ]
 
 const upgradeRows: { label: string; free: string; coach: string }[] = [
-  { label: 'Doctor Rhea AI',          free: '✓ Free',   coach: '✓ Included' },
+  { label: 'Doctor Riya AI',          free: '✓ Free',   coach: '✓ Included' },
   { label: 'Self-paced journeys',     free: '✓ Free',   coach: '✓ Included' },
   { label: 'CBT toolkit & journal',   free: '✓ Free',   coach: '✓ Included' },
   { label: 'Assessments',             free: '✓ Free',   coach: '✓ Included' },
@@ -101,7 +101,7 @@ const pillars: {
   alt: string
 }[] = [
   {
-    title: 'Doctor Rhea AI — your free 24/7 companion',
+    title: 'Doctor Riya AI — your free 24/7 companion',
     copy: 'A real CBT-grounded AI agent that knows your journey. Not a chatbot — an actual companion.',
     bullets: [
       'Available 24/7, no wait, no appointment',
@@ -112,7 +112,7 @@ const pillars: {
     badge: 'free',
     badgeText: 'FREE · ALWAYS',
     screenshot: '/screenshots/MentalHealthHomeMainV11.png',
-    alt: 'MindTalk home with Doctor Rhea AI chat',
+    alt: 'MindTalk home with Doctor Riya AI chat',
   },
   {
     title: 'Journeys — free or coach-led',
@@ -121,7 +121,7 @@ const pillars: {
       'FREE — self-paced journeys, all topics, no time limit',
       'PAID — Anxiety / Depression / Burnout / Relationships, structured 90-day with weekly therapist',
       'Daily CBT micro-tasks with progress tracking',
-      'Doctor Rhea AI weaves into both paths',
+      'Doctor Riya AI weaves into both paths',
     ],
     badge: 'mixed',
     screenshot: '/screenshots/JourneyPath.png',
@@ -193,7 +193,7 @@ export default function AppPage() {
                 </span>
               </h1>
               <p className="text-lg text-[#9AA0AB] leading-relaxed mb-7 max-w-xl">
-                Doctor Rhea AI, daily CBT tools, guided journeys, and mood tracking — completely free.
+                Doctor Riya AI, daily CBT tools, guided journeys, and mood tracking — completely free.
                 Upgrade to a coach-led programme when you're ready.
               </p>
               <div className="flex flex-wrap gap-2 mb-8">
@@ -218,7 +218,7 @@ export default function AppPage() {
           </div>
         </section>
 
-        {/* ─── DOCTOR RHEA — HERO FEATURE ──────────────────────────────── */}
+        {/* ─── DOCTOR RIYA — HERO FEATURE ──────────────────────────────── */}
         <section className="relative overflow-hidden bg-[#0E1726] text-white py-20 sm:py-24">
           <MorphingGradientBg opacity={0.35} />
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -227,7 +227,7 @@ export default function AppPage() {
               <div className="relative mx-auto max-w-[280px]">
                 <Image
                   src="/screenshots/MentalHealthHomeMainV11.png"
-                  alt="Doctor Rhea AI chat in MindTalk app"
+                  alt="Doctor Riya AI chat in MindTalk app"
                   width={560}
                   height={1180}
                   className="rounded-[44px] shadow-2xl"
@@ -236,13 +236,13 @@ export default function AppPage() {
             </div>
             <div>
               <div className="inline-flex items-center rounded-full bg-[#F1EBFF] text-[#6C5CE7] px-3 py-1 text-[11px] font-bold tracking-wider mb-5">
-                DOCTOR RHEA AI · FREE
+                DOCTOR RIYA AI · FREE
               </div>
               <h2 className="text-3xl sm:text-5xl font-extrabold leading-[1.05] tracking-tight mb-5 text-balance">
                 An AI that actually<br />understands you.
               </h2>
               <p className="text-lg text-[#9AA0AB] leading-relaxed mb-8 max-w-xl">
-                Doctor Rhea is MindTalk's AI mental health companion — built on CBT protocols, free
+                Doctor Riya is MindTalk's AI mental health companion — built on CBT protocols, free
                 to use, available 24/7. She knows your journey, tracks your mood over time, and gives
                 you the right tool at the right moment. Not a chatbot. A companion.
               </p>
@@ -267,7 +267,7 @@ export default function AppPage() {
                   href={DOWNLOAD_URL}
                   className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#F77268] to-[#F97316] text-white font-semibold h-13 px-7 text-base hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(249,115,22,0.28)] transition-all"
                 >
-                  Chat with Doctor Rhea →
+                  Chat with Doctor Riya →
                 </a>
               </div>
               <AIDisclaimer variant="inline" className="text-[#6B7280]" />
@@ -470,7 +470,7 @@ export default function AppPage() {
                 <ol className="space-y-3 text-sm text-[#4A5260] mb-7 list-decimal list-inside">
                   <li>Download the app (or open on web)</li>
                   <li>Take the free mental health assessment</li>
-                  <li>Chat with Doctor Rhea AI</li>
+                  <li>Chat with Doctor Riya AI</li>
                   <li>Start a self-paced journey</li>
                   <li>Use the toolkit, journal, explore</li>
                 </ol>
@@ -543,7 +543,7 @@ export default function AppPage() {
               </span>
             </h2>
             <p className="text-lg text-[#9AA0AB] mb-8 max-w-xl mx-auto">
-              Download the app. Chat with Doctor Rhea. Start your journey today.
+              Download the app. Chat with Doctor Riya. Start your journey today.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a

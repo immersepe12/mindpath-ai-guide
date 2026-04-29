@@ -65,7 +65,7 @@ export default function JourneysPage() {
                 {[
                   'All 4 conditions (anxiety, depression, burnout, relationships) + others',
                   'Daily CBT micro-tasks',
-                  'Doctor Rhea AI in every step',
+                  'Doctor Riya AI in every step',
                   'Mood tracking, journaling, breathing tools',
                 ].map((b) => (
                   <li key={b} className="flex items-start gap-2">

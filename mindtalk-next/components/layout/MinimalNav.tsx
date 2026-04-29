@@ -5,7 +5,7 @@ import WhatsAppGate from '@/components/WhatsAppGate'
 import { DOWNLOAD_URL, WEB_APP_URL } from '@/components/marketing/DownloadButtons'
 
 const FEATURE_LINKS: { label: string; href: string; meta?: string; tone?: 'free' | 'paid' | 'mixed' }[] = [
-  { label: 'Doctor Rhea AI',     href: '/features/doctor-rhea', meta: 'Free 24/7 AI companion',         tone: 'free' },
+  { label: 'Doctor Riya AI',     href: '/features/doctor-riya', meta: 'Free 24/7 AI companion',         tone: 'free' },
   { label: 'Journeys',           href: '/features/journeys',    meta: 'Free + coach-led',                tone: 'mixed' },
   { label: 'Self-Care Toolkit',  href: '/features/self-care',   meta: 'Breathing, journal, audio',       tone: 'free' },
   { label: 'Therapy',            href: '/features/therapy',     meta: 'Coach-led · ₹7,799',              tone: 'paid' },

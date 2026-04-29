@@ -175,7 +175,7 @@ CBT is available in India through:
 
 2. **Hospital outpatient departments**: Available at major hospitals like Cadabams, NIMHANS, and Apollo. Often more affordable, but can involve long wait times.
 
-3. **Online platforms**: Increasingly available. MindTalk provides structured CBT [Journeys](/anxiety) (Anxiety, Depression, Burnout, Relationships) at ₹7,799 for 90 days — including daily CBT exercises, weekly therapist sessions, Doctor Rhea AI, and progress tracking.
+3. **Online platforms**: Increasingly available. MindTalk provides structured CBT [Journeys](/anxiety) (Anxiety, Depression, Burnout, Relationships) at ₹7,799 for 90 days — including daily CBT exercises, weekly therapist sessions, Doctor Riya AI, and progress tracking.
 
 **What makes a good CBT provider:**
 - Uses recognised CBT protocols (not just "talking therapy")
@@ -211,7 +211,7 @@ MindTalk's Journeys are designed on these principles — structured daily practi
 
 ## About MindTalk
 
-MindTalk is India's first structured CBT recovery programme, developed by Cadabams Group — the country's largest mental health organisation with 30+ years of clinical experience. Each Journey ([Anxiety](/anxiety), [Depression](/depression), [Burnout](/burnout), [Relationships](/relationships)) follows a clinically validated CBT structure over 30, 45, or 90 days. The programme includes daily exercises, self-care tools, journaling, Doctor Rhea AI companion, and weekly sessions with a Cadabams therapist. Packages from ₹7,799 at cadabamsmindtalk.com.
+MindTalk is India's first structured CBT recovery programme, developed by Cadabams Group — the country's largest mental health organisation with 30+ years of clinical experience. Each Journey ([Anxiety](/anxiety), [Depression](/depression), [Burnout](/burnout), [Relationships](/relationships)) follows a clinically validated CBT structure over 30, 45, or 90 days. The programme includes daily exercises, self-care tools, journaling, Doctor Riya AI companion, and weekly sessions with a Cadabams therapist. Packages from ₹7,799 at cadabamsmindtalk.com.
 
 ---
 

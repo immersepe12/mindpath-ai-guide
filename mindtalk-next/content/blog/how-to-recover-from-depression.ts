@@ -203,7 +203,7 @@ MindTalk's [Depression Journey](/depression) includes weekly sessions with a Cad
 
 ## About MindTalk
 
-MindTalk is a structured CBT recovery programme by Cadabams Group — India's largest mental health organisation with 30+ years of clinical experience. The Depression Journey combines daily CBT exercises, mood tracking, a journaling system, Doctor Rhea AI companion, and weekly therapist sessions into a 90-day structured recovery path. Packages from ₹7,799 at [cadabamsmindtalk.com](/depression).
+MindTalk is a structured CBT recovery programme by Cadabams Group — India's largest mental health organisation with 30+ years of clinical experience. The Depression Journey combines daily CBT exercises, mood tracking, a journaling system, Doctor Riya AI companion, and weekly therapist sessions into a 90-day structured recovery path. Packages from ₹7,799 at [cadabamsmindtalk.com](/depression).
 
 ---
 

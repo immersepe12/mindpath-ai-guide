@@ -53,7 +53,7 @@ export default function SelfCarePage() {
               </h2>
               <p className="text-[#4A5260] max-w-xl mx-auto">
                 Inhale 4. Hold 7. Exhale 8. The orb will guide you. This same exercise lives inside
-                the MindTalk app — and it's one of Doctor Rhea's most-recommended tools.
+                the MindTalk app — and it's one of Doctor Riya's most-recommended tools.
               </p>
             </div>
             <BreathingOrb />

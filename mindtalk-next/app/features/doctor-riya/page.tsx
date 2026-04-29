@@ -8,34 +8,34 @@ import AIDisclaimer from '@/components/marketing/AIDisclaimer'
 import { HeroParticles, BreathingOrb } from '@/components/three/dynamic'
 
 export const metadata: Metadata = {
-  title: 'Doctor Rhea AI — Free CBT Mental Health Companion | MindTalk',
+  title: 'Doctor Riya AI — Free CBT Mental Health Companion | MindTalk',
   description:
-    'Doctor Rhea is a free, 24/7 AI mental health companion built on CBT protocols. Tracks mood, knows your journey, surfaces the right tool at the right moment.',
-  alternates: { canonical: 'https://cadabamsmindtalk.com/features/doctor-rhea' },
+    'Doctor Riya is a free, 24/7 AI mental health companion built on CBT protocols. Tracks mood, knows your journey, surfaces the right tool at the right moment.',
+  alternates: { canonical: 'https://cadabamsmindtalk.com/features/doctor-riya' },
 }
 
 const scenarios: { title: string; copy: string }[] = [
-  { title: "It's 2am and anxiety hits", copy: "Open the app. Doctor Rhea is awake. Get a guided breathing exercise and grounding before the spiral takes over." },
-  { title: 'Before a hard conversation', copy: "Five minutes with Doctor Rhea, working through the cognitive distortions you'll bring into the room." },
+  { title: "It's 2am and anxiety hits", copy: "Open the app. Doctor Riya is awake. Get a guided breathing exercise and grounding before the spiral takes over." },
+  { title: 'Before a hard conversation', copy: "Five minutes with Doctor Riya, working through the cognitive distortions you'll bring into the room." },
   { title: 'You want to track your mood', copy: 'Quick mood check-in. She remembers patterns over weeks and surfaces the trends you missed.' },
   { title: 'You need a CBT exercise now', copy: "Type how you're feeling. She picks the right CBT tool — thought record, behavioural activation, exposure ladder — and walks you through it." },
 ]
 
 const differentiators: { title: string; copy: string }[] = [
-  { title: 'Not a chatbot', copy: 'Doctor Rhea is a structured CBT agent, not a generic LLM with a wellness prompt. Every response is grounded in protocol.' },
+  { title: 'Not a chatbot', copy: 'Doctor Riya is a structured CBT agent, not a generic LLM with a wellness prompt. Every response is grounded in protocol.' },
   { title: 'CBT-grounded', copy: 'Cognitive restructuring, behavioural activation, exposure work — the actual evidence base, not vibes.' },
   { title: 'Always remembers you', copy: 'She knows where you are in your journey, what triggers you, and what tools have worked before.' },
 ]
 
-export default function DoctorRheaPage() {
+export default function DoctorRiyaPage() {
   return (
     <>
       <MinimalNav />
       <main>
         <FeatureHero
-          overline="DOCTOR RHEA AI · FREE FOREVER"
+          overline="DOCTOR RIYA AI · FREE FOREVER"
           overlineTone="free"
-          headline="Doctor Rhea. Free. Always on."
+          headline="Doctor Riya. Free. Always on."
           subhead="The AI mental health companion that knows your journey — and gives you CBT tools the moment you need them."
           primaryScreenshot="/screenshots/MentalHealthHomeMainV11.png"
           secondaryScreenshot="/screenshots/MentalHealthHomeMain.png"
@@ -92,7 +92,7 @@ export default function DoctorRheaPage() {
             <div className="text-center mb-10">
               <FreeBadge size="md" className="mb-4">TRY IT NOW</FreeBadge>
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0E1726] mb-3">
-                One of Doctor Rhea's most-used tools
+                One of Doctor Riya's most-used tools
               </h2>
               <p className="text-[#4A5260]">
                 The 4-7-8 breathing technique — inhale 4, hold 7, exhale 8. Try it.
@@ -113,14 +113,14 @@ export default function DoctorRheaPage() {
         <section className="bg-[#0E1726] text-white py-20 text-center">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-5 text-balance">
-              Chat with Doctor Rhea — free.
+              Chat with Doctor Riya — free.
             </h2>
             <p className="text-[#9AA0AB] mb-8">No payment. No appointment. Just open the app.</p>
             <a
               href={DOWNLOAD_URL}
               className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#F77268] to-[#F97316] text-white font-semibold h-14 px-8 hover:scale-[1.02] hover:shadow-[0_12px_28px_rgba(249,115,22,0.28)] transition-all"
             >
-              Chat with Doctor Rhea Free →
+              Chat with Doctor Riya Free →
             </a>
           </div>
         </section>

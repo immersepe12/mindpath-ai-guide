@@ -200,7 +200,7 @@ Research consistently shows that **structured, guided CBT programmes outperform 
 - Has accountability (someone or something checking in)
 - Adapts to *your* specific anxiety patterns
 
-This is exactly what MindTalk's [Anxiety Journey](/anxiety) is designed to do. Over 30, 45, or 90 days, you work through all 7 of these techniques in a structured sequence, guided by Doctor Rhea AI, with weekly sessions with a Cadabams therapist built in.
+This is exactly what MindTalk's [Anxiety Journey](/anxiety) is designed to do. Over 30, 45, or 90 days, you work through all 7 of these techniques in a structured sequence, guided by Doctor Riya AI, with weekly sessions with a Cadabams therapist built in.
 
 ---
 
