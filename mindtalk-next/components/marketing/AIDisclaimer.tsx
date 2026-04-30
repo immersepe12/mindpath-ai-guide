@@ -38,7 +38,7 @@ export default function AIDisclaimer({ variant = 'inline', className = '' }: AID
           </ul>
         </div>
         <div>
-          <div className="font-semibold text-[#DC4B45] mb-1.5">She is not</div>
+          <div className="font-semibold text-[#92400E] mb-1.5">She is not</div>
           <ul className="space-y-1 text-[#4A5260] list-disc pl-5">
             <li>A licensed therapist or psychiatrist</li>
             <li>A diagnostic or clinical assessment tool</li>

@@ -179,13 +179,13 @@ export default function JourneysPage() {
         </section>
 
         {/* Final CTA pair */}
-        <section className="bg-[#0E1726] text-white py-20 text-center">
+        <section className="bg-[#FAF7F4] py-20 text-center border-t border-[#ECE6DE]">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-8 text-balance">
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#0E1726] mb-8 text-balance">
               Pick a path. Start today.
             </h2>
             <DownloadButtons
-              theme="dark"
+              theme="light"
               primaryLabel="Explore Free Journeys"
               secondaryLabel="Start a Coach Journey"
               className="justify-center"
