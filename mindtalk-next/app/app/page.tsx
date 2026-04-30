@@ -89,43 +89,64 @@ const appScreens: {
   label: string
   sublabel: string
   bg: string
+  badge: string
+  badgeColor: string
   src: string
   alt: string
 }[] = [
   {
-    label: 'Doctor Riya AI',
-    sublabel: 'Free · Always on',
-    bg: 'from-[#FFF1E8] to-[#FFE4D0]',
-    src: '/screenshots/MentalHealthHomeMainV11.png',
-    alt: 'Doctor Riya AI chat home screen',
+    label: 'Home',
+    sublabel: 'Everything starts here',
+    bg: 'from-[#FFF4EC] to-[#FFE8D6]',
+    badge: 'FREE',
+    badgeColor: 'bg-[#FEF3C7] text-[#92400E]',
+    src: '/app-screenshots/screen_home.png',
+    alt: 'MindTalk home screen showing mood check-in and Doctor Riya ask bar',
   },
   {
-    label: 'Your Journeys',
+    label: 'Journeys',
     sublabel: 'Free self-paced · Coach-led paid',
-    bg: 'from-[#FFF8F0] to-[#FEF3E8]',
-    src: '/screenshots/JourneyPath.png',
-    alt: 'Journey path with progress nodes',
+    bg: 'from-[#FFF1E8] to-[#FFE4D0]',
+    badge: 'FREE + PAID',
+    badgeColor: 'bg-[#FFF4EC] text-[#C9531A]',
+    src: '/app-screenshots/screen_journeys.png',
+    alt: 'MindTalk journeys screen showing recovery programmes',
+  },
+  {
+    label: 'Doctor Riya AI',
+    sublabel: 'Free · Always on · CBT-grounded',
+    bg: 'from-[#FEF9F0] to-[#FDF3E3]',
+    badge: 'FREE FOREVER',
+    badgeColor: 'bg-[#FEF3C7] text-[#92400E]',
+    src: '/app-screenshots/screen_doctor_riya_chat.png',
+    alt: 'Doctor Riya AI chat screen showing supportive conversation',
   },
   {
     label: 'CBT Journal',
     sublabel: 'Daily prompts · Mood streaks',
-    bg: 'from-[#F0F9FF] to-[#E8F4FD]',
-    src: '/screenshots/JournalActiveDashboard.png',
-    alt: 'Journal dashboard with mood tracking',
+    bg: 'from-[#F9F5FF] to-[#F1EBFF]',
+    badge: 'FREE',
+    badgeColor: 'bg-[#FEF3C7] text-[#92400E]',
+    src: '/app-screenshots/screen_journal.png',
+    alt: 'MindTalk journal screen showing Free Flow and guided reflection',
   },
   {
-    label: 'Self-Care Toolkit',
-    sublabel: 'Breathing · Grounding · Audio',
+    label: 'Progress',
+    sublabel: 'Mood trends · Weekly insights',
     bg: 'from-[#F0FDF4] to-[#DCFCE7]',
-    src: '/screenshots/BreathingExercise.png',
-    alt: 'Guided breathing exercise screen',
+    badge: 'FREE',
+    badgeColor: 'bg-[#FEF3C7] text-[#92400E]',
+    src: '/app-screenshots/screen_mood_report.png',
+    alt: 'MindTalk mood report showing 30-day trends and top feelings',
   },
   {
-    label: 'Progress Tracking',
-    sublabel: 'Mood trends · Streak rings',
-    bg: 'from-[#FFF8F0] to-[#FEF9E8]',
-    src: '/screenshots/HomeScreenPolished.png',
-    alt: 'Progress tracking on home screen',
+    label: 'Self-Care',
+    sublabel: 'Audio · Breathing · Quick relief',
+    bg: 'from-[#FFF8F0] to-[#FEF3E8]',
+    badge: 'FREE',
+    badgeColor: 'bg-[#FEF3C7] text-[#92400E]',
+    src: '/app-screenshots/screen_quick_relief.png',
+    alt: 'MindTalk quick relief screen showing audio and visualisation sessions',
   },
 ]
 
@@ -150,8 +171,8 @@ const pillars: {
     ],
     badge: 'free',
     badgeText: 'FREE · ALWAYS',
-    screenshot: '/screenshots/MentalHealthHomeMainV11.png',
-    alt: 'MindTalk home with Doctor Riya AI chat',
+    screenshot: '/app-screenshots/screen_doctor_riya_chat.png',
+    alt: 'Doctor Riya AI chat showing supportive CBT conversation',
     showDisclaimer: true,
   },
   {
@@ -164,8 +185,8 @@ const pillars: {
       'Doctor Riya AI weaves into both paths',
     ],
     badge: 'mixed',
-    screenshot: '/screenshots/JourneyPath.png',
-    alt: 'Duolingo-style journey path with progress nodes',
+    screenshot: '/app-screenshots/screen_journeys.png',
+    alt: 'MindTalk journeys screen showing recovery programmes',
   },
   {
     title: 'Self-Care Toolkit — free',
@@ -178,8 +199,8 @@ const pillars: {
     ],
     badge: 'free',
     badgeText: 'FREE',
-    screenshot: '/screenshots/BreathingExercise.png',
-    alt: 'Guided breathing exercise screen',
+    screenshot: '/app-screenshots/screen_quick_relief.png',
+    alt: 'MindTalk quick relief screen with audio and visualisation sessions',
   },
   {
     title: 'Therapy — included with coach-led journeys',
@@ -192,8 +213,8 @@ const pillars: {
     ],
     badge: 'paid',
     badgeText: 'COACH-LED · ₹7,799',
-    screenshot: '/screenshots/TherapistBookingRedesign.png',
-    alt: 'Therapist booking screen with available slots',
+    screenshot: '/app-screenshots/screen_therapists.png',
+    alt: 'Find your therapist screen with filter chips and 69 specialists',
   },
   {
     title: 'Journal — daily CBT prompts, free',
@@ -206,8 +227,8 @@ const pillars: {
     ],
     badge: 'free',
     badgeText: 'FREE',
-    screenshot: '/screenshots/JournalActiveDashboard.png',
-    alt: 'Journal dashboard with mood tracking',
+    screenshot: '/app-screenshots/screen_journal.png',
+    alt: 'MindTalk journal screen with Free Flow and guided reflection',
   },
 ]
 
@@ -290,19 +311,24 @@ export default function AppPage() {
             {appScreens.map((s) => (
               <div
                 key={s.label}
-                className={`snap-start shrink-0 w-72 rounded-3xl bg-gradient-to-br ${s.bg} p-5 border border-white/60 shadow-md`}
+                className={`snap-start shrink-0 w-[260px] rounded-3xl bg-gradient-to-br ${s.bg} p-4 border border-white/70 shadow-md`}
               >
-                <div className="mb-3">
-                  <p className="font-bold text-[#0E1726] text-base">{s.label}</p>
-                  <p className="text-xs text-[#9C8A7A]">{s.sublabel}</p>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="min-w-0">
+                    <p className="font-bold text-[#0E1726] text-sm leading-tight">{s.label}</p>
+                    <p className="text-xs text-[#9AA0AB] mt-0.5">{s.sublabel}</p>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-2 ${s.badgeColor}`}>
+                    {s.badge}
+                  </span>
                 </div>
-                <div className="rounded-2xl overflow-hidden bg-white shadow-sm h-[340px] flex items-center justify-center">
+                <div className="rounded-2xl overflow-hidden bg-white shadow-sm">
                   <Image
                     src={s.src}
                     alt={s.alt}
                     width={500}
                     height={1050}
-                    className="object-contain h-full w-full"
+                    className="w-full h-[380px] object-cover object-top"
                   />
                 </div>
               </div>
@@ -310,7 +336,7 @@ export default function AppPage() {
             <div className="shrink-0 w-6" aria-hidden />
           </div>
 
-          <p className="text-center text-xs text-[#9C8A7A] mt-3">← Scroll to explore →</p>
+          <p className="text-center text-xs text-[#9AA0AB] mt-4 tracking-wide">Scroll to explore →</p>
         </section>
 
         {/* ─── DOCTOR RIYA — HERO FEATURE (light) ──────────────────────── */}
@@ -320,7 +346,7 @@ export default function AppPage() {
               <div className="absolute -inset-12 bg-[radial-gradient(50%_50%_at_50%_50%,rgba(249,115,22,0.18)_0%,rgba(249,115,22,0)_70%)] pointer-events-none" />
               <div className="relative mx-auto max-w-[280px]">
                 <Image
-                  src="/screenshots/MentalHealthHomeMainV11.png"
+                  src="/app-screenshots/screen_doctor_riya_chat.png"
                   alt="Doctor Riya AI chat in MindTalk app"
                   width={560}
                   height={1180}

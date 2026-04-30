@@ -37,8 +37,8 @@ export default function DoctorRiyaPage() {
           overlineTone="free"
           headline="Doctor Riya. Free. Always on."
           subhead="The AI mental health companion that knows your journey — and gives you CBT tools the moment you need them."
-          primaryScreenshot="/screenshots/MentalHealthHomeMainV11.png"
-          secondaryScreenshot="/screenshots/MentalHealthHomeMain.png"
+          primaryScreenshot="/app-screenshots/screen_doctor_riya_chat.png"
+          secondaryScreenshot="/app-screenshots/screen_home.png"
           background="cream"
           decoration={<HeroParticles className="opacity-60" />}
           badges={

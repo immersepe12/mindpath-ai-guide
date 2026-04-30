@@ -31,8 +31,8 @@ export default function SelfCarePage() {
           overlineTone="free"
           headline="Tools in your pocket. Always free."
           subhead="Breathing, grounding, journaling, audio, mood — the building blocks of mental health, all free."
-          primaryScreenshot="/screenshots/BreathingExercise.png"
-          secondaryScreenshot="/screenshots/QuickReliefAudioList.png"
+          primaryScreenshot="/app-screenshots/screen_quick_relief.png"
+          secondaryScreenshot="/app-screenshots/screen_audio_player.png"
           background="cream"
           badges={
             <>
@@ -107,8 +107,8 @@ export default function SelfCarePage() {
             </div>
             <div className="flex justify-center">
               <Image
-                src="/screenshots/JournalActiveDashboard.png"
-                alt="Journal dashboard with mood tracking"
+                src="/app-screenshots/screen_journal.png"
+                alt="Journal screen with Free Flow and guided reflection"
                 width={500}
                 height={1050}
                 className="rounded-[36px] shadow-xl max-w-[280px]"

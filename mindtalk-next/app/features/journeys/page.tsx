@@ -32,8 +32,8 @@ export default function JourneysPage() {
           overlineTone="neutral"
           headline="Pick your path. Free or with a coach."
           subhead="Free self-paced journeys cover every topic. Upgrade to coach-led for a 90-day structured CBT programme with a real Cadabams therapist."
-          primaryScreenshot="/screenshots/JourneysLanding.png"
-          secondaryScreenshot="/screenshots/JourneyPath.png"
+          primaryScreenshot="/app-screenshots/screen_journeys.png"
+          secondaryScreenshot="/app-screenshots/screen_journey_path.png"
           background="cream"
           badges={<DownloadButtons />}
         />
@@ -139,7 +139,7 @@ export default function JourneysPage() {
             </div>
             <div className="flex justify-center">
               <Image
-                src="/screenshots/JourneyDetail.png"
+                src="/app-screenshots/screen_journey_path.png"
                 alt="Journey day-detail screen"
                 width={500}
                 height={1050}
