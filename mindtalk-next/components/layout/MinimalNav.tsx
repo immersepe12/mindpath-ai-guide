@@ -14,6 +14,7 @@ const FEATURE_LINKS: { label: string; href: string; meta?: string; tone?: 'free'
 
 export default function MinimalNav() {
   const [open, setOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
     <nav className="relative bg-white border-b border-gray-100 z-40">
@@ -24,7 +25,7 @@ export default function MinimalNav() {
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-5">
-          {/* The App dropdown */}
+          {/* The App dropdown — desktop only */}
           <div className="relative hidden md:block">
             <button
               type="button"
@@ -96,8 +97,87 @@ export default function MinimalNav() {
           >
             Download Free
           </a>
+
+          {/* Hamburger — mobile only */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-lg text-[#0E1726] hover:bg-[#FAF7F4] transition-colors"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          >
+            {mobileOpen ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <path d="M6 6L18 18M6 18L18 6" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile menu panel */}
+      {mobileOpen && (
+        <div
+          id="mobile-menu"
+          className="md:hidden absolute top-14 left-0 right-0 bg-white border-b border-gray-100 shadow-xl z-40 max-h-[calc(100vh-3.5rem)] overflow-y-auto"
+        >
+          <div className="px-4 py-3">
+            <p className="text-[11px] font-bold tracking-widest text-[#9C8A7A] uppercase mb-2 px-1">The App</p>
+            <Link
+              href="/app"
+              onClick={() => setMobileOpen(false)}
+              className="block px-3 py-2.5 rounded-xl hover:bg-[#FAF7F4]"
+            >
+              <div className="text-sm font-bold text-[#0E1726]">Overview</div>
+              <div className="text-xs text-[#6B7280]">All features in one page</div>
+            </Link>
+            {FEATURE_LINKS.map((f) => (
+              <Link
+                key={f.href}
+                href={f.href}
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2.5 rounded-xl hover:bg-[#FAF7F4]"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-[#0E1726]">{f.label}</span>
+                  {f.tone === 'free' && (
+                    <span className="inline-flex items-center rounded-full bg-[#E6F4EA] text-[#1F8B4C] text-[10px] font-bold tracking-wider px-1.5 py-0.5">
+                      FREE
+                    </span>
+                  )}
+                  {f.tone === 'paid' && (
+                    <span className="inline-flex items-center rounded-full bg-[#FFE9D9] text-[#C9531A] text-[10px] font-bold tracking-wider px-1.5 py-0.5">
+                      COACH-LED
+                    </span>
+                  )}
+                </div>
+                {f.meta && <div className="text-xs text-[#6B7280] mt-0.5">{f.meta}</div>}
+              </Link>
+            ))}
+          </div>
+          <div className="border-t border-gray-100 px-4 py-3 space-y-1">
+            <a
+              href={WEB_APP_URL}
+              className="block px-3 py-2.5 rounded-xl text-sm text-[#0E1726] hover:bg-[#FAF7F4]"
+            >
+              Log in
+            </a>
+            <WhatsAppGate location="nav-mobile">
+              <button
+                type="button"
+                className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-[#0E1726] hover:bg-[#FAF7F4]"
+              >
+                Questions? WhatsApp us
+              </button>
+            </WhatsAppGate>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }
