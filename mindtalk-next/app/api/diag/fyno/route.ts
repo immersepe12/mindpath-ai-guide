@@ -84,7 +84,8 @@ export async function POST(req: NextRequest) {
   const url = `https://api.fyno.io/v1/${FYNO_WORKSPACE}/event`
   const payload = {
     event: 'lead_created',
-    to: { phone_number: '+919999900099', email: 'diag@cadabamsmindtalk.com' },
+    // Fyno requires channel keys (sms/whatsapp/email/phone/...), not phone_number.
+    to: { sms: '+919999900099', whatsapp: '+919999900099', email: 'diag@cadabamsmindtalk.com' },
     data: {
       name: 'Diag Test',
       vertical: 'anxiety',

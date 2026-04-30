@@ -119,8 +119,14 @@ export async function POST(req: NextRequest) {
           },
           body: JSON.stringify({
             event: 'lead_created',
+            // Fyno's `to` object keys must be channel names — sms / whatsapp /
+            // email / phone (voice) / push / inapp / etc. `phone_number` is
+            // not a recognised channel and Fyno returns 400. Send the phone
+            // on both sms and whatsapp so any workflow routing on either
+            // channel can pick it up.
             to: {
-              phone_number: normalisedPhone,
+              sms:      normalisedPhone,
+              whatsapp: normalisedPhone,
               ...(cleanEmail ? { email: cleanEmail } : {}),
             },
             data: {

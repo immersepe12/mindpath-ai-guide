@@ -121,7 +121,8 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           event: 'purchase_confirmed',
-          to: { phone_number: body.phone, email: body.email },
+          // Fyno channel keys (not `phone_number`).
+          to: { sms: body.phone, whatsapp: body.phone, email: body.email },
           data: {
             name:         body.name,
             vertical:     body.vertical,
