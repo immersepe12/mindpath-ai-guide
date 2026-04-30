@@ -130,11 +130,18 @@ export async function POST(req: NextRequest) {
               ...(cleanEmail ? { email: cleanEmail } : {}),
             },
             // Drop any keys with empty/undefined values — Meta WhatsApp
-            // utility templates reject empty placeholders ({{1}}=""), which
-            // surfaces in Fyno as the "request is missing a required
-            // parameter" alarm with the message dropped.
+            // utility templates reject empty placeholders, which surfaces
+            // in Fyno as alarm 131008 ("Required parameter is missing").
+            //
+            // The mindtalk_lead_d0_welcome_utility template uses Fyno's
+            // positional placeholders {{$1}}, {{$2}}, {{$3}} → those map
+            // to keys "1", "2", "3" in this data object. Named keys
+            // (name, vertical, lp_url, …) are kept in parallel so the
+            // template author can switch to {{name}}-style placeholders
+            // without a code change.
             data: Object.fromEntries(
               Object.entries({
+                // Named keys
                 name:          name,
                 first_name:    typeof name === 'string' ? name.split(' ')[0] : name,
                 phone:         normalisedPhone,
@@ -146,6 +153,12 @@ export async function POST(req: NextRequest) {
                 utm_medium:    utmMedium,
                 utm_content:   utmContent,
                 source:        typeof source === 'string' ? source : undefined,
+                // Positional keys for the WhatsApp utility template
+                // (mindtalk_lead_d0_welcome_utility):
+                //   {{$1}} = name      {{$2}} = focus area      {{$3}} = url
+                '1': name,
+                '2': vertical,
+                '3': lpUrls[vertical] ?? lpUrls.anxiety,
               }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
             ),
           }),
