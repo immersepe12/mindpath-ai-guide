@@ -32,7 +32,7 @@ export default function JourneysPage() {
           overlineTone="neutral"
           headline="Pick your path. Free or with a coach."
           subhead="Free self-paced journeys cover every topic. Upgrade to coach-led for a 90-day structured CBT programme with a real Cadabams therapist."
-          primaryScreenshot="/app-screenshots/screen_journeys.png"
+          primaryScreenshot="/app-screenshots/screen_journey_path.png"
           secondaryScreenshot="/app-screenshots/screen_journey_path.png"
           background="cream"
           badges={<DownloadButtons />}

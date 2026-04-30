@@ -109,8 +109,8 @@ const appScreens: {
     bg: 'from-[#FFF1E8] to-[#FFE4D0]',
     badge: 'FREE + PAID',
     badgeColor: 'bg-[#FFF4EC] text-[#C9531A]',
-    src: '/app-screenshots/screen_journeys.png',
-    alt: 'MindTalk journeys screen showing recovery programmes',
+    src: '/app-screenshots/screen_journey_path.png',
+    alt: 'MindTalk journey path — Duolingo-style milestones for 90-day programme',
   },
   {
     label: 'Doctor Riya AI',
@@ -127,7 +127,7 @@ const appScreens: {
     bg: 'from-[#F9F5FF] to-[#F1EBFF]',
     badge: 'FREE',
     badgeColor: 'bg-[#FEF3C7] text-[#92400E]',
-    src: '/app-screenshots/screen_journal.png',
+    src: '/app-screenshots/screen_journal_home.png',
     alt: 'MindTalk journal screen showing Free Flow and guided reflection',
   },
   {
@@ -185,7 +185,7 @@ const pillars: {
       'Doctor Riya AI weaves into both paths',
     ],
     badge: 'mixed',
-    screenshot: '/app-screenshots/screen_journeys.png',
+    screenshot: '/app-screenshots/screen_journey_path.png',
     alt: 'MindTalk journeys screen showing recovery programmes',
   },
   {
@@ -213,7 +213,7 @@ const pillars: {
     ],
     badge: 'paid',
     badgeText: 'COACH-LED · ₹7,799',
-    screenshot: '/app-screenshots/screen_therapists.png',
+    screenshot: '/app-screenshots/screen_find_therapist.png',
     alt: 'Find your therapist screen with filter chips and 69 specialists',
   },
   {
@@ -227,7 +227,7 @@ const pillars: {
     ],
     badge: 'free',
     badgeText: 'FREE',
-    screenshot: '/app-screenshots/screen_journal.png',
+    screenshot: '/app-screenshots/screen_journal_home.png',
     alt: 'MindTalk journal screen with Free Flow and guided reflection',
   },
 ]

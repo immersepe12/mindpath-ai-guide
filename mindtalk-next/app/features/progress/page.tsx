@@ -24,7 +24,7 @@ export default function ProgressPage() {
           headline="See yourself change."
           subhead="Daily mood, weekly trends, streak rings — all free. Add a coach for clinical progress reports and final 90-day reviews."
           primaryScreenshot="/app-screenshots/screen_mood_report.png"
-          secondaryScreenshot="/app-screenshots/screen_assessment_report.png"
+          secondaryScreenshot="/app-screenshots/screen_assessment_results.png"
           background="cream"
           badges={<DownloadButtons />}
         />
@@ -101,7 +101,7 @@ export default function ProgressPage() {
             </div>
             <div className="flex justify-center">
               <Image
-                src="/app-screenshots/screen_assessment_report.png"
+                src="/app-screenshots/screen_assessment_results.png"
                 alt="Clinical assessment report screen"
                 width={500}
                 height={1050}

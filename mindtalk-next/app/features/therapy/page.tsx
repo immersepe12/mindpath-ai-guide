@@ -29,8 +29,8 @@ export default function TherapyPage() {
           overlineTone="paid"
           headline="A real therapist. Every week."
           subhead="The coach-led journey includes 12 weekly sessions with a licensed Cadabams therapist over 90 days. Therapy is the upgrade — the free app gives you everything else."
-          primaryScreenshot="/app-screenshots/screen_therapists.png"
-          secondaryScreenshot="/app-screenshots/screen_therapists.png"
+          primaryScreenshot="/app-screenshots/screen_find_therapist.png"
+          secondaryScreenshot="/app-screenshots/screen_find_therapist.png"
           background="cream"
           badges={
             <Link
@@ -70,7 +70,7 @@ export default function TherapyPage() {
             </div>
             <div className="flex justify-center">
               <Image
-                src="/app-screenshots/screen_therapists.png"
+                src="/app-screenshots/screen_find_therapist.png"
                 alt="Find your therapist screen"
                 width={500}
                 height={1050}

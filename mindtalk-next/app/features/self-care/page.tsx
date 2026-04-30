@@ -107,7 +107,7 @@ export default function SelfCarePage() {
             </div>
             <div className="flex justify-center">
               <Image
-                src="/app-screenshots/screen_journal.png"
+                src="/app-screenshots/screen_journal_home.png"
                 alt="Journal screen with Free Flow and guided reflection"
                 width={500}
                 height={1050}
