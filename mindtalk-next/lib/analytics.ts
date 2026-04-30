@@ -3,8 +3,9 @@ import { trackMetaPixel, newClientEventId, readFbCookies, type MetaPixelEvent } 
 import { getAllVariantProps } from '@/lib/ab-test'
 
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
-const FYNO_WORKSPACE = process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID
-const FYNO_API_KEY   = process.env.NEXT_PUBLIC_FYNO_API_KEY
+// Fyno is fired server-side only (see /api/lead/route.ts). Removed the
+// client-side env reads; they were dead since the client-side fire was
+// retired to prevent duplicate lead_created events.
 
 export function initAnalytics() {
   if (typeof window === 'undefined') return
