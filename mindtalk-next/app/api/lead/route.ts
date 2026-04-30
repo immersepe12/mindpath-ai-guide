@@ -129,13 +129,25 @@ export async function POST(req: NextRequest) {
               whatsapp: normalisedPhone,
               ...(cleanEmail ? { email: cleanEmail } : {}),
             },
-            data: {
-              name,
-              vertical,
-              lp_url: lpUrls[vertical] ?? lpUrls.anxiety,
-              utm_source: utmSource ?? '',
-              utm_campaign: utmCampaign ?? '',
-            },
+            // Drop any keys with empty/undefined values — Meta WhatsApp
+            // utility templates reject empty placeholders ({{1}}=""), which
+            // surfaces in Fyno as the "request is missing a required
+            // parameter" alarm with the message dropped.
+            data: Object.fromEntries(
+              Object.entries({
+                name:          name,
+                first_name:    typeof name === 'string' ? name.split(' ')[0] : name,
+                phone:         normalisedPhone,
+                email:         cleanEmail,
+                vertical:      vertical,
+                lp_url:        lpUrls[vertical] ?? lpUrls.anxiety,
+                utm_source:    utmSource,
+                utm_campaign:  utmCampaign,
+                utm_medium:    utmMedium,
+                utm_content:   utmContent,
+                source:        typeof source === 'string' ? source : undefined,
+              }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
+            ),
           }),
         }
       )
