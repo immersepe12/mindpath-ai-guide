@@ -61,8 +61,10 @@ export default function FeatureHero({
               <Image
                 src={secondaryScreenshot}
                 alt=""
-                width={500}
-                height={1050}
+                width={1206}
+                height={2622}
+                quality={95}
+                sizes="320px"
                 className="rounded-[36px] shadow-2xl opacity-90"
               />
             </div>
@@ -71,8 +73,10 @@ export default function FeatureHero({
             <Image
               src={primaryScreenshot}
               alt={headline}
-              width={560}
-              height={1180}
+              width={1206}
+              height={2622}
+              quality={95}
+              sizes="(max-width: 1024px) 360px, 400px"
               className="rounded-[44px] shadow-2xl"
               priority
             />
@@ -83,8 +87,10 @@ export default function FeatureHero({
           <Image
             src={primaryScreenshot}
             alt={headline}
-            width={420}
-            height={880}
+            width={1206}
+            height={2622}
+            quality={95}
+            sizes="260px"
             className="rounded-[36px] shadow-xl max-w-[260px] w-full"
           />
         </div>

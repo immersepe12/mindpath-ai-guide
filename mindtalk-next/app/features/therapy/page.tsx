@@ -72,8 +72,10 @@ export default function TherapyPage() {
               <Image
                 src="/app-screenshots/screen_find_therapist.png"
                 alt="Find your therapist screen"
-                width={500}
-                height={1050}
+                width={1206}
+                height={2622}
+                quality={95}
+                sizes="280px"
                 className="rounded-[36px] shadow-xl max-w-[280px]"
               />
             </div>

@@ -326,8 +326,10 @@ export default function AppPage() {
                   <Image
                     src={s.src}
                     alt={s.alt}
-                    width={500}
-                    height={1050}
+                    width={1206}
+                    height={2622}
+                    quality={95}
+                    sizes="260px"
                     className="w-full h-[380px] object-cover object-top"
                   />
                 </div>
@@ -348,8 +350,10 @@ export default function AppPage() {
                 <Image
                   src="/app-screenshots/screen_doctor_riya_chat.png"
                   alt="Doctor Riya AI chat in MindTalk app"
-                  width={560}
-                  height={1180}
+                  width={1206}
+                  height={2622}
+                  quality={95}
+                  sizes="(max-width: 1024px) 280px, 560px"
                   className="rounded-[44px] shadow-2xl"
                 />
               </div>
@@ -561,8 +565,10 @@ export default function AppPage() {
                 <Image
                   src={p.screenshot}
                   alt={p.alt}
-                  width={600}
-                  height={1260}
+                  width={1206}
+                  height={2622}
+                  quality={95}
+                  sizes="384px"
                   className="w-full h-auto"
                 />
               </div>
