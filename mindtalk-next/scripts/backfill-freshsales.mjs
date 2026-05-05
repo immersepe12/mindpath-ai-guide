@@ -142,8 +142,25 @@ function buildPayload(row) {
   return { contact }
 }
 
+// Wrap a fetch in 429 retry-with-exponential-backoff. Honours Retry-After
+// when the server provides one, otherwise climbs 5s → 10s → 20s → 40s.
+async function fetchWithBackoff(url, init, maxAttempts = 5) {
+  let attempt = 0
+  let delay = 5000
+  while (true) {
+    const resp = await fetch(url, init)
+    if (resp.status !== 429) return resp
+    if (++attempt >= maxAttempts) return resp
+    const retryAfter = parseInt(resp.headers.get('Retry-After') ?? '', 10)
+    const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : delay
+    console.log(`    ↻ rate limited, sleeping ${Math.round(waitMs / 1000)}s before retry ${attempt}/${maxAttempts - 1}…`)
+    await new Promise((r) => setTimeout(r, waitMs))
+    delay = Math.min(delay * 2, 60000)
+  }
+}
+
 async function postContact(payload) {
-  const resp = await fetch(FRESHSALES_API, {
+  const resp = await fetchWithBackoff(FRESHSALES_API, {
     method: 'POST',
     headers: {
       Authorization: `Token token=${apiKey}`,
@@ -160,7 +177,7 @@ async function lookupContactByPhone(phone) {
   // matches the query. `f=mobile_number` searches the mobile field;
   // `entities=contact` scopes to the contact object.
   const url = `${SEARCH_API}?q=${encodeURIComponent(phone)}&f=mobile_number&entities=contact`
-  const resp = await fetch(url, {
+  const resp = await fetchWithBackoff(url, {
     headers: {
       Authorization: `Token token=${apiKey}`,
       'Content-Type': 'application/json',
@@ -178,7 +195,7 @@ async function lookupContactByPhone(phone) {
 }
 
 async function updateContact(id, payload) {
-  const resp = await fetch(`${FRESHSALES_API}/${id}`, {
+  const resp = await fetchWithBackoff(`${FRESHSALES_API}/${id}`, {
     method: 'PUT',
     headers: {
       Authorization: `Token token=${apiKey}`,
@@ -254,7 +271,10 @@ for (let i = 0; i < sliced.length; i++) {
       failures.push({ id, error: err?.message ?? String(err) })
       console.log(`${label}  ✗ network error: ${err?.message ?? err}`)
     }
-    await new Promise((r) => setTimeout(r, 250))
+    // Pace ourselves below Freshsales' rate limit. 1.2s between rows
+  // means ~50 req/min — well under the typical 100/min cap and leaves
+  // headroom for 429 retries above.
+  await new Promise((r) => setTimeout(r, 1200))
     continue
   }
 
@@ -283,7 +303,10 @@ for (let i = 0; i < sliced.length; i++) {
   }
 
   // Be polite to Freshsales — small pause between calls
-  await new Promise((r) => setTimeout(r, 250))
+  // Pace ourselves below Freshsales' rate limit. 1.2s between rows
+  // means ~50 req/min — well under the typical 100/min cap and leaves
+  // headroom for 429 retries above.
+  await new Promise((r) => setTimeout(r, 1200))
 }
 
 console.log('')
