@@ -14,9 +14,15 @@
 //     ~/Downloads/user-export-3984638-2026_05_05_04_44_15.csv
 //
 // Optional flags:
-//   --dry-run   Print payloads but don't POST.
-//   --limit N   Only process the first N rows after the header.
-//   --start N   Skip the first N data rows (for resuming).
+//   --dry-run        Print payloads but don't POST/PUT.
+//   --limit N        Only process the first N rows after the header.
+//   --start N        Skip the first N data rows (for resuming).
+//   --update-mode    Don't try to create. Instead look up each phone and
+//                    PATCH the existing contact's lead_source +
+//                    cf_form_source_custom so all Mindtalk LP submissions
+//                    end up unified under the 'packages' filter even if
+//                    the contact was originally created by a different
+//                    flow (Zapier, older form, etc.). Safe to re-run.
 //
 // Output: a per-row line (✓ created / ↺ existing / ✗ failed) and a final
 // summary. Errors include the upstream HTTP status and body.
@@ -31,11 +37,12 @@ const SEARCH_API     = 'https://cadabams.myfreshworks.com/crm/sales/api/lookup'
 const args = process.argv.slice(2)
 const csvPath = args.find((a) => !a.startsWith('--'))
 const dryRun  = args.includes('--dry-run')
+const updateMode = args.includes('--update-mode')
 const limit   = (() => { const i = args.indexOf('--limit'); return i >= 0 ? parseInt(args[i + 1], 10) : Infinity })()
 const start   = (() => { const i = args.indexOf('--start'); return i >= 0 ? parseInt(args[i + 1], 10) : 0 })()
 
 if (!csvPath) {
-  console.error('usage: FRESHSALES_API_KEY=xxx node scripts/backfill-freshsales.mjs <csv-path> [--dry-run] [--limit N] [--start N]')
+  console.error('usage: FRESHSALES_API_KEY=xxx node scripts/backfill-freshsales.mjs <csv-path> [--dry-run] [--limit N] [--start N] [--update-mode]')
   process.exit(2)
 }
 
@@ -93,7 +100,7 @@ const sliced = dataRows.slice(start, start + limit)
 console.log(`Loaded ${dataRows.length} rows from ${csvPath}; processing ${sliced.length} (start=${start}, limit=${limit === Infinity ? 'all' : limit})${dryRun ? ' [DRY RUN]' : ''}`)
 console.log('')
 
-const summary = { created: 0, existing: 0, blocked_no_mobile: 0, failed: 0, skipped: 0 }
+const summary = { created: 0, existing: 0, updated: 0, not_found: 0, blocked_no_mobile: 0, failed: 0, skipped: 0 }
 const failures = []
 
 function normalisePhone(raw) {
@@ -148,6 +155,41 @@ async function postContact(payload) {
   return { status: resp.status, body: text }
 }
 
+async function lookupContactByPhone(phone) {
+  // Freshsales lookup endpoint: returns the contact whose unique field
+  // matches the query. `f=mobile_number` searches the mobile field;
+  // `entities=contact` scopes to the contact object.
+  const url = `${SEARCH_API}?q=${encodeURIComponent(phone)}&f=mobile_number&entities=contact`
+  const resp = await fetch(url, {
+    headers: {
+      Authorization: `Token token=${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+  })
+  const text = await resp.text()
+  if (!resp.ok) return { ok: false, status: resp.status, body: text }
+  try {
+    const data = JSON.parse(text)
+    const contacts = data?.contacts?.contacts ?? []
+    return { ok: true, contact: contacts[0] ?? null }
+  } catch {
+    return { ok: false, status: resp.status, body: text.slice(0, 300) }
+  }
+}
+
+async function updateContact(id, payload) {
+  const resp = await fetch(`${FRESHSALES_API}/${id}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Token token=${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+  const text = await resp.text()
+  return { status: resp.status, body: text }
+}
+
 function classify(status, body) {
   if (status >= 200 && status < 300) return 'created'
   // Freshsales surfaces "already exists" duplicates as either 400 with
@@ -171,6 +213,52 @@ for (let i = 0; i < sliced.length; i++) {
 
   if (!payload) { summary.skipped++; console.log(`${label}  ⊘ skipped (no phone — email-only)`); continue }
 
+  // ─────────── UPDATE MODE ───────────
+  if (updateMode) {
+    const phone = payload.contact.mobile_number
+    if (dryRun) {
+      console.log(`${label}  [dry-run] would lookup ${phone} and PATCH cf_form_source_custom + lead_source + campaign`)
+      summary.updated++
+      continue
+    }
+    try {
+      const lookup = await lookupContactByPhone(phone)
+      if (!lookup.ok) {
+        summary.failed++
+        failures.push({ id, status: lookup.status, body: (lookup.body ?? '').slice(0, 200) })
+        console.log(`${label}  ✗ lookup failed (HTTP ${lookup.status})`)
+      } else if (!lookup.contact) {
+        summary.not_found++
+        console.log(`${label}  ? not found in Freshsales`)
+      } else {
+        // PATCH the contact with the LP attribution we want consistent
+        const patch = {
+          contact: {
+            lead_source: payload.contact.lead_source,
+            ...(payload.contact.campaign ? { campaign: payload.contact.campaign } : {}),
+            custom_field: { cf_form_source_custom: 'packages' },
+          },
+        }
+        const { status, body } = await updateContact(lookup.contact.id, patch)
+        if (status >= 200 && status < 300) {
+          summary.updated++
+          console.log(`${label}  ✎ updated (id=${lookup.contact.id})`)
+        } else {
+          summary.failed++
+          failures.push({ id, status, body: body.slice(0, 300) })
+          console.log(`${label}  ✗ update failed (HTTP ${status}) ${body.slice(0, 200)}`)
+        }
+      }
+    } catch (err) {
+      summary.failed++
+      failures.push({ id, error: err?.message ?? String(err) })
+      console.log(`${label}  ✗ network error: ${err?.message ?? err}`)
+    }
+    await new Promise((r) => setTimeout(r, 250))
+    continue
+  }
+
+  // ─────────── CREATE MODE (default) ───────────
   if (dryRun) {
     console.log(`${label}  [dry-run] payload=${JSON.stringify(payload.contact)}`)
     summary.created++
