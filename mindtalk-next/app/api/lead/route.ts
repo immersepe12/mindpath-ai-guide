@@ -39,10 +39,13 @@ export async function POST(req: NextRequest) {
 
   // Build the breadcrumb that goes into Freshsales' standard `medium` field
   // (single-line text on the contact). Pack page URL + UTMs + quiz context
-  // so the sales/care team can see the journey at a glance. Truncated to
-  // 230 chars to stay under typical text-field limits.
+  // + the gate/form 'source' label (whatsapp_gate_floating, call_gate_footer,
+  // packages_lp, quiz, etc.) so the sales/care team can see the journey at
+  // a glance. Truncated to 230 chars to stay under typical text-field limits.
+  const sourceLabel = typeof source === 'string' && source.trim() ? source.trim() : undefined
   const mediumParts = [
     pageUrl,
+    sourceLabel ? `src_form=${sourceLabel}`   : '',
     utmSource   ? `src=${utmSource}`     : '',
     utmMedium   ? `med=${utmMedium}`     : '',
     utmCampaign ? `cmp=${utmCampaign}`   : '',
@@ -82,7 +85,15 @@ export async function POST(req: NextRequest) {
         ...(utmCampaign   ? { campaign: utmCampaign }   : {}),
         ...(utmContent    ? { keyword:  utmContent }    : {}),
         custom_field: {
-          cf_form_source_custom: typeof source === 'string' && source ? source : 'packages',
+          // Hard-coded 'packages' for ALL leads regardless of which gate
+          // or form they came through. The user filters Freshsales on
+          // cf_form_source_custom contains "packages" to scope the
+          // Mindtalk segment, and gate-specific labels like
+          // 'whatsapp_gate_floating' or 'call_gate_footer' broke that
+          // filter (the contact disappeared from the segment view). The
+          // gate/form attribution is preserved in `medium` as
+          // src_form=<source> so we don't lose that signal.
+          cf_form_source_custom: 'packages',
           cf_score: readinessScore ?? '',
           cf_customer_category: durationOfIssue ?? '',
           cf_relationship: Array.isArray(symptoms) ? symptoms.join(', ') : '',
