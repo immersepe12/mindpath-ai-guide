@@ -119,42 +119,41 @@ export async function POST(req: NextRequest) {
           Authorization: `Bearer ${FYNO_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          event: 'purchase_confirmed',
-          // Fyno channel keys (not `phone_number`). Drop empty channels —
-          // Meta WhatsApp/email providers reject empty destinations.
-          to: Object.fromEntries(
-            Object.entries({
-              sms:      body.phone,
-              whatsapp: body.phone,
-              email:    body.email,
-            }).filter(([, v]) => typeof v === 'string' && v.length > 0),
-          ),
-          // Same defensive shape as /api/lead — drop empty values (Meta
-          // rejects empty placeholder values with error 131008) and ship
-          // both named and positional keys so the WhatsApp template can
-          // use either {{name}} or {{$1}} style placeholders.
-          //
-          // Positional contract for the purchase-confirmation template:
-          //   {{$1}} = name      {{$2}} = journey      {{$3}} = app link
-          data: Object.fromEntries(
-            Object.entries({
-              name:         body.name,
-              first_name:   firstName,
-              phone:        body.phone,
-              email:        body.email,
-              vertical:     body.vertical,
-              order_id:     body.orderId,
-              journey_name: body.journeyName,
-              app_link:     body.appLink,
-              value:        String(value),
-              currency,
-              '1':          body.name,
-              '2':          body.journeyName,
-              '3':          body.appLink,
-            }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
-          ),
-        }),
+        body: JSON.stringify((() => {
+          // Same naming convention as /api/lead — Fyno templates use named
+          // placeholders. Normalise issue_vertical (lower + trim) and drop
+          // empty values so Meta WhatsApp doesn't reject placeholders.
+          const ALLOWED = new Set(['anxiety', 'depression', 'burnout', 'relationship'])
+          const verticalRaw = typeof body.vertical === 'string' ? body.vertical.trim().toLowerCase() : ''
+          const issueVertical = ALLOWED.has(verticalRaw) ? verticalRaw : undefined
+
+          const fynoBody = {
+            event: 'purchase_confirmed',
+            // Fyno channel keys, drop empty channels.
+            to: Object.fromEntries(
+              Object.entries({
+                sms:      body.phone,
+                whatsapp: body.phone,
+                email:    body.email,
+              }).filter(([, v]) => typeof v === 'string' && v.length > 0),
+            ),
+            data: Object.fromEntries(
+              Object.entries({
+                first_name:     firstName,
+                phone:          body.phone,
+                email:          body.email,
+                issue_vertical: issueVertical,
+                order_id:       body.orderId,
+                journey_name:   body.journeyName,
+                app_link:       body.appLink,
+                value:          String(value),
+                currency,
+              }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
+            ),
+          }
+          console.log('[purchase-confirmed] Fyno payload:', JSON.stringify(fynoBody))
+          return fynoBody
+        })()),
       })
     } catch (e: any) {
       console.warn('[purchase-confirmed] Fyno error:', e?.message)

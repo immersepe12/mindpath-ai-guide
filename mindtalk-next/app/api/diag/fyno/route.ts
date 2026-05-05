@@ -86,13 +86,17 @@ export async function POST(req: NextRequest) {
     event: 'lead_created',
     // Fyno requires channel keys (sms/whatsapp/email/phone/...), not phone_number.
     to: { sms: '+919999900099', whatsapp: '+919999900099', email: 'diag@cadabamsmindtalk.com' },
+    // Match the named-variable contract used by /api/lead and the Fyno
+    // templates (issue_vertical / landing_page_url, no positional keys).
     data: {
-      name: 'Diag Test',
-      vertical: 'anxiety',
-      lp_url: 'https://cadabamsmindtalk.com/anxiety',
-      utm_source: 'diag',
-      utm_campaign: testEventId,
-      _diag: true,
+      first_name:        'DiagTest',
+      phone:             '+919999900099',
+      email:             'diag@cadabamsmindtalk.com',
+      issue_vertical:    'anxiety',
+      landing_page_url:  'https://cadabamsmindtalk.com/anxiety',
+      utm_source:        'diag',
+      utm_campaign:      testEventId,
+      _diag:             true,
     },
   }
 

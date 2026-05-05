@@ -118,9 +118,66 @@ export async function POST(req: NextRequest) {
   }
 
   // 2. Fyno — trigger lead_created nurture sequence
+  //
+  // Fyno templates (email + WhatsApp utility) are the source of truth for
+  // field names. All variables are NAMED (no positional {{$N}} anymore):
+  //
+  //   first_name         — visitor's first name
+  //   issue_vertical     — anxiety | depression | burnout | relationship
+  //   landing_page_url   — full https URL of the matching LP
+  //   utm_*              — pass-through marketing context
+  //
+  // Build a normalised, cleaned payload at this layer so Fyno never has to
+  // alias / coerce / fall back on its end. Emit a single log line with the
+  // final payload before firing so a wrong template can be diagnosed by
+  // tailing Vercel logs alone.
+
+  // Normalise issue_vertical: lowercase + trim, default to 'anxiety' if
+  // missing or unrecognised. Conditions in Fyno's workflow branch on this
+  // value, so consistent casing matters more than preserving caller input.
+  const ALLOWED_VERTICALS = new Set(['anxiety', 'depression', 'burnout', 'relationship'])
+  const verticalRaw = typeof vertical === 'string' ? vertical.trim().toLowerCase() : ''
+  const issueVertical = ALLOWED_VERTICALS.has(verticalRaw) ? verticalRaw : 'anxiety'
+
+  // Validate landing_page_url: must be https; otherwise build a fallback
+  // from the issue_vertical so the email/WhatsApp CTA always points
+  // somewhere real.
+  const lpFallback = lpUrls[issueVertical] ?? lpUrls.anxiety
+  const landingPageUrl =
+    typeof pageUrl === 'string' && /^https:\/\//.test(pageUrl) ? pageUrl : lpFallback
+
+  // First name only — split on whitespace, trim, drop empties.
+  const firstName = typeof name === 'string' ? (name.trim().split(/\s+/)[0] || undefined) : undefined
+
+  const fynoData = Object.fromEntries(
+    Object.entries({
+      first_name:        firstName,
+      phone:             normalisedPhone,
+      email:             cleanEmail,
+      issue_vertical:    issueVertical,
+      landing_page_url:  landingPageUrl,
+      utm_source:        utmSource,
+      utm_campaign:      utmCampaign,
+      utm_medium:        utmMedium,
+      utm_content:       utmContent,
+      source:            typeof source === 'string' ? source : undefined,
+    }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
+  )
+
   let fynoStatus: { ok: boolean; status?: number; body?: string; error?: string } = { ok: false, error: 'no_api_key' }
   if (process.env.FYNO_API_KEY && process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID) {
     try {
+      const fynoBody = {
+        event: 'lead_created',
+        // Fyno channel keys (not phone_number).
+        to: {
+          sms:      normalisedPhone,
+          whatsapp: normalisedPhone,
+          ...(cleanEmail ? { email: cleanEmail } : {}),
+        },
+        data: fynoData,
+      }
+      console.log('[lead] Fyno payload:', JSON.stringify(fynoBody))
       const resp = await fetch(
         `https://api.fyno.io/v1/${process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID}/event`,
         {
@@ -129,51 +186,7 @@ export async function POST(req: NextRequest) {
             Authorization: `Bearer ${process.env.FYNO_API_KEY}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            event: 'lead_created',
-            // Fyno's `to` object keys must be channel names — sms / whatsapp /
-            // email / phone (voice) / push / inapp / etc. `phone_number` is
-            // not a recognised channel and Fyno returns 400. Send the phone
-            // on both sms and whatsapp so any workflow routing on either
-            // channel can pick it up.
-            to: {
-              sms:      normalisedPhone,
-              whatsapp: normalisedPhone,
-              ...(cleanEmail ? { email: cleanEmail } : {}),
-            },
-            // Drop any keys with empty/undefined values — Meta WhatsApp
-            // utility templates reject empty placeholders, which surfaces
-            // in Fyno as alarm 131008 ("Required parameter is missing").
-            //
-            // The mindtalk_lead_d0_welcome_utility template uses Fyno's
-            // positional placeholders {{$1}}, {{$2}}, {{$3}} → those map
-            // to keys "1", "2", "3" in this data object. Named keys
-            // (name, vertical, lp_url, …) are kept in parallel so the
-            // template author can switch to {{name}}-style placeholders
-            // without a code change.
-            data: Object.fromEntries(
-              Object.entries({
-                // Named keys
-                name:          name,
-                first_name:    typeof name === 'string' ? name.split(' ')[0] : name,
-                phone:         normalisedPhone,
-                email:         cleanEmail,
-                vertical:      vertical,
-                lp_url:        lpUrls[vertical] ?? lpUrls.anxiety,
-                utm_source:    utmSource,
-                utm_campaign:  utmCampaign,
-                utm_medium:    utmMedium,
-                utm_content:   utmContent,
-                source:        typeof source === 'string' ? source : undefined,
-                // Positional keys for the WhatsApp utility template
-                // (mindtalk_lead_d0_welcome_utility):
-                //   {{$1}} = name      {{$2}} = focus area      {{$3}} = url
-                '1': name,
-                '2': vertical,
-                '3': lpUrls[vertical] ?? lpUrls.anxiety,
-              }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
-            ),
-          }),
+          body: JSON.stringify(fynoBody),
         }
       )
       const respBody = await resp.text()
