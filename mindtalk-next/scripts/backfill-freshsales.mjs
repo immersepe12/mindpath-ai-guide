@@ -93,7 +93,7 @@ const sliced = dataRows.slice(start, start + limit)
 console.log(`Loaded ${dataRows.length} rows from ${csvPath}; processing ${sliced.length} (start=${start}, limit=${limit === Infinity ? 'all' : limit})${dryRun ? ' [DRY RUN]' : ''}`)
 console.log('')
 
-const summary = { created: 0, existing: 0, failed: 0, skipped: 0 }
+const summary = { created: 0, existing: 0, blocked_no_mobile: 0, failed: 0, skipped: 0 }
 const failures = []
 
 function normalisePhone(raw) {
@@ -116,7 +116,10 @@ function buildPayload(row) {
   const cleanEmail = email && email !== 'undefined' && email.includes('@') ? email : (isEmailId ? id : undefined)
   const phone = isPhone ? normalisePhone(id) : undefined
 
-  if (!phone && !cleanEmail) return null  // no identity, can't create
+  // Phone is mandatory for the Mindtalk pipeline. Skip rows that have only
+  // email — Freshsales would reject them anyway with the "Mobile is required"
+  // workspace rule, and the business doesn't want email-only leads in CRM.
+  if (!phone) return null
 
   const contact = {
     first_name: name && name !== 'undefined' ? name : (phone ?? cleanEmail),
@@ -147,9 +150,16 @@ async function postContact(payload) {
 
 function classify(status, body) {
   if (status >= 200 && status < 300) return 'created'
-  // Freshsales returns 422 with errors mentioning duplicate / already exists
-  // for an existing contact. Treat that as success (we don't need to update).
-  if (status === 422 && /already taken|duplicate|exists/i.test(body)) return 'existing'
+  // Freshsales surfaces "already exists" duplicates as either 400 with
+  // error_code 3002 ("Contact is not unique") or 422 with "already taken".
+  // Both are success signals for backfill — the contact is already there.
+  if ((status === 400 || status === 422) && /already exists|already taken|not unique|3002/i.test(body)) {
+    return 'existing'
+  }
+  // Freshsales workspace rule "Mobile is required on all contacts" blocks
+  // email-only creates with a 400 + this exact phrase. Bucket separately
+  // so the summary makes the underlying rule obvious.
+  if (status === 400 && /Need to fill this Mobile/i.test(body)) return 'blocked_no_mobile'
   return 'failed'
 }
 
@@ -159,7 +169,7 @@ for (let i = 0; i < sliced.length; i++) {
   const payload = buildPayload(row)
   const label = `[${String(i + 1).padStart(3)}/${sliced.length}] ${id}`
 
-  if (!payload) { summary.skipped++; console.log(`${label}  ⊘ no identity`); continue }
+  if (!payload) { summary.skipped++; console.log(`${label}  ⊘ skipped (no phone — email-only)`); continue }
 
   if (dryRun) {
     console.log(`${label}  [dry-run] payload=${JSON.stringify(payload.contact)}`)
@@ -171,7 +181,11 @@ for (let i = 0; i < sliced.length; i++) {
     const { status, body } = await postContact(payload)
     const verdict = classify(status, body)
     summary[verdict]++
-    const mark = verdict === 'created' ? '✓ created' : verdict === 'existing' ? '↺ existing' : '✗ failed'
+    const mark =
+      verdict === 'created' ? '✓ created' :
+      verdict === 'existing' ? '↺ existing' :
+      verdict === 'blocked_no_mobile' ? '⏸ blocked (mobile required)' :
+      '✗ failed'
     console.log(`${label}  ${mark} (HTTP ${status})${verdict === 'failed' ? ' ' + body.slice(0, 200) : ''}`)
     if (verdict === 'failed') failures.push({ id, status, body: body.slice(0, 400) })
   } catch (err) {

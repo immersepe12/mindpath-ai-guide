@@ -16,6 +16,18 @@ export async function POST(req: NextRequest) {
     return `+${digits}`
   }
 
+  // Phone is mandatory for the Mindtalk pipeline. Freshsales has a
+  // workspace rule that rejects email-only contacts ("Need to fill this
+  // Mobile to submit the form."), and the business doesn't want such
+  // leads. Reject early so we don't fire Fyno/Mixpanel for half-leads
+  // either — let the form layer surface the error and keep nudging.
+  if (typeof phone !== 'string' || phone.replace(/\D/g, '').length < 10) {
+    return NextResponse.json(
+      { success: false, error: 'phone_required' },
+      { status: 400 },
+    )
+  }
+
   const normalisedPhone = normalisePhone(phone)
 
   const lpUrls: Record<string, string> = {
