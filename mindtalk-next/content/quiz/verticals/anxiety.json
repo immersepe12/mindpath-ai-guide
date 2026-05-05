@@ -1,0 +1,91 @@
+{
+  "vertical": "anxiety",
+  "questions": [
+    {
+      "id": "duration",
+      "question": "How long has the anxiety been showing up?",
+      "subtext": "Honest answers help us match the right psychologist.",
+      "type": "single",
+      "options": [
+        { "label": "Just the last few weeks", "value": "weeks" },
+        { "label": "A few months now", "value": "months" },
+        { "label": "More than six months", "value": "6mo_plus" },
+        { "label": "Honestly, as long as I can remember", "value": "always" }
+      ]
+    },
+    {
+      "id": "symptoms",
+      "question": "Which of these feel most familiar?",
+      "subtext": "Pick everything that fits — there's no wrong answer.",
+      "type": "multi",
+      "options": [
+        { "label": "My mind races at night and I can't switch off", "value": "racing_thoughts" },
+        { "label": "I avoid situations even when I know I shouldn't", "value": "avoidance" },
+        { "label": "I feel it in my body — chest, jaw, shoulders", "value": "physical_tension" },
+        { "label": "I worry about things going wrong before they happen", "value": "anticipatory_worry" },
+        { "label": "I get short with people I love when I'm stretched", "value": "irritability" }
+      ]
+    },
+    {
+      "id": "trigger",
+      "question": "When does it hit hardest?",
+      "subtext": "Choose the moment that comes up most.",
+      "type": "single",
+      "options": [
+        { "label": "Right when I wake up", "value": "morning" },
+        { "label": "At work or before something I have to do", "value": "performance" },
+        { "label": "In social situations or around new people", "value": "social" },
+        { "label": "At night, when everything goes quiet", "value": "night" }
+      ]
+    },
+    {
+      "id": "impact",
+      "question": "What part of life is it affecting most?",
+      "subtext": "We'll focus your programme around what matters most to you.",
+      "type": "single",
+      "options": [
+        { "label": "My work or studies", "value": "work" },
+        { "label": "My relationships and family", "value": "relationships" },
+        { "label": "My sleep and energy", "value": "sleep" },
+        { "label": "How I feel about myself", "value": "self" }
+      ]
+    },
+    {
+      "id": "tried_before",
+      "question": "Have you tried anything for this before?",
+      "subtext": "Whatever you've done — or haven't — is fine.",
+      "type": "single",
+      "options": [
+        { "label": "No, this is my first step", "value": "nothing" },
+        { "label": "Books, apps, breathing exercises", "value": "self_help" },
+        { "label": "Therapy or counselling in the past", "value": "past_therapy" },
+        { "label": "I'm seeing someone now but want more support", "value": "ongoing" }
+      ]
+    },
+    {
+      "id": "readiness",
+      "question": "How ready do you feel to actually work on this?",
+      "subtext": "It's okay if the answer is 'not very' — we'll meet you there.",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": {
+        "1": "Just exploring",
+        "3": "Want to try",
+        "5": "Ready to commit"
+      }
+    },
+    {
+      "id": "different",
+      "question": "What would feel different if things were better?",
+      "subtext": "There's no right answer — pick what resonates.",
+      "type": "single",
+      "options": [
+        { "label": "I'd sleep through the night without my mind racing", "value": "sleep" },
+        { "label": "I'd say yes to things I usually avoid", "value": "courage" },
+        { "label": "I'd feel calm in my own body again", "value": "calm" },
+        { "label": "I'd stop bracing for the next thing to go wrong", "value": "trust" }
+      ]
+    }
+  ]
+}

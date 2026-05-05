@@ -1,14 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import LeadCaptureForm from '@/components/LeadCaptureForm'
-import WhatsAppGate from '@/components/WhatsAppGate'
 import { getVariant, type Variant } from '@/lib/ab-test'
 
 interface VerticalHeroProps {
   headline: string
   subtext: string
   ctaText: string
+  /** Where the hero CTA points. Should be the per-vertical quiz route
+   * (e.g. /anxiety/quiz) — set on the LP page wrapper. */
   ctaUrl: string
   vertical: string
 }
@@ -27,7 +27,7 @@ const verticalLabels: Record<string, string> = {
   burnout: 'Workplace Burnout Recovery',
 }
 
-export default function VerticalHero({ headline, subtext, ctaText, ctaUrl: _ctaUrl, vertical }: VerticalHeroProps) {
+export default function VerticalHero({ headline, subtext, ctaText, ctaUrl, vertical }: VerticalHeroProps) {
   const accent = verticalAccents[vertical] ?? 'bg-orange-50 text-[#E8521A]'
   const label = verticalLabels[vertical] ?? '90-Day Recovery Programme'
 
@@ -53,8 +53,8 @@ export default function VerticalHero({ headline, subtext, ctaText, ctaUrl: _ctaU
   return (
     <section className="bg-[#FDF8F4] pt-14 pb-18 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
-          {/* Left — copy */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
+          {/* Left — copy + primary CTA */}
           <div>
             <div className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium mb-6 ${accent}`}>
               {badge}
@@ -65,34 +65,36 @@ export default function VerticalHero({ headline, subtext, ctaText, ctaUrl: _ctaU
             <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-2xl">
               {subtext}
             </p>
-            {/* Mobile-only: scroll-to-form CTA (form is below on mobile) */}
-            <div className="flex flex-col sm:flex-row gap-3 lg:hidden">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <Button size="hero" asChild>
-                <a href="#lead-form">{variantCtaText}</a>
+                <a href={ctaUrl}>{variantCtaText}</a>
               </Button>
-              <WhatsAppGate location="vertical_hero" vertical={vertical}>
-                <Button size="hero" variant="secondary">
-                  Talk to us first
-                </Button>
-              </WhatsAppGate>
             </div>
-            {/* Desktop-only: trust signals below copy */}
-            <div className="hidden lg:block">
-              <p className="text-sm text-gray-400">{trustLine}</p>
-            </div>
+            <p className="text-sm text-gray-400">{trustLine}</p>
           </div>
 
-          {/* Right — inline lead form */}
-          <div className="lg:pt-4">
-            <LeadCaptureForm
-              vertical={vertical}
-              ctaText={variantCtaText}
-              showPrice={!isFreeCall}
-            />
+          {/* Right — quiz invitation card */}
+          <div>
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-md p-7 text-center">
+              <div className="text-xs font-semibold tracking-widest text-[#E8521A] uppercase mb-3">
+                7-question assessment
+              </div>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Find the right psychologist for you
+              </h2>
+              <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                A short, warm assessment. No clinical jargon. We&apos;ll match
+                you to the right Cadabams psychologist for a 90-day programme.
+              </p>
+              <Button size="lg" className="w-full" asChild>
+                <a href={ctaUrl}>{variantCtaText} →</a>
+              </Button>
+              <p className="text-xs text-gray-400 mt-3">
+                Takes about 90 seconds.
+              </p>
+            </div>
           </div>
         </div>
-
-        <p className="mt-5 text-sm text-gray-400 lg:hidden">{trustLine}</p>
       </div>
     </section>
   )

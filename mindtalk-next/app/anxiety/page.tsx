@@ -10,7 +10,6 @@ import PricingSection from '@/components/sections/PricingSection'
 import FAQSection from '@/components/sections/FAQSection'
 import CTASection from '@/components/sections/CTASection'
 import StickyMobileCTA from '@/components/layout/StickyMobileCTA'
-import WhatsAppFloating from '@/components/layout/WhatsAppFloating'
 import { faqSchema, medicalServiceSchema, productSchema, breadcrumbSchema } from '@/lib/structured-data'
 import PageTracker from '@/components/PageTracker'
 import ScrollDepthTracker from '@/components/ScrollDepthTracker'
@@ -96,14 +95,14 @@ export default function AnxietyPage() {
           headline={fm.heroHeadline}
           subtext={fm.heroSubtext}
           ctaText={fm.ctaText}
-          ctaUrl={fm.ctaUrl}
+          ctaUrl="/anxiety/quiz"
           vertical={fm.vertical}
         />
         <ProblemAgitation
           headline={fm.problemHeadline}
           problems={fm.problems}
           ctaText={fm.ctaText}
-          ctaUrl={fm.ctaUrl}
+          ctaUrl="/anxiety/quiz"
         />
         <JourneyTimeline
           headline={fm.timelineHeadline}
@@ -120,7 +119,7 @@ export default function AnxietyPage() {
           priceNote={fm.priceNote}
           refundNote={fm.refundNote}
           ctaText={fm.ctaText}
-          ctaUrl={fm.ctaUrl}
+          ctaUrl="/anxiety/quiz"
         />
         <FAQSection
           headline={fm.faqHeadline}
@@ -128,12 +127,11 @@ export default function AnxietyPage() {
         />
         <CTASection
           ctaText={fm.ctaText}
-          ctaUrl={fm.ctaUrl}
+          ctaUrl="/anxiety/quiz"
         />
       </main>
       <Footer />
-      <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl={fm.ctaUrl} />
-      <WhatsAppFloating message={fm.whatsappMessage} />
+      <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl="/anxiety/quiz" />
       <p className="text-xs text-gray-400 mt-8 text-center pb-4">
         Clinically reviewed: March 2026 · Cadabams Group
       </p>

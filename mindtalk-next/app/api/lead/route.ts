@@ -7,6 +7,9 @@ export async function POST(req: NextRequest) {
     durationOfIssue, symptoms, priorTherapy, readinessScore,
     utmSource, utmMedium, utmCampaign, utmContent, pageUrl,
     source,
+    // Quiz fields — sent by VerticalQuizFlow on each LP. quizAnswers is a
+    // JSON object of {questionId: answer}; quizCompleted is a boolean flag.
+    quizAnswers, quizCompleted,
   } = body
 
   const normalisePhone = (raw: string) => {
@@ -51,6 +54,7 @@ export async function POST(req: NextRequest) {
     utmCampaign ? `cmp=${utmCampaign}`   : '',
     utmContent  ? `cnt=${utmContent}`    : '',
     vertical    ? `vert=${vertical}`     : '',
+    quizCompleted ? 'quiz=done' : '',
     durationOfIssue ? `dur=${durationOfIssue}` : '',
     priorTherapy    ? `prior=${priorTherapy}`  : '',
     readinessScore  ? `score=${readinessScore}` : '',
@@ -160,6 +164,13 @@ export async function POST(req: NextRequest) {
   // First name only — split on whitespace, trim, drop empties.
   const firstName = typeof name === 'string' ? (name.trim().split(/\s+/)[0] || undefined) : undefined
 
+  // Quiz answers come through as a JSON object keyed by question id. Stringify
+  // for Fyno so it lands as a single field templates can reference; also pass
+  // quiz_completed so workflows can branch on quiz vs non-quiz leads.
+  const quizAnswersJson = quizAnswers && typeof quizAnswers === 'object'
+    ? JSON.stringify(quizAnswers)
+    : undefined
+
   const fynoData = Object.fromEntries(
     Object.entries({
       first_name:        firstName,
@@ -172,6 +183,8 @@ export async function POST(req: NextRequest) {
       utm_medium:        utmMedium,
       utm_content:       utmContent,
       source:            typeof source === 'string' ? source : undefined,
+      quiz_completed:    quizCompleted ? 'true' : undefined,
+      quiz_answers:      quizAnswersJson,
     }).filter(([, v]) => v !== undefined && v !== null && v !== ''),
   )
 

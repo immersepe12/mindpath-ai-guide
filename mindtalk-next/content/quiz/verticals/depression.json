@@ -1,0 +1,91 @@
+{
+  "vertical": "depression",
+  "questions": [
+    {
+      "id": "duration",
+      "question": "How long has it been feeling this way?",
+      "subtext": "Honest answers help us match the right psychologist.",
+      "type": "single",
+      "options": [
+        { "label": "A few weeks", "value": "weeks" },
+        { "label": "A few months", "value": "months" },
+        { "label": "Over six months", "value": "6mo_plus" },
+        { "label": "It's been most of my life", "value": "always" }
+      ]
+    },
+    {
+      "id": "symptoms",
+      "question": "Which of these feel most true right now?",
+      "subtext": "Select everything that fits.",
+      "type": "multi",
+      "options": [
+        { "label": "It's hard to start anything, even small things", "value": "low_energy" },
+        { "label": "I'm pulling away from people", "value": "withdrawal" },
+        { "label": "I've lost interest in things I used to love", "value": "anhedonia" },
+        { "label": "I feel empty or numb more than sad", "value": "numbness" },
+        { "label": "I'm tired no matter how much I sleep", "value": "fatigue" }
+      ]
+    },
+    {
+      "id": "mornings",
+      "question": "How are mornings feeling?",
+      "subtext": "First thing when you wake up.",
+      "type": "single",
+      "options": [
+        { "label": "I dread getting out of bed", "value": "dread" },
+        { "label": "I'm okay once I get going, but starting is hard", "value": "slow_start" },
+        { "label": "Mornings are fine — it hits later in the day", "value": "later" },
+        { "label": "It's pretty constant from morning to night", "value": "constant" }
+      ]
+    },
+    {
+      "id": "self_talk",
+      "question": "Which of these sounds most like the voice in your head?",
+      "subtext": "Just pick what comes closest.",
+      "type": "single",
+      "options": [
+        { "label": "\"I'm letting everyone down\"", "value": "guilt" },
+        { "label": "\"What's even the point?\"", "value": "hopeless" },
+        { "label": "\"I should be able to handle this\"", "value": "self_critical" },
+        { "label": "\"I just feel… nothing\"", "value": "numb" }
+      ]
+    },
+    {
+      "id": "tried_before",
+      "question": "Have you tried anything for this before?",
+      "subtext": "Whatever the answer is, it's okay.",
+      "type": "single",
+      "options": [
+        { "label": "No, this is my first step", "value": "nothing" },
+        { "label": "Books, apps, journalling", "value": "self_help" },
+        { "label": "Therapy or counselling in the past", "value": "past_therapy" },
+        { "label": "I'm on medication or in therapy now", "value": "ongoing" }
+      ]
+    },
+    {
+      "id": "readiness",
+      "question": "How ready do you feel to actually work on this?",
+      "subtext": "It's fine if the answer is 'not very' — we'll start gently.",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": {
+        "1": "Just exploring",
+        "3": "Want to try",
+        "5": "Ready to commit"
+      }
+    },
+    {
+      "id": "different",
+      "question": "What would feel different if things were better?",
+      "subtext": "There's no right answer — pick what resonates.",
+      "type": "single",
+      "options": [
+        { "label": "I'd want to do things again — even small ones", "value": "interest" },
+        { "label": "I'd feel like myself when I look in the mirror", "value": "self" },
+        { "label": "I'd reach out to people instead of hiding", "value": "connection" },
+        { "label": "I'd stop running on empty all the time", "value": "energy" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "vertical": "relationship",
+  "questions": [
+    {
+      "id": "duration",
+      "question": "How long has this been on your mind?",
+      "subtext": "Honest answers help us match the right psychologist.",
+      "type": "single",
+      "options": [
+        { "label": "Just the last few weeks", "value": "weeks" },
+        { "label": "A few months", "value": "months" },
+        { "label": "More than six months", "value": "6mo_plus" },
+        { "label": "It's a pattern across relationships", "value": "pattern" }
+      ]
+    },
+    {
+      "id": "context",
+      "question": "What's going on right now?",
+      "subtext": "Pick the one that fits most.",
+      "type": "single",
+      "options": [
+        { "label": "I'm in a relationship and it's hard", "value": "in_relationship" },
+        { "label": "I'm processing a breakup or separation", "value": "breakup" },
+        { "label": "Things with family are weighing on me", "value": "family" },
+        { "label": "I keep ending up in the same kind of relationship", "value": "pattern" }
+      ]
+    },
+    {
+      "id": "symptoms",
+      "question": "Which of these feel most familiar?",
+      "subtext": "Select everything that fits.",
+      "type": "multi",
+      "options": [
+        { "label": "We have the same fight on repeat", "value": "loop" },
+        { "label": "I feel unseen or unheard", "value": "unseen" },
+        { "label": "I shut down or pull away when it gets hard", "value": "withdraw" },
+        { "label": "I overthink every message and silence", "value": "overthink" },
+        { "label": "I'm holding on tighter than I'd like to admit", "value": "anxious_attach" }
+      ]
+    },
+    {
+      "id": "self_in_it",
+      "question": "When you imagine yourself in this — what do you notice?",
+      "subtext": "Just pick what comes closest.",
+      "type": "single",
+      "options": [
+        { "label": "I become someone I don't recognise", "value": "lost_self" },
+        { "label": "I'm walking on eggshells", "value": "walking_eggshells" },
+        { "label": "I keep making myself smaller", "value": "shrinking" },
+        { "label": "I want to fix it but I don't know how", "value": "wanting_to_fix" }
+      ]
+    },
+    {
+      "id": "tried_before",
+      "question": "Have you tried anything for this?",
+      "subtext": "Whatever the answer is, it's okay.",
+      "type": "single",
+      "options": [
+        { "label": "No, this is my first step", "value": "nothing" },
+        { "label": "Books, podcasts, talking to friends", "value": "self_help" },
+        { "label": "Couples or individual therapy in the past", "value": "past_therapy" },
+        { "label": "I'm in therapy now and want more focus on this", "value": "ongoing" }
+      ]
+    },
+    {
+      "id": "readiness",
+      "question": "How ready do you feel to work on this?",
+      "subtext": "It's okay if you're still figuring it out.",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": {
+        "1": "Just exploring",
+        "3": "Want to try",
+        "5": "Ready to commit"
+      }
+    },
+    {
+      "id": "different",
+      "question": "What would feel different if things were better?",
+      "subtext": "There's no right answer — pick what resonates.",
+      "type": "single",
+      "options": [
+        { "label": "I'd feel safe to say what I actually think", "value": "voice" },
+        { "label": "I'd stop bracing for the next argument", "value": "calm" },
+        { "label": "I'd recognise myself again in the relationship", "value": "self" },
+        { "label": "I'd choose different patterns going forward", "value": "patterns" }
+      ]
+    }
+  ]
+}

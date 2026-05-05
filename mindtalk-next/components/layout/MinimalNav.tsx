@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import WhatsAppGate from '@/components/WhatsAppGate'
 import { DOWNLOAD_URL, WEB_APP_URL } from '@/components/marketing/DownloadButtons'
 
 const FEATURE_LINKS: { label: string; href: string; meta?: string; tone?: 'free' | 'paid' | 'mixed' }[] = [
@@ -74,15 +73,6 @@ export default function MinimalNav() {
               </div>
             )}
           </div>
-
-          <WhatsAppGate location="nav">
-            <button
-              type="button"
-              className="hidden sm:inline text-sm text-gray-500 hover:text-[#E8521A] transition-colors"
-            >
-              Questions? WhatsApp us
-            </button>
-          </WhatsAppGate>
 
           <a
             href={WEB_APP_URL}
@@ -167,14 +157,6 @@ export default function MinimalNav() {
             >
               Log in
             </a>
-            <WhatsAppGate location="nav-mobile">
-              <button
-                type="button"
-                className="w-full text-left px-3 py-2.5 rounded-xl text-sm text-[#0E1726] hover:bg-[#FAF7F4]"
-              >
-                Questions? WhatsApp us
-              </button>
-            </WhatsAppGate>
           </div>
         </div>
       )}

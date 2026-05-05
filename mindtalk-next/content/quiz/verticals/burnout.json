@@ -1,0 +1,91 @@
+{
+  "vertical": "burnout",
+  "questions": [
+    {
+      "id": "duration",
+      "question": "How long has work been feeling this way?",
+      "subtext": "Honest answers help us match the right psychologist.",
+      "type": "single",
+      "options": [
+        { "label": "Just the last few weeks", "value": "weeks" },
+        { "label": "A few months", "value": "months" },
+        { "label": "More than six months", "value": "6mo_plus" },
+        { "label": "Through multiple roles, honestly", "value": "always" }
+      ]
+    },
+    {
+      "id": "symptoms",
+      "question": "Which of these are showing up?",
+      "subtext": "Pick everything that fits.",
+      "type": "multi",
+      "options": [
+        { "label": "I dread Mondays — Sunday evenings feel heavy", "value": "sunday_dread" },
+        { "label": "I'm just going through the motions at work", "value": "detached" },
+        { "label": "I'm short-tempered with people who don't deserve it", "value": "irritability" },
+        { "label": "I'm physically tired even after rest", "value": "fatigue" },
+        { "label": "I can't concentrate the way I used to", "value": "focus" }
+      ]
+    },
+    {
+      "id": "trigger",
+      "question": "What's making it heaviest?",
+      "subtext": "Pick the one that fits most.",
+      "type": "single",
+      "options": [
+        { "label": "Workload — there's just too much", "value": "load" },
+        { "label": "A boss or team that drains me", "value": "people" },
+        { "label": "I've stopped caring about the work itself", "value": "meaning" },
+        { "label": "I can't switch off after work", "value": "boundaries" }
+      ]
+    },
+    {
+      "id": "weekends",
+      "question": "How do weekends feel?",
+      "subtext": "Be honest — even with yourself.",
+      "type": "single",
+      "options": [
+        { "label": "I spend them recovering from the week", "value": "recovery" },
+        { "label": "I dread Sunday afternoon", "value": "anticipation" },
+        { "label": "I can't actually relax even when I try", "value": "no_off" },
+        { "label": "Weekends are okay — it's the weekdays", "value": "weekdays_only" }
+      ]
+    },
+    {
+      "id": "tried_before",
+      "question": "Have you tried anything for this?",
+      "subtext": "Whatever you've done — or haven't — is fine.",
+      "type": "single",
+      "options": [
+        { "label": "No, this is my first step", "value": "nothing" },
+        { "label": "Time off, exercise, meditation apps", "value": "self_help" },
+        { "label": "Therapy or coaching in the past", "value": "past_therapy" },
+        { "label": "I'm in therapy now and want more structure", "value": "ongoing" }
+      ]
+    },
+    {
+      "id": "readiness",
+      "question": "How ready do you feel to work on this?",
+      "subtext": "It's fine if you're just exploring.",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": {
+        "1": "Just exploring",
+        "3": "Want to try",
+        "5": "Ready to commit"
+      }
+    },
+    {
+      "id": "different",
+      "question": "What would feel different if things were better?",
+      "subtext": "There's no right answer — pick what resonates.",
+      "type": "single",
+      "options": [
+        { "label": "I'd close my laptop and actually be present", "value": "presence" },
+        { "label": "I'd care about my work again without being consumed by it", "value": "balance" },
+        { "label": "I'd have energy for the people who matter", "value": "energy_people" },
+        { "label": "I'd stop bracing for Mondays", "value": "monday" }
+      ]
+    }
+  ]
+}

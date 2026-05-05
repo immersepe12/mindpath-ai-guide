@@ -7,7 +7,7 @@ interface StickyMobileCTAProps {
   ctaUrl: string
 }
 
-export default function StickyMobileCTA({ ctaText }: StickyMobileCTAProps) {
+export default function StickyMobileCTA({ ctaText, ctaUrl }: StickyMobileCTAProps) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function StickyMobileCTA({ ctaText }: StickyMobileCTAProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-100 px-4 py-3 shadow-lg">
       <Button size="hero" className="w-full" asChild>
-        <a href="#lead-form">{ctaText}</a>
+        <a href={ctaUrl}>{ctaText}</a>
       </Button>
     </div>
   )
