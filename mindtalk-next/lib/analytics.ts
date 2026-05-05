@@ -132,6 +132,11 @@ export function trackWhatsAppClick(location: string, vertical?: string) {
   try { trackMetaContact(location, vertical) } catch {}
 }
 
+export function trackCallClick(location: string, vertical?: string) {
+  track('call_clicked', { location, vertical })
+  try { trackMetaContact(location, vertical) } catch {}
+}
+
 // ─── QUIZ EVENTS ─────────────────────────────────────────────────────────────
 
 export function trackQuizStarted() {
