@@ -318,6 +318,12 @@ export async function POST(req: NextRequest) {
 
   const fynoData = Object.fromEntries(
     Object.entries({
+      // distinct_id is what the Fyno workflow ('mindtalk_d0_welcome' v5)
+      // keys users on — without it the event is received but never bound
+      // to a user, so the workflow shows '0 users entered'. Use phone as
+      // the universal identifier (matches Mixpanel's distinct_id semantics
+      // for phone-only leads, falls back to email for email-only).
+      distinct_id:       cleanEmail ?? normalisedPhone,
       first_name:        firstName,
       phone:             normalisedPhone,
       email:             cleanEmail,

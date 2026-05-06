@@ -145,6 +145,11 @@ export async function POST(req: NextRequest) {
             ),
             data: Object.fromEntries(
               Object.entries({
+                // distinct_id matches the lead_created event so the Fyno
+                // workflow recognises this as the SAME user — its
+                // 'End journey when purchase_confirmed is fired' rule
+                // depends on user identity matching.
+                distinct_id:    body.email ?? body.phone,
                 first_name:     firstName,
                 phone:          body.phone,
                 email:          body.email,
