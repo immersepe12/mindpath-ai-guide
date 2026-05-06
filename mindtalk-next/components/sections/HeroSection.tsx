@@ -27,7 +27,7 @@ export default function HeroSection({ headline, subtext, ctaText, ctaUrl }: Hero
             <Link href={ctaUrl}>{ctaText}</Link>
           </Button>
           <Button size="hero" variant="secondary" asChild>
-            <Link href="/quiz">Take the assessment</Link>
+            <Link href="/quiz">Talk to us first</Link>
           </Button>
         </div>
         <p className="mt-6 text-sm text-gray-400">₹7,799 · 90 days · 12 psychologist sessions</p>
