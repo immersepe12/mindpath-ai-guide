@@ -8,8 +8,9 @@ export async function POST(req: NextRequest) {
     utmSource, utmMedium, utmCampaign, utmContent, pageUrl,
     source,
     // Quiz fields — sent by VerticalQuizFlow on each LP. quizAnswers is a
-    // JSON object of {questionId: answer}; quizCompleted is a boolean flag.
-    quizAnswers, quizCompleted,
+    // JSON object of {questionId: answer}; quizCompleted is a boolean flag;
+    // quizNote is a pre-formatted human-readable Q&A transcript for Freshsales.
+    quizAnswers, quizCompleted, quizNote,
   } = body
 
   const normalisePhone = (raw: string) => {
@@ -115,6 +116,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify(freshsalesPayload),
       })
       const respBody = await resp.text()
+      let createdContactId: number | null = null
       if (!resp.ok) {
         console.error('[lead] Freshsales HTTP', resp.status, respBody.slice(0, 500))
         // No more silent retry-strip-cf_medium. If the request fails, log
@@ -123,7 +125,42 @@ export async function POST(req: NextRequest) {
         freshsalesStatus = { ok: false, status: resp.status, body: respBody.slice(0, 300) }
       } else {
         freshsalesStatus = { ok: true, status: resp.status }
-        console.log('[lead] Freshsales created contact', cleanEmail ?? `(phone-only ${normalisedPhone})`)
+        try {
+          const parsed = JSON.parse(respBody)
+          createdContactId = parsed?.contact?.id ?? null
+        } catch {}
+        console.log('[lead] Freshsales created contact', cleanEmail ?? `(phone-only ${normalisedPhone})`, 'id=', createdContactId)
+      }
+
+      // Attach quiz Q&A as a Freshsales note so the sales/care team sees
+      // the full context on the contact card. Skipped for non-quiz leads
+      // and for create-failures (no contact id to target).
+      if (createdContactId && typeof quizNote === 'string' && quizNote.trim()) {
+        try {
+          const noteResp = await fetch('https://cadabams.myfreshworks.com/crm/sales/api/notes', {
+            method: 'POST',
+            headers: {
+              Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              note: {
+                description: quizNote,
+                targetable_type: 'Contact',
+                targetable_id: createdContactId,
+              },
+            }),
+          })
+          if (!noteResp.ok) {
+            const noteErr = await noteResp.text()
+            console.error('[lead] Freshsales note HTTP', noteResp.status, noteErr.slice(0, 300))
+          } else {
+            console.log('[lead] Freshsales note attached to contact', createdContactId)
+          }
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err)
+          console.error('[lead] Freshsales note error:', msg)
+        }
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)

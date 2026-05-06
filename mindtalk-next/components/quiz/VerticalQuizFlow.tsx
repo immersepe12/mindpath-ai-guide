@@ -175,6 +175,31 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
     let utms: Record<string, string> = {}
     try { utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}') } catch {}
 
+    // Build a readable Q&A transcript for Freshsales notes. Resolves
+    // each answer's value back to its label so the sales/care team
+    // sees human-readable text rather than slugs like 'racing_thoughts'.
+    const labelFor = (q: Question, value: string) => {
+      const opt = (q.options ?? []).find(o => o.value === value)
+      return opt?.label ?? value
+    }
+    const quizNoteLines: string[] = [
+      `MindTalk Quiz — ${vertical[0].toUpperCase()}${vertical.slice(1)}`,
+      '─────────────────────',
+    ]
+    questions.forEach((q, i) => {
+      const a = answers[q.id]
+      let answerText = '—'
+      if (Array.isArray(a)) {
+        answerText = a.length ? a.map(v => `• ${labelFor(q, v)}`).join('\n') : '—'
+      } else if (typeof a === 'string') {
+        answerText = q.type === 'scale' ? `${a}/${q.scaleMax ?? 5}` : labelFor(q, a)
+      }
+      quizNoteLines.push('')
+      quizNoteLines.push(`Q${i + 1}: ${q.question}`)
+      quizNoteLines.push(answerText)
+    })
+    const quizNote = quizNoteLines.join('\n')
+
     try {
       await fetch('/api/lead', {
         method: 'POST',
@@ -186,6 +211,7 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
           vertical,
           quizAnswers: answers,
           quizCompleted: true,
+          quizNote,
           source:      `quiz_${vertical}`,
           utmSource:   utms.utm_source   ?? '',
           utmMedium:   utms.utm_medium   ?? '',
