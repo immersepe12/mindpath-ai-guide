@@ -130,9 +130,16 @@ export async function POST(req: NextRequest) {
         freshsalesStatus = { ok: false, status: resp.status, body: respBody.slice(0, 300) }
 
         // Duplicate-mobile path. Freshsales returns 400 with error_code 3002
-        // ('Contact is not unique') when the phone already exists. To still
-        // attach the quiz note (and keep idempotent re-submissions working),
-        // look up the existing contact id by phone.
+        // ('Contact is not unique') when the phone already exists. We do two
+        // things here:
+        //  1. Look up the existing contact id (so we can attach the quiz note
+        //     and PATCH marketing fields).
+        //  2. PUT /contacts/{id} with lead_source / campaign / keyword /
+        //     medium / cf_form_source_custom — Freshsales doesn't merge these
+        //     from a duplicate POST, so without this update a returning
+        //     visitor's contact card stays at whatever (often empty) values
+        //     the original record had, breaking the
+        //     'cf_form_source_custom contains packages' Mindtalk segment.
         const duplicate = (resp.status === 400 || resp.status === 422)
           && /already exists|not unique|3002/i.test(respBody)
         if (duplicate) {
@@ -151,6 +158,46 @@ export async function POST(req: NextRequest) {
               if (existing?.id) {
                 contactId = existing.id
                 console.log('[lead] Freshsales duplicate; using existing contact id=', contactId)
+
+                // PATCH the existing contact's marketing fields so the
+                // Mindtalk filter (cf_form_source_custom contains 'packages')
+                // picks them up. Same-shape payload as the create — but
+                // wrapped in a PUT to /contacts/{id}.
+                try {
+                  const patchPayload = {
+                    contact: {
+                      lead_source: utmSource || 'MindTalk Website',
+                      ...(mediumValue   ? { medium:   mediumValue }   : {}),
+                      ...(utmCampaign   ? { campaign: utmCampaign }   : {}),
+                      ...(utmContent    ? { keyword:  utmContent }    : {}),
+                      custom_field: {
+                        cf_form_source_custom: 'packages',
+                        ...(readinessScore ? { cf_score: readinessScore } : {}),
+                        ...(durationOfIssue ? { cf_customer_category: durationOfIssue } : {}),
+                        ...(Array.isArray(symptoms) && symptoms.length ? { cf_relationship: symptoms.join(', ') } : {}),
+                        ...(priorTherapy ? { cf_gender: priorTherapy } : {}),
+                      },
+                    },
+                  }
+                  const patchResp = await fetch(`https://cadabams.myfreshworks.com/crm/sales/api/contacts/${contactId}`, {
+                    method: 'PUT',
+                    headers: {
+                      Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(patchPayload),
+                  })
+                  if (!patchResp.ok) {
+                    const patchErr = await patchResp.text()
+                    console.error('[lead] Freshsales duplicate PATCH HTTP', patchResp.status, patchErr.slice(0, 300))
+                  } else {
+                    console.log('[lead] Freshsales duplicate PATCHed marketing fields on contact', contactId)
+                    freshsalesStatus = { ok: true, status: patchResp.status }
+                  }
+                } catch (err) {
+                  const msg = err instanceof Error ? err.message : String(err)
+                  console.error('[lead] Freshsales duplicate PATCH error:', msg)
+                }
               }
             } else {
               console.error('[lead] Freshsales duplicate lookup HTTP', lookupResp.status)
