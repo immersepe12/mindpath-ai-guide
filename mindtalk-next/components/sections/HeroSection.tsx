@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import WhatsAppGate from '@/components/WhatsAppGate'
 
 interface HeroSectionProps {
   headline: string
@@ -27,11 +26,9 @@ export default function HeroSection({ headline, subtext, ctaText, ctaUrl }: Hero
           <Button size="hero" asChild>
             <Link href={ctaUrl}>{ctaText}</Link>
           </Button>
-          <WhatsAppGate location="home_hero">
-            <Button size="hero" variant="secondary">
-              Talk to us first
-            </Button>
-          </WhatsAppGate>
+          <Button size="hero" variant="secondary" asChild>
+            <Link href="/quiz">Take the assessment</Link>
+          </Button>
         </div>
         <p className="mt-6 text-sm text-gray-400">₹7,799 · 90 days · 12 psychologist sessions</p>
       </div>
