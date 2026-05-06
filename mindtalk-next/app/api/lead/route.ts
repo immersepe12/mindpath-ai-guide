@@ -116,26 +116,55 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify(freshsalesPayload),
       })
       const respBody = await resp.text()
-      let createdContactId: number | null = null
+      let contactId: number | null = null
       if (!resp.ok) {
         console.error('[lead] Freshsales HTTP', resp.status, respBody.slice(0, 500))
-        // No more silent retry-strip-cf_medium. If the request fails, log
-        // the actual response so the cause is debuggable rather than papered
-        // over. Future schema mismatches will surface as real errors.
         freshsalesStatus = { ok: false, status: resp.status, body: respBody.slice(0, 300) }
+
+        // Duplicate-mobile path. Freshsales returns 400 with error_code 3002
+        // ('Contact is not unique') when the phone already exists. To still
+        // attach the quiz note (and keep idempotent re-submissions working),
+        // look up the existing contact id by phone.
+        const duplicate = (resp.status === 400 || resp.status === 422)
+          && /already exists|not unique|3002/i.test(respBody)
+        if (duplicate) {
+          try {
+            const lookupUrl = `https://cadabams.myfreshworks.com/crm/sales/api/lookup?q=${encodeURIComponent(normalisedPhone)}&f=mobile_number&entities=contact`
+            const lookupResp = await fetch(lookupUrl, {
+              headers: {
+                Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
+                'Content-Type': 'application/json',
+              },
+            })
+            if (lookupResp.ok) {
+              const lookupBody = await lookupResp.text()
+              const parsed = JSON.parse(lookupBody)
+              const existing = parsed?.contacts?.contacts?.[0]
+              if (existing?.id) {
+                contactId = existing.id
+                console.log('[lead] Freshsales duplicate; using existing contact id=', contactId)
+              }
+            } else {
+              console.error('[lead] Freshsales duplicate lookup HTTP', lookupResp.status)
+            }
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err)
+            console.error('[lead] Freshsales duplicate lookup error:', msg)
+          }
+        }
       } else {
         freshsalesStatus = { ok: true, status: resp.status }
         try {
           const parsed = JSON.parse(respBody)
-          createdContactId = parsed?.contact?.id ?? null
+          contactId = parsed?.contact?.id ?? null
         } catch {}
-        console.log('[lead] Freshsales created contact', cleanEmail ?? `(phone-only ${normalisedPhone})`, 'id=', createdContactId)
+        console.log('[lead] Freshsales created contact', cleanEmail ?? `(phone-only ${normalisedPhone})`, 'id=', contactId)
       }
 
-      // Attach quiz Q&A as a Freshsales note so the sales/care team sees
-      // the full context on the contact card. Skipped for non-quiz leads
-      // and for create-failures (no contact id to target).
-      if (createdContactId && typeof quizNote === 'string' && quizNote.trim()) {
+      // Attach quiz Q&A as a Freshsales note. Now runs whether the contact
+      // was newly created OR found via duplicate-lookup, so repeat testers
+      // and returning visitors still get their note.
+      if (contactId && typeof quizNote === 'string' && quizNote.trim()) {
         try {
           const noteResp = await fetch('https://cadabams.myfreshworks.com/crm/sales/api/notes', {
             method: 'POST',
@@ -147,7 +176,7 @@ export async function POST(req: NextRequest) {
               note: {
                 description: quizNote,
                 targetable_type: 'Contact',
-                targetable_id: createdContactId,
+                targetable_id: contactId,
               },
             }),
           })
@@ -155,7 +184,7 @@ export async function POST(req: NextRequest) {
             const noteErr = await noteResp.text()
             console.error('[lead] Freshsales note HTTP', noteResp.status, noteErr.slice(0, 300))
           } else {
-            console.log('[lead] Freshsales note attached to contact', createdContactId)
+            console.log('[lead] Freshsales note attached to contact', contactId)
           }
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err)
