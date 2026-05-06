@@ -1,5 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Wrap a fetch in 429 retry-with-exponential-backoff. Honours Retry-After
+// when the server provides one, otherwise climbs 600ms → 1.2s → 2.4s → 4.8s.
+// Capped attempts so the request route doesn't hang forever on a sustained
+// outage. Used for Freshsales which rate-limits aggressively at 100 req/min
+// and was silently dropping real leads when bursts hit the cap.
+async function fetchWithBackoff(
+  url: string,
+  init: RequestInit,
+  maxAttempts = 4,
+): Promise<Response> {
+  let attempt = 0
+  let delay = 600
+  while (true) {
+    const resp = await fetch(url, init)
+    if (resp.status !== 429) return resp
+    if (++attempt >= maxAttempts) return resp
+    const retryAfter = parseInt(resp.headers.get('Retry-After') ?? '', 10)
+    const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : delay
+    console.log(`[lead] Freshsales 429 — retry ${attempt}/${maxAttempts - 1} after ${waitMs}ms`)
+    await new Promise((r) => setTimeout(r, waitMs))
+    delay = Math.min(delay * 2, 8000)
+  }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json()
   const {
@@ -115,7 +139,7 @@ export async function POST(req: NextRequest) {
       },
     }
     try {
-      const resp = await fetch('https://cadabams.myfreshworks.com/crm/sales/api/contacts', {
+      const resp = await fetchWithBackoff('https://cadabams.myfreshworks.com/crm/sales/api/contacts', {
         method: 'POST',
         headers: {
           Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
@@ -145,7 +169,7 @@ export async function POST(req: NextRequest) {
         if (duplicate) {
           try {
             const lookupUrl = `https://cadabams.myfreshworks.com/crm/sales/api/lookup?q=${encodeURIComponent(normalisedPhone)}&f=mobile_number&entities=contact`
-            const lookupResp = await fetch(lookupUrl, {
+            const lookupResp = await fetchWithBackoff(lookupUrl, {
               headers: {
                 Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
                 'Content-Type': 'application/json',
@@ -179,7 +203,7 @@ export async function POST(req: NextRequest) {
                       },
                     },
                   }
-                  const patchResp = await fetch(`https://cadabams.myfreshworks.com/crm/sales/api/contacts/${contactId}`, {
+                  const patchResp = await fetchWithBackoff(`https://cadabams.myfreshworks.com/crm/sales/api/contacts/${contactId}`, {
                     method: 'PUT',
                     headers: {
                       Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
@@ -221,7 +245,7 @@ export async function POST(req: NextRequest) {
       // and returning visitors still get their note.
       if (contactId && typeof quizNote === 'string' && quizNote.trim()) {
         try {
-          const noteResp = await fetch('https://cadabams.myfreshworks.com/crm/sales/api/notes', {
+          const noteResp = await fetchWithBackoff('https://cadabams.myfreshworks.com/crm/sales/api/notes', {
             method: 'POST',
             headers: {
               Authorization: `Token token=${process.env.FRESHSALES_API_KEY}`,
