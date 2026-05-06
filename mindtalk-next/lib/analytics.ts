@@ -336,6 +336,23 @@ interface MetaCustom {
   [key: string]:    unknown
 }
 
+// Strip query params Meta would treat as condition signals (utm_*, mc_*, etc.)
+// from the page URL we send to CAPI. Preserve fbclid because Meta uses it to
+// chain Pixel ↔ CAPI ↔ click for attribution and our /api/track/meta
+// fbc-fallback depends on it.
+function sanitiseEventSourceUrl(): string {
+  if (typeof window === 'undefined') return ''
+  try {
+    const u = new URL(window.location.href)
+    const fbclid = u.searchParams.get('fbclid')
+    u.search = ''
+    if (fbclid) u.searchParams.set('fbclid', fbclid)
+    return u.toString()
+  } catch {
+    return `${window.location.protocol}//${window.location.host}${window.location.pathname}`
+  }
+}
+
 function postCapi(eventName: MetaPixelEvent, eventId: string, customData?: MetaCustom, userData?: MetaUserPii) {
   if (typeof window === 'undefined') return
   if (!window.location.hostname.endsWith('cadabamsmindtalk.com')) return
@@ -348,7 +365,7 @@ function postCapi(eventName: MetaPixelEvent, eventId: string, customData?: MetaC
     body: JSON.stringify({
       eventName,
       eventId,
-      eventSourceUrl: window.location.href,
+      eventSourceUrl: sanitiseEventSourceUrl(),
       customData,
       userData: { ...(userData ?? {}), ...fb },
     }),
@@ -379,10 +396,22 @@ function fireMetaEvent(
   return eventId
 }
 
+// All Meta customData below is condition-neutral: no vertical, no
+// `MindTalk Anxiety Recovery Programme` style names. Vertical still flows
+// through the Mixpanel mirror inside fireMetaEvent (track(mixpanelEvent, …))
+// because that's an internal system. Function signatures keep the vertical
+// arg so existing call sites compile unchanged.
+const NEUTRAL_PROGRAMME_NAME = 'MindTalk 90-Day Programme'
+const NEUTRAL_CATEGORY       = 'programme'
+
 export function trackMetaViewContent(vertical: string, value?: number) {
+  // vertical kept in signature for the Mixpanel mirror; track() inside
+  // fireMetaEvent merges customData into the Mixpanel event, but Mixpanel
+  // is internal so it's safe to keep vertical there as a property.
+  void vertical
   return fireMetaEvent('ViewContent', 'meta_view_content', {
-    content_category: vertical,
-    content_name:     vertical,
+    content_category: NEUTRAL_CATEGORY,
+    content_name:     NEUTRAL_PROGRAMME_NAME,
     content_type:     'product',
     value,
     currency:         value !== undefined ? 'INR' : undefined,
@@ -391,11 +420,13 @@ export function trackMetaViewContent(vertical: string, value?: number) {
 
 export function trackMetaLead(payload: { vertical?: string; phone?: string; email?: string; name?: string; value?: number }) {
   const [firstName, ...rest] = (payload.name ?? '').trim().split(/\s+/)
+  void payload.vertical
   return fireMetaEvent('Lead', 'meta_lead',
     {
-      content_category: payload.vertical,
-      value:            payload.value ?? 0,
-      currency:         'INR',
+      // Minimal Lead per spec — event name, page URL, hashed userData.
+      // No content_* fields at all.
+      value:    payload.value ?? 0,
+      currency: 'INR',
     },
     {
       email:     payload.email,
@@ -408,16 +439,20 @@ export function trackMetaLead(payload: { vertical?: string; phone?: string; emai
 }
 
 export function trackMetaContact(location: string, vertical?: string) {
+  void vertical
   return fireMetaEvent('Contact', 'meta_contact', {
-    content_category: vertical,
-    content_name:     `whatsapp_${location}`,
+    content_category: NEUTRAL_CATEGORY,
+    // location = 'home_hero' | 'nav' | 'floating' | … — destination, not condition
+    content_name:     `contact_${location}`,
   })
 }
 
 export function trackMetaInitiateCheckout(payload: { vertical: string; value: number; contentName?: string }) {
+  void payload.vertical
+  void payload.contentName  // ignore caller-provided name (could be condition-bearing)
   return fireMetaEvent('InitiateCheckout', 'meta_initiate_checkout', {
-    content_category: payload.vertical,
-    content_name:     payload.contentName,
+    content_category: NEUTRAL_CATEGORY,
+    content_name:     NEUTRAL_PROGRAMME_NAME,
     content_type:     'product',
     value:            payload.value,
     currency:         'INR',
@@ -426,9 +461,11 @@ export function trackMetaInitiateCheckout(payload: { vertical: string; value: nu
 }
 
 export function trackMetaAddToCart(payload: { vertical: string; value: number; contentName?: string; packageId?: string | number }) {
+  void payload.vertical
+  void payload.contentName
   return fireMetaEvent('AddToCart', 'meta_add_to_cart', {
-    content_category: payload.vertical,
-    content_name:     payload.contentName,
+    content_category: NEUTRAL_CATEGORY,
+    content_name:     NEUTRAL_PROGRAMME_NAME,
     content_ids:      payload.packageId ? [payload.packageId] : undefined,
     content_type:     'product',
     value:            payload.value,

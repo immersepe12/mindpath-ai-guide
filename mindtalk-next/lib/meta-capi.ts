@@ -17,6 +17,25 @@ function sha256(value?: string | number | null): string | undefined {
   return crypto.createHash('sha256').update(String(value).trim().toLowerCase()).digest('hex')
 }
 
+/**
+ * Strip query params Meta would treat as condition signals (utm_*, etc.) from
+ * an event source URL — typically a Referer header on a server-side CAPI fire.
+ * Preserves fbclid because Meta uses it to chain Pixel ↔ CAPI ↔ click for
+ * attribution and our /api/track/meta has a fbc-fallback that depends on it.
+ */
+export function sanitiseEventSourceUrl(raw?: string | null): string | undefined {
+  if (!raw) return undefined
+  try {
+    const u = new URL(raw)
+    const fbclid = u.searchParams.get('fbclid')
+    u.search = ''
+    if (fbclid) u.searchParams.set('fbclid', fbclid)
+    return u.toString()
+  } catch {
+    return undefined
+  }
+}
+
 function normPhone(raw?: string): string | undefined {
   if (!raw) return undefined
   const digits = String(raw).replace(/\D/g, '')

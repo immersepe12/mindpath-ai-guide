@@ -3,7 +3,7 @@
 // Sends Purchase + Subscribe to Meta CAPI, mirrors to Mixpanel server-side,
 // and forwards to the Fyno purchase-confirmation flow (preserves prior behaviour).
 import { NextRequest, NextResponse } from 'next/server'
-import { sendMetaEvent, extractRequestUserData, newEventId } from '@/lib/meta-capi'
+import { sendMetaEvent, extractRequestUserData, newEventId, sanitiseEventSourceUrl } from '@/lib/meta-capi'
 import { trackMixpanelServer } from '@/lib/mixpanel-server'
 
 interface Body {
@@ -50,11 +50,15 @@ export async function POST(req: NextRequest) {
     ...reqUser,
   }
 
+  // Condition-neutral content fields. body.vertical / body.journeyName are
+  // condition-bearing ('anxiety', 'MindTalk Anxiety Recovery Programme', …)
+  // so they must not leak to Meta. Internal systems (Mixpanel, Fyno, Freshsales)
+  // still receive the original vertical further down this route.
   const customData = {
     value,
     currency,
-    content_name:     body.journeyName,
-    content_category: body.vertical,
+    content_name:     'MindTalk 90-Day Programme',
+    content_category: 'programme',
     content_ids:      body.orderId ? [body.orderId] : undefined,
     content_type:     'product',
     order_id:         body.orderId,
@@ -62,19 +66,21 @@ export async function POST(req: NextRequest) {
     num_items:        1,
   }
 
+  const sanitisedReferer = sanitiseEventSourceUrl(req.headers.get('referer'))
+
   // ── Meta CAPI: Purchase + Subscribe (same trigger, separate events for funnel) ──
   await Promise.all([
     sendMetaEvent({
       eventName:      'Purchase',
       eventId,
-      eventSourceUrl: req.headers.get('referer') ?? undefined,
+      eventSourceUrl: sanitisedReferer,
       userData,
       customData,
     }),
     sendMetaEvent({
       eventName:      'Subscribe',
       eventId:        subEventId,
-      eventSourceUrl: req.headers.get('referer') ?? undefined,
+      eventSourceUrl: sanitisedReferer,
       userData,
       customData: {
         ...customData,

@@ -1,6 +1,6 @@
 // app/api/checkout/send-otp/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { sendMetaEvent, extractRequestUserData, newEventId } from '@/lib/meta-capi';
+import { sendMetaEvent, extractRequestUserData, newEventId, sanitiseEventSourceUrl } from '@/lib/meta-capi';
 import { trackMixpanelServer } from '@/lib/mixpanel-server';
 
 const CRM_BASE = 'https://crm.cadabams.com';
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
   await sendMetaEvent({
     eventName:       'CompleteRegistration',
     eventId:         regEventId,
-    eventSourceUrl:  req.headers.get('referer') ?? undefined,
+    eventSourceUrl:  sanitiseEventSourceUrl(req.headers.get('referer')),
     customData: {
       content_name: 'otp_signup',
       currency:     'INR',

@@ -57,11 +57,14 @@ function SuccessContent() {
 
     // Browser Pixel: Purchase + Subscribe (server CAPI mirrors via API below)
     try {
+      // Condition-neutral content fields — Meta's "Health & wellness" classifier
+      // reads content_category / content_name. pkg.name is condition-bearing
+      // ('MindTalk Anxiety Recovery Programme' etc.) so it must not leak here.
       trackMetaPixel('Purchase', {
         value,
         currency,
-        content_name:     pkg.name,
-        content_category: booking.vertical,
+        content_name:     'MindTalk 90-Day Programme',
+        content_category: 'programme',
         content_ids:      [String(booking.booking_id)],
         content_type:     'product',
         num_items:        1,
@@ -71,8 +74,8 @@ function SuccessContent() {
       trackMetaPixel('Subscribe', {
         value,
         currency,
-        content_name:     pkg.name,
-        content_category: booking.vertical,
+        content_name:     'MindTalk 90-Day Programme',
+        content_category: 'programme',
         predicted_ltv:    value,
         subscription_id:  String(booking.booking_id),
       }, subscribeEventId);
