@@ -8,7 +8,7 @@ interface ProblemAgitationProps {
   ctaUrl: string
 }
 
-export default function ProblemAgitation({ headline, problems, ctaText }: ProblemAgitationProps) {
+export default function ProblemAgitation({ headline, problems, ctaText, ctaUrl }: ProblemAgitationProps) {
   return (
     <section className="py-20 px-4 sm:px-6 bg-white">
       <div className="max-w-2xl mx-auto text-center">
@@ -24,7 +24,7 @@ export default function ProblemAgitation({ headline, problems, ctaText }: Proble
           ))}
         </ul>
         <Button size="lg" asChild>
-          <a href="#lead-form">{ctaText}</a>
+          <a href={ctaUrl}>{ctaText}</a>
         </Button>
       </div>
     </section>

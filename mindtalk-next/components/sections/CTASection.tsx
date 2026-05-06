@@ -5,7 +5,7 @@ interface CTASectionProps {
   ctaUrl: string
 }
 
-export default function CTASection({ ctaText }: CTASectionProps) {
+export default function CTASection({ ctaText, ctaUrl }: CTASectionProps) {
   return (
     <section className="py-20 px-4 sm:px-6 bg-[#E8521A]">
       <div className="max-w-2xl mx-auto text-center">
@@ -13,10 +13,10 @@ export default function CTASection({ ctaText }: CTASectionProps) {
           Ready to start your recovery?
         </h2>
         <p className="text-white/80 mb-8 text-lg">
-          Fill in your details above. Get matched this week.
+          Take the 90-second assessment. Get matched this week.
         </p>
         <Button size="hero" variant="white" asChild>
-          <a href="#lead-form">{ctaText}</a>
+          <a href={ctaUrl}>{ctaText}</a>
         </Button>
         <p className="text-white/60 text-sm mt-4">
           No commitment · Full refund guarantee
