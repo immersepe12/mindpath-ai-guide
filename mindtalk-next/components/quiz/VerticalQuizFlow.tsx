@@ -307,10 +307,12 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
                   className="pl-14"
                   value={contact.phone}
                   onChange={e => {
+                    // Normalise messy autofills. Take the LAST 10 digits so
+                    // doubled +91 prefixes ('+91+919196286233' → 14 digits)
+                    // don't end up dropping real digits off the right.
                     let digits = e.target.value.replace(/\D/g, '')
-                    if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
                     if (digits.startsWith('0')) digits = digits.slice(1)
-                    digits = digits.slice(0, 10)
+                    if (digits.length > 10) digits = digits.slice(-10)
                     setContact(c => ({ ...c, phone: digits }))
                   }}
                   onFocus={() => trackQuizContactFieldFocused('phone')}

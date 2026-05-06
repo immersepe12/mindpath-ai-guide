@@ -21,11 +21,11 @@ interface LeadCaptureFormProps {
  */
 function normalisePhoneInput(raw: string): string {
   let digits = raw.replace(/\D/g, '')
-  // Autofill often includes country code — strip leading 91 if over 10 digits
-  if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
-  // Some users include leading 0 for local dialling
   if (digits.startsWith('0')) digits = digits.slice(1)
-  return digits.slice(0, 10)
+  // Take the last 10 digits so doubled-prefix autofills ('+91+91…' → 14
+  // digits) don't drop real digits off the right.
+  if (digits.length > 10) digits = digits.slice(-10)
+  return digits
 }
 
 export default function LeadCaptureForm({

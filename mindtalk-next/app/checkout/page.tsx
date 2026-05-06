@@ -375,9 +375,9 @@ function CheckoutContent() {
                     value={phone}
                     onChange={e => {
                       let digits = e.target.value.replace(/\D/g, '')
-                      if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
                       if (digits.startsWith('0')) digits = digits.slice(1)
-                      setPhone(digits.slice(0, 10))
+                      if (digits.length > 10) digits = digits.slice(-10)
+                      setPhone(digits)
                     }}
                     style={{
                       flex: 1, padding: '12px 14px',

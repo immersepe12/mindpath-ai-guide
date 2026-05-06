@@ -14,9 +14,17 @@ export async function POST(req: NextRequest) {
   } = body
 
   const normalisePhone = (raw: string) => {
-    const digits = raw.replace(/\D/g, '')
-    if (digits.startsWith('91') && digits.length === 12) return `+${digits}`
+    let digits = raw.replace(/\D/g, '')
+    if (digits.startsWith('0')) digits = digits.slice(1)
+    // Strip leading 91s while the remainder is still longer than a 10-digit
+    // local number. Catches doubled-prefix autofill ('+91+9196286233' →
+    // 919196286233 → 9196286233) without truncating real digits off the
+    // right via slice(0, 10).
+    while (digits.length > 10 && digits.startsWith('91')) {
+      digits = digits.slice(2)
+    }
     if (digits.length === 10) return `+91${digits}`
+    if (digits.startsWith('91') && digits.length === 12) return `+${digits}`
     return `+${digits}`
   }
 

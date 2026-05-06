@@ -323,9 +323,8 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
                   value={contact.phone}
                   onChange={e => {
                     let digits = e.target.value.replace(/\D/g, '')
-                    if (digits.length > 10 && digits.startsWith('91')) digits = digits.slice(2)
                     if (digits.startsWith('0')) digits = digits.slice(1)
-                    digits = digits.slice(0, 10)
+                    if (digits.length > 10) digits = digits.slice(-10)
                     setContact(c => ({ ...c, phone: digits }))
                   }}
                   onFocus={() => trackQuizContactFieldFocused('phone')}
