@@ -59,6 +59,13 @@ export const metadata: Metadata = {
   },
   verification: {
     google: 'add-your-google-search-console-verification-token-here',
+    other: {
+      // Renders <meta name="facebook-domain-verification" content="..." />
+      // Required so Meta Business Manager can verify ownership of
+      // cadabamsmindtalk.com — needed for some advanced ad-account features
+      // (Aggregated Event Measurement priorities, app-domain claims, etc).
+      'facebook-domain-verification': 'bjh009bx6p0xlwqbhvusxzo8l9nthh',
+    },
   },
   alternates: {
     canonical: 'https://cadabamsmindtalk.com',
