@@ -5,9 +5,17 @@
 
 import crypto from 'crypto'
 
-const PIXEL_ID     = process.env.META_CAPI_PIXEL_ID
-const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN
-const TEST_CODE    = process.env.META_CAPI_TEST_EVENT_CODE
+// Dual-pixel: pair every (PIXEL_ID, ACCESS_TOKEN) so both fire in parallel.
+// Each pair is fired with the same eventID so dedup against its corresponding
+// browser Pixel still works for both.
+interface PixelTarget { pixelId: string; accessToken: string }
+const PIXEL_TARGETS: PixelTarget[] = (
+  [
+    { pixelId: process.env.META_CAPI_PIXEL_ID,     accessToken: process.env.META_CAPI_ACCESS_TOKEN },
+    { pixelId: process.env.META_CAPI_PIXEL_ID_2,   accessToken: process.env.META_CAPI_ACCESS_TOKEN_2 },
+  ].filter((t): t is PixelTarget => !!t.pixelId && !!t.accessToken)
+)
+const TEST_CODE = process.env.META_CAPI_TEST_EVENT_CODE
 
 const ENDPOINT = (id: string) =>
   `https://graph.facebook.com/v18.0/${id}/events`
@@ -94,11 +102,13 @@ export interface SendMetaEventInput {
 }
 
 export async function sendMetaEvent(input: SendMetaEventInput): Promise<void> {
-  if (!PIXEL_ID || !ACCESS_TOKEN) {
-    console.error('[meta-capi] CRITICAL: META_CAPI_PIXEL_ID or META_CAPI_ACCESS_TOKEN missing — Meta CAPI is NOT firing.', {
-      hasPixelId: !!PIXEL_ID,
-      hasToken:   !!ACCESS_TOKEN,
-      eventName:  input.eventName,
+  if (PIXEL_TARGETS.length === 0) {
+    console.error('[meta-capi] CRITICAL: no PIXEL_ID + ACCESS_TOKEN pair configured — Meta CAPI is NOT firing.', {
+      hasPixel1: !!process.env.META_CAPI_PIXEL_ID,
+      hasToken1: !!process.env.META_CAPI_ACCESS_TOKEN,
+      hasPixel2: !!process.env.META_CAPI_PIXEL_ID_2,
+      hasToken2: !!process.env.META_CAPI_ACCESS_TOKEN_2,
+      eventName: input.eventName,
     })
     return
   }
@@ -137,24 +147,27 @@ export async function sendMetaEvent(input: SendMetaEventInput): Promise<void> {
   }
   if (TEST_CODE) body.test_event_code = TEST_CODE
 
-  try {
-    const res = await fetch(`${ENDPOINT(PIXEL_ID)}?access_token=${ACCESS_TOKEN}`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(body),
+  // Fire to every configured pixel in parallel. Same event_id → both pixels
+  // can dedup against their own browser-Pixel events.
+  await Promise.all(
+    PIXEL_TARGETS.map(async ({ pixelId, accessToken }) => {
+      try {
+        const res = await fetch(`${ENDPOINT(pixelId)}?access_token=${accessToken}`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(body),
+        })
+        const text = await res.text()
+        if (!res.ok) {
+          console.error(`[meta-capi] ${input.eventName} ${res.status} pixel=${pixelId}: ${text.slice(0, 500)}`)
+        } else {
+          console.log(`[meta-capi] ${input.eventName} OK pixel=${pixelId} eid=${input.eventId} body=${text.slice(0, 200)}`)
+        }
+      } catch (e: any) {
+        console.error(`[meta-capi] fetch error pixel=${pixelId}:`, e?.message)
+      }
     })
-    const text = await res.text()
-    if (!res.ok) {
-      console.error(`[meta-capi] ${input.eventName} ${res.status}: ${text.slice(0, 500)}`)
-    } else {
-      // Always log success (including production) so Vercel Function logs
-      // are a definitive source of truth — we can verify CAPI actually
-      // fired for every event without trusting Meta's UI alone.
-      console.log(`[meta-capi] ${input.eventName} OK pixel=${PIXEL_ID} eid=${input.eventId} body=${text.slice(0, 200)}`)
-    }
-  } catch (e: any) {
-    console.error('[meta-capi] fetch error:', e?.message)
-  }
+  )
 }
 
 // Helper for API routes — extract IP, UA, fbp, fbc from a NextRequest.

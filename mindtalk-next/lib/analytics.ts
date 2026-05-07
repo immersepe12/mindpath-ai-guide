@@ -490,9 +490,10 @@ export function trackMetaCompleteRegistration(payload: { phone?: string; email?:
 }
 
 export function trackMetaAddPaymentInfo(payload: { vertical: string; value: number; phone?: string; email?: string; leadId?: string | number; eventId?: string }) {
+  void payload.vertical
   return fireMetaEvent('AddPaymentInfo', 'meta_add_payment_info',
     {
-      content_category: payload.vertical,
+      content_category: NEUTRAL_CATEGORY,
       value:            payload.value,
       currency:         'INR',
     },
@@ -516,10 +517,12 @@ export function trackMetaPurchase(payload: {
   contentName?: string
 }) {
   const [firstName, ...rest] = (payload.name ?? '').trim().split(/\s+/)
+  void payload.vertical
+  void payload.contentName
   return fireMetaEvent('Purchase', 'meta_purchase',
     {
-      content_category: payload.vertical,
-      content_name:     payload.contentName,
+      content_category: NEUTRAL_CATEGORY,
+      content_name:     NEUTRAL_PROGRAMME_NAME,
       content_ids:      [payload.orderId],
       content_type:     'product',
       value:            payload.value,
@@ -546,10 +549,12 @@ export function trackMetaSubscribe(payload: {
   phone?:          string
   contentName?:    string
 }) {
+  void payload.vertical
+  void payload.contentName
   return fireMetaEvent('Subscribe', 'meta_subscribe',
     {
-      content_category: payload.vertical,
-      content_name:     payload.contentName,
+      content_category: NEUTRAL_CATEGORY,
+      content_name:     NEUTRAL_PROGRAMME_NAME,
       content_ids:      [payload.orderId],
       content_type:     'product',
       value:            payload.value,

@@ -142,8 +142,12 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
 
   function handleEmailBlur() {
     const t = contact.email.trim()
-    if (t && (!t.includes('@') || !t.includes('.'))) {
-      setEmailError("That doesn't look like a valid email — or leave it blank.")
+    if (!t) {
+      setEmailError('')
+      return
+    }
+    if (!t.includes('@') || !t.includes('.')) {
+      setEmailError("That doesn't look like a valid email.")
     } else {
       setEmailError('')
     }
@@ -164,8 +168,13 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
       return
     }
     const trimmedEmail = contact.email.trim()
-    if (trimmedEmail && (!trimmedEmail.includes('@') || !trimmedEmail.includes('.'))) {
-      setError('Please enter a valid email address (or leave it blank).')
+    if (!trimmedEmail) {
+      setError('Please enter your email — we send your match details there.')
+      trackQuizSubmitError('missing_email', vertical)
+      return
+    }
+    if (!trimmedEmail.includes('@') || !trimmedEmail.includes('.')) {
+      setError('Please enter a valid email address.')
       trackQuizSubmitError('invalid_email', vertical)
       return
     }
@@ -324,12 +333,11 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
               <p className="text-xs text-gray-400 mt-1">We&apos;ll send your match via WhatsApp.</p>
             </div>
             <div>
-              <Label htmlFor="qz-email">
-                Email address <span className="text-gray-400 font-normal">(optional)</span>
-              </Label>
+              <Label htmlFor="qz-email">Email address</Label>
               <Input
                 id="qz-email"
                 type="email"
+                required
                 className={`mt-1.5 ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                 value={contact.email}
                 onChange={e => {
@@ -351,6 +359,7 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
                 submitting ||
                 !contact.firstName.trim() ||
                 contact.phone.replace(/\D/g, '').length !== 10 ||
+                !contact.email.trim() ||
                 !!emailError
               }
             >

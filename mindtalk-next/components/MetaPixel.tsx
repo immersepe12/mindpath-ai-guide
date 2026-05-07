@@ -6,7 +6,13 @@
 import { Suspense, useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
-const PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID
+// Dual-pixel: keep the original pixel firing while we ramp up a new one.
+// Meta's pixel base script supports multiple `fbq('init', ID)` calls — every
+// subsequent `fbq('track', ...)` is dispatched to all initialised pixels with
+// the same eventID, so dedup against CAPI continues to work for both.
+const PIXEL_ID   = process.env.NEXT_PUBLIC_FB_PIXEL_ID
+const PIXEL_ID_2 = process.env.NEXT_PUBLIC_FB_PIXEL_ID_2
+const PIXEL_IDS = [PIXEL_ID, PIXEL_ID_2].filter((id): id is string => !!id)
 
 /**
  * Re-fires fbq('track', 'PageView') on every client-side navigation.
@@ -37,7 +43,7 @@ function PageViewOnRouteChange() {
 
 export default function MetaPixel() {
   useEffect(() => {
-    if (!PIXEL_ID) return
+    if (PIXEL_IDS.length === 0) return
     if (typeof window === 'undefined') return
     if (!window.location.hostname.endsWith('cadabamsmindtalk.com')) return
     if ((window as any).fbq) return // already loaded
@@ -62,11 +68,11 @@ export default function MetaPixel() {
       s.parentNode?.insertBefore(t, s)
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js')
 
-    ;(window as any).fbq('init', PIXEL_ID)
+    PIXEL_IDS.forEach((id) => (window as any).fbq('init', id))
     ;(window as any).fbq('track', 'PageView')
   }, [])
 
-  if (!PIXEL_ID) return null
+  if (PIXEL_IDS.length === 0) return null
 
   return (
     <>
@@ -80,7 +86,9 @@ export default function MetaPixel() {
           in JS-enabled browsers and double-counting PageView in Meta. */}
       <noscript
         dangerouslySetInnerHTML={{
-          __html: `<img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1" />`,
+          __html: PIXEL_IDS
+            .map((id) => `<img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${id}&ev=PageView&noscript=1" />`)
+            .join(''),
         }}
       />
     </>
