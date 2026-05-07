@@ -342,8 +342,17 @@ export async function POST(req: NextRequest) {
   let fynoStatus: { ok: boolean; status?: number; body?: string; error?: string } = { ok: false, error: 'no_api_key' }
   if (process.env.FYNO_API_KEY && process.env.NEXT_PUBLIC_FYNO_WORKSPACE_ID) {
     try {
+      // distinct_id MUST be at the top level of the Fyno event payload —
+      // Fyno's workflow 'Define Unique Identifier' resolves it from there,
+      // not from data.distinct_id. Without a top-level value the workflow
+      // receives the event but can't bind it to a user, so the
+      // 'mindtalk_d0_welcome' counter stayed at 0 even though messages
+      // were sending. Keep it in data too so any template that interpolates
+      // {{distinct_id}} still works.
+      const distinctId = cleanEmail ?? normalisedPhone
       const fynoBody = {
         event: 'lead_created',
+        distinct_id: distinctId,
         // Fyno channel keys (not phone_number).
         to: {
           sms:      normalisedPhone,

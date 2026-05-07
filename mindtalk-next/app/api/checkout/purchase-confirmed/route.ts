@@ -133,8 +133,13 @@ export async function POST(req: NextRequest) {
           const verticalRaw = typeof body.vertical === 'string' ? body.vertical.trim().toLowerCase() : ''
           const issueVertical = ALLOWED.has(verticalRaw) ? verticalRaw : undefined
 
+          // distinct_id at top level so Fyno's workflow can bind this event
+          // to the same user that lead_created bound earlier (matches the
+          // pattern in /api/lead).
+          const distinctId = body.email ?? body.phone
           const fynoBody = {
             event: 'purchase_confirmed',
+            distinct_id: distinctId,
             // Fyno channel keys, drop empty channels.
             to: Object.fromEntries(
               Object.entries({
