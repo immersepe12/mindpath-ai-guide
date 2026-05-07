@@ -319,11 +319,10 @@ export async function POST(req: NextRequest) {
   const fynoData = Object.fromEntries(
     Object.entries({
       // distinct_id is what the Fyno workflow ('mindtalk_d0_welcome' v5)
-      // keys users on — without it the event is received but never bound
-      // to a user, so the workflow shows '0 users entered'. Use phone as
-      // the universal identifier (matches Mixpanel's distinct_id semantics
-      // for phone-only leads, falls back to email for email-only).
-      distinct_id:       cleanEmail ?? normalisedPhone,
+      // keys users on. Phone always — universal identity across every
+      // entry path (quiz, WhatsApp gate, call gate, legacy form). Email
+      // is optional on some paths so it can't be the primary key.
+      distinct_id:       normalisedPhone,
       first_name:        firstName,
       phone:             normalisedPhone,
       email:             cleanEmail,
@@ -349,7 +348,11 @@ export async function POST(req: NextRequest) {
       // 'mindtalk_d0_welcome' counter stayed at 0 even though messages
       // were sending. Keep it in data too so any template that interpolates
       // {{distinct_id}} still works.
-      const distinctId = cleanEmail ?? normalisedPhone
+      //
+      // Always use the normalised phone — phone is collected on every
+      // entry path (quiz, WhatsApp gate, call gate, legacy form) so it's
+      // the only universal identity key. Email is optional on some paths.
+      const distinctId = normalisedPhone
       const fynoBody = {
         event: 'lead_created',
         distinct_id: distinctId,

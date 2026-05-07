@@ -134,9 +134,10 @@ export async function POST(req: NextRequest) {
           const issueVertical = ALLOWED.has(verticalRaw) ? verticalRaw : undefined
 
           // distinct_id at top level so Fyno's workflow can bind this event
-          // to the same user that lead_created bound earlier (matches the
-          // pattern in /api/lead).
-          const distinctId = body.email ?? body.phone
+          // to the same user that lead_created bound earlier. Phone always
+          // (matches /api/lead) — it's the universal identity key across
+          // every entry path.
+          const distinctId = body.phone
           const fynoBody = {
             event: 'purchase_confirmed',
             distinct_id: distinctId,
@@ -153,8 +154,9 @@ export async function POST(req: NextRequest) {
                 // distinct_id matches the lead_created event so the Fyno
                 // workflow recognises this as the SAME user — its
                 // 'End journey when purchase_confirmed is fired' rule
-                // depends on user identity matching.
-                distinct_id:    body.email ?? body.phone,
+                // depends on user identity matching. Phone always (matches
+                // /api/lead).
+                distinct_id:    body.phone,
                 first_name:     firstName,
                 phone:          body.phone,
                 email:          body.email,
