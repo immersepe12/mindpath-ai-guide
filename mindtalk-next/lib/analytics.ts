@@ -272,22 +272,11 @@ export async function trackLeadSubmitted(data: LeadData): Promise<void> {
     }
   }
 
-  // Meta Lead (Pixel + CAPI + Mixpanel mirror as `meta_lead`)
-  try {
-    console.log('[META LEAD FIRED]', vertical, {
-      hasFbq: typeof (window as { fbq?: unknown }).fbq,
-      url:    window.location.href,
-    })
-    trackMetaLead({
-      vertical,
-      phone:  data.phone,
-      email:  data.email,
-      name:   data.name,
-      value:  0,
-    })
-  } catch (err) {
-    console.error('[META LEAD] trackMetaLead threw:', err)
-  }
+  // Meta Lead fires from /quiz/result mount effect — not here.
+  // Firing on the submit handler put 'quiz' in event_source_url which
+  // never matches the 'URL contains quiz/result' Meta custom-conversion
+  // rule. Mixpanel above stays here so the lead is recorded internally
+  // immediately, regardless of whether the redirect lands.
 
   // Note: Fyno lead_created is fired server-side from /api/lead/route.ts
   // (single canonical source). Previously this helper also fired Fyno

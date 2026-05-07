@@ -236,7 +236,7 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
         verticalRaw: vertical,
       })
       trackQuizCompleted(vertical, 0)
-      router.push(`/thank-you?vertical=${vertical}&name=${encodeURIComponent(trimmedName)}&phone=${encodeURIComponent(digits)}`)
+      router.push(`/quiz/result?vertical=${vertical}&name=${encodeURIComponent(trimmedName)}&phone=${encodeURIComponent(digits)}&email=${encodeURIComponent(trimmedEmail)}`)
     } catch {
       trackQuizSubmitError('api_error', vertical)
       setError('Something went wrong. Please try again.')

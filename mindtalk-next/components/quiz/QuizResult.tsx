@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import { Suspense, useEffect } from 'react'
-import { trackResultPageViewed, trackResultCTAClick, trackMetaViewContent } from '@/lib/analytics'
+import { trackResultPageViewed, trackResultCTAClick, trackMetaViewContent, trackMetaLead } from '@/lib/analytics'
 import WhatsAppGate from '@/components/WhatsAppGate'
 
 const verticalData: Record<string, {
@@ -74,7 +74,12 @@ function QuizResultInner() {
     trackResultPageViewed(vertical, name)
     // Meta ViewContent — user is being shown a specific recommended programme
     try { trackMetaViewContent(vertical, 7799) } catch {}
-  }, [vertical, name])
+    // Meta Lead — fires here (not on quiz submit) so event_source_url
+    // is /quiz/result, matching the Meta custom conversion URL rule.
+    try {
+      trackMetaLead({ vertical, name, phone, email, value: 0 })
+    } catch {}
+  }, [vertical, name, phone, email])
 
   return (
     <div className="max-w-xl mx-auto">
