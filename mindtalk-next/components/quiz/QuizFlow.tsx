@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import {
@@ -49,7 +50,9 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
   const router = useRouter()
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({})
-  const [contact, setContact] = useState({ firstName: '', phone: '', email: '' })
+  const [contact, setContact] = useState({ firstName: '', phone: '', email: '', goalText: '' })
+  const [goalError, setGoalError] = useState('')
+  const GOAL_MIN = 10
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -138,6 +141,12 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
       if (!contact.phone)     missing.push('phone')
       setError('Please enter your name and mobile number.')
       trackQuizSubmitError(`missing_fields:${missing.join(',')}`, selectedVertical)
+      return
+    }
+    const trimmedGoal = contact.goalText.trim()
+    if (trimmedGoal.length < GOAL_MIN) {
+      setGoalError(`Please share a few words about what you want to change (at least ${GOAL_MIN} characters).`)
+      trackQuizSubmitError('missing_goal', selectedVertical)
       return
     }
     const digits = contact.phone.replace(/\D/g, '')
@@ -310,6 +319,26 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
               />
             </div>
             <div>
+              <Label htmlFor="goal">
+                What&apos;s the one thing you most want to change in the next 3 months?
+              </Label>
+              <Textarea
+                id="goal"
+                required
+                rows={3}
+                className={`mt-1.5 ${goalError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                value={contact.goalText}
+                onChange={e => {
+                  setContact(c => ({ ...c, goalText: e.target.value }))
+                  if (goalError) setGoalError('')
+                }}
+                onFocus={() => trackQuizContactFieldFocused('goalText')}
+                placeholder="Type your answer here..."
+                aria-invalid={!!goalError}
+              />
+              {goalError && <p className="text-xs text-red-500 mt-1">{goalError}</p>}
+            </div>
+            <div>
               <Label htmlFor="phone">Mobile number</Label>
               <div className="relative mt-1.5">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500 text-base pointer-events-none select-none">
@@ -368,6 +397,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
               disabled={
                 submitting ||
                 !contact.firstName.trim() ||
+                contact.goalText.trim().length < GOAL_MIN ||
                 contact.phone.replace(/\D/g, '').length !== 10 ||
                 !!emailError
               }

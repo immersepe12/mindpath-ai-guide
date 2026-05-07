@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import {
@@ -56,10 +57,12 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
   const router = useRouter()
   const [step, setStep] = useState<Step>({ kind: 'question', index: 0 })
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
-  const [contact, setContact] = useState({ firstName: '', phone: '', email: '' })
+  const [contact, setContact] = useState({ firstName: '', phone: '', email: '', goalText: '' })
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [goalError, setGoalError] = useState('')
+  const GOAL_MIN = 10
 
   const therapist = therapistByVertical[vertical]
   const totalQuestions = questions.length
@@ -157,9 +160,15 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
     setError('')
     const trimmedName = contact.firstName.trim()
     const digits      = contact.phone.replace(/\D/g, '')
+    const trimmedGoal = contact.goalText.trim()
     if (!trimmedName) {
       setError('Please enter your name.')
       trackQuizSubmitError('missing_name', vertical)
+      return
+    }
+    if (trimmedGoal.length < GOAL_MIN) {
+      setGoalError(`Please share a few words about what you want to change (at least ${GOAL_MIN} characters).`)
+      trackQuizSubmitError('missing_goal', vertical)
       return
     }
     if (digits.length !== 10) {
@@ -310,6 +319,26 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
               />
             </div>
             <div>
+              <Label htmlFor="qz-goal">
+                What&apos;s the one thing you most want to change in the next 3 months?
+              </Label>
+              <Textarea
+                id="qz-goal"
+                required
+                rows={3}
+                className={`mt-1.5 ${goalError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                value={contact.goalText}
+                onChange={e => {
+                  setContact(c => ({ ...c, goalText: e.target.value }))
+                  if (goalError) setGoalError('')
+                }}
+                onFocus={() => trackQuizContactFieldFocused('goalText')}
+                placeholder="Type your answer here..."
+                aria-invalid={!!goalError}
+              />
+              {goalError && <p className="text-xs text-red-500 mt-1">{goalError}</p>}
+            </div>
+            <div>
               <Label htmlFor="qz-phone">Mobile number</Label>
               <div className="relative mt-1.5">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500 text-base pointer-events-none select-none">
@@ -364,6 +393,7 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
               disabled={
                 submitting ||
                 !contact.firstName.trim() ||
+                contact.goalText.trim().length < GOAL_MIN ||
                 contact.phone.replace(/\D/g, '').length !== 10 ||
                 !contact.email.trim() ||
                 !!emailError
