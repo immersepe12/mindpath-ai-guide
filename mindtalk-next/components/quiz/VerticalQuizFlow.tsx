@@ -209,10 +209,16 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
     })
     const quizNote = quizNoteLines.join('\n')
 
+    // Fire-and-forget /api/lead with keepalive: true so the request survives
+    // the navigation. Awaiting it would block the redirect when Freshsales
+    // hits a 429 with a 60+ second Retry-After (route's backoff stacks
+    // upstream waits and the user sees 'Submitting…' for minutes). The
+    // backend retries on its own; the user shouldn't wait.
     try {
-      await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      fetch('/api/lead', {
+        method:    'POST',
+        keepalive: true,
+        headers:   { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name:        trimmedName,
           phone:       digits,
@@ -228,7 +234,7 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
           utmContent:  utms.utm_content  ?? '',
           pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
         }),
-      })
+      }).catch(() => {})
       trackLeadSubmitted({
         name:        trimmedName,
         phone:       digits,
