@@ -1,24 +1,26 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+// Inline lead capture form for the vertical landing pages.
+// Replaces the per-vertical quiz CTAs with a 2-field + optional-email
+// submit-then-redirect flow. Hits the existing /api/lead endpoint
+// (Freshsales + Fyno) and lands on /quiz/result with URL params so the
+// result page renders the matched-programme card and the Meta Lead pixel
+// fires there (preserves the URL-rule custom conversion match).
+//
+// Props:
+//   vertical — one of 'anxiety' | 'depression' | 'burnout' | 'relationship'
+//              (the /emotional-reset LP uses 'depression' since both LPs
+//              funnel into the same Cadabams package).
+import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { trackLeadSubmitted, trackInlineFormSubmitted, trackInlineFormError } from '@/lib/analytics'
-import WhatsAppGate from '@/components/WhatsAppGate'
+import { trackInlineFormSubmitted, trackInlineFormError, trackLeadSubmitted } from '@/lib/analytics'
 
 interface LeadCaptureFormProps {
   vertical: string
-  /** Button label override */
-  ctaText?: string
-  /** Show the pricing badge above the form */
-  showPrice?: boolean
 }
 
-/**
- * Normalise phone input so only 10 local digits remain in the field, even
- * when the browser autofills a full international number like "+919876543210".
- */
 function normalisePhoneInput(raw: string): string {
   let digits = raw.replace(/\D/g, '')
   if (digits.startsWith('0')) digits = digits.slice(1)
@@ -28,262 +30,170 @@ function normalisePhoneInput(raw: string): string {
   return digits
 }
 
-export default function LeadCaptureForm({
-  vertical,
-  ctaText = 'Get my programme match',
-  showPrice = true,
-}: LeadCaptureFormProps) {
+export default function LeadCaptureForm({ vertical }: LeadCaptureFormProps) {
   const router = useRouter()
-  const [name, setName] = useState('')
+  const [firstName, setFirstName] = useState('')
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
-  const [error, setError] = useState('')
-  const [emailError, setEmailError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const phoneRef = useRef<HTMLInputElement>(null)
-  const nameRef  = useRef<HTMLInputElement>(null)
+  const [error, setError] = useState('')
 
-  // Safety net: Chrome autofill can bypass React's onChange synthesis. Poll
-  // the raw DOM value for the first 2s after mount and re-normalise if it
-  // ever contains the country code.
-  useEffect(() => {
-    const el = phoneRef.current
-    if (!el) return
-    const syncFromDOM = () => {
-      const normalised = normalisePhoneInput(el.value)
-      if (normalised !== el.value) {
-        el.value = normalised
-      }
-      if (normalised !== phone) setPhone(normalised)
-    }
-    syncFromDOM()
-    const interval = setInterval(syncFromDOM, 200)
-    const stop = setTimeout(() => clearInterval(interval), 2000)
-    return () => { clearInterval(interval); clearTimeout(stop) }
-
-  }, [])
-
-  // Auto-focus the name field on desktop only. On mobile this would force
-  // the keyboard up immediately, covering the hero copy and feeling
-  // aggressive — desktop visitors get a clear "start here" cue instead.
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (window.matchMedia('(min-width: 768px)').matches) {
-      nameRef.current?.focus({ preventScroll: true })
-    }
-  }, [])
-
-  // Inline email validation on blur — only complain about format if the
-  // user actually typed something. Empty stays valid (email is optional).
-  function handleEmailBlur() {
-    const t = email.trim()
-    if (t && (!t.includes('@') || !t.includes('.'))) {
-      setEmailError("That doesn't look like a valid email — or leave it blank.")
-    } else {
-      setEmailError('')
-    }
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-
-    if (!name.trim() || !phone.trim()) {
-      const missing: string[] = []
-      if (!name.trim())  missing.push('name')
-      if (!phone.trim()) missing.push('phone')
-      setError('Please enter your name and mobile number.')
-      // Per-field detail so Mixpanel actually tells us which field bounced
-      // people, e.g. `missing_fields:phone` (autofill timing) vs
-      // `missing_fields:name,phone` (tapped CTA without typing anything).
-      trackInlineFormError(vertical, `missing_fields:${missing.join(',')}`)
+    setError('')
+    const name = firstName.trim()
+    const digits = phone.replace(/\D/g, '')
+    if (!name) {
+      setError('Please enter your first name.')
+      trackInlineFormError(vertical, 'missing_name')
       return
     }
-
-    const digits = phone.replace(/\D/g, '')
     if (digits.length !== 10) {
       setError('Please enter a valid 10-digit mobile number.')
       trackInlineFormError(vertical, 'invalid_phone')
       return
     }
-
-    // Email is optional. Only validate format if the user typed something.
     const trimmedEmail = email.trim()
     if (trimmedEmail && (!trimmedEmail.includes('@') || !trimmedEmail.includes('.'))) {
-      setError('Please enter a valid email address (or leave it blank).')
+      setError('Please enter a valid email or leave it blank.')
       trackInlineFormError(vertical, 'invalid_email')
       return
     }
 
-    setError('')
     setSubmitting(true)
+    trackInlineFormSubmitted(vertical)
 
     let utms: Record<string, string> = {}
-    try {
-      utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}')
-    } catch {}
+    try { utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}') } catch {}
 
-    try {
-      // Submit lead to CRM + Fyno
-      const leadResp = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          phone: digits,
-          email: trimmedEmail,
-          vertical,
-          utmSource: utms.utm_source ?? '',
-          utmMedium: utms.utm_medium ?? '',
-          utmCampaign: utms.utm_campaign ?? '',
-          utmContent: utms.utm_content ?? '',
-          pageUrl: window.location.href,
-        }),
-      })
-      const leadData = await leadResp.json().catch(() => ({}))
-      if (!leadResp.ok || !leadData?.success) {
-        console.warn('[lead-form] /api/lead did not succeed:', leadResp.status, leadData)
-      } else {
-        console.log('[lead-form] /api/lead ok:', leadData)
-      }
-
-      // Track inline form submission (distinct from quiz contact form)
-      trackInlineFormSubmitted(vertical)
-
-      // Mixpanel + Meta Lead (Pixel + CAPI)
-      trackLeadSubmitted({
-        name: name.trim(),
+    // Fire-and-forget /api/lead with keepalive so the redirect happens
+    // even if Freshsales backoff stretches the request several seconds.
+    // The route still completes its full retry chain in the background.
+    fetch('/api/lead', {
+      method: 'POST',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
         phone: digits,
-        email: email.trim(),
+        email: trimmedEmail,
+        vertical,
+        source: `lp_inline_${vertical}`,
+        utmSource:   utms.utm_source   ?? '',
+        utmMedium:   utms.utm_medium   ?? '',
+        utmCampaign: utms.utm_campaign ?? '',
+        utmContent:  utms.utm_content  ?? '',
+        pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
+      }),
+    }).catch(() => {})
+
+    // Client-side Mixpanel identify + people.set so the lead is recorded
+    // immediately, regardless of whether the redirect lands.
+    try {
+      trackLeadSubmitted({
+        name,
+        phone: digits,
+        email: trimmedEmail,
         verticalRaw: vertical,
       })
+    } catch {}
 
-      // Redirect to result page with pre-filled data
-      const resultParams = new URLSearchParams({
-        vertical,
-        name: name.trim(),
-        phone: digits,
-        email: email.trim(),
-      })
-      router.push(`/quiz/result?${resultParams.toString()}`)
-    } catch {
-      setError('Something went wrong. Please try again or WhatsApp us.')
-      setSubmitting(false)
-    }
+    // Redirect to /quiz/result so the Lead pixel fires there (matches the
+    // 'URL contains quiz/result' Meta custom-conversion rule).
+    // ?source=inline signals to QuizResult that we don't have quiz answers
+    // — it'll swap the 'Why this fits you' block for generic copy.
+    const params = new URLSearchParams({ vertical, name, phone: digits, source: 'inline' })
+    if (trimmedEmail) params.set('email', trimmedEmail)
+    router.push(`/quiz/result?${params.toString()}`)
   }
 
   return (
-    <div id="lead-form" className="scroll-mt-20">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white rounded-2xl border border-gray-100 shadow-md p-6 sm:p-8"
-      >
-        {showPrice && (
-          <div className="text-center mb-5">
-            <div className="text-2xl font-bold text-gray-900">₹7,799</div>
-            <div className="text-xs text-gray-500 mt-0.5">
-              Full 90-day programme · Less than ₹650/session
-            </div>
-          </div>
-        )}
+    <form id="lead-form" onSubmit={handleSubmit} className="bg-white rounded-3xl border border-gray-100 shadow-md p-7" noValidate>
+      <div className="text-xs font-semibold tracking-widest text-[#E8521A] uppercase mb-3">
+        Find your match
+      </div>
+      <h2 className="text-xl font-bold text-gray-900 mb-2">
+        Get matched to the right psychologist
+      </h2>
+      <p className="text-sm text-gray-500 leading-relaxed mb-6">
+        Leave your details — we&apos;ll match you to a Cadabams psychologist and call you back within a few hours.
+      </p>
 
-        <div className="space-y-3">
+      <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <Label htmlFor="lead-name" className="sr-only">First name</Label>
+            <Label htmlFor="lf-name">First name</Label>
             <Input
-              id="lead-name"
-              ref={nameRef}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              id="lf-name"
+              required
+              className="mt-1.5"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               placeholder="Your first name"
               autoComplete="given-name"
+              disabled={submitting}
             />
           </div>
           <div>
-            <Label htmlFor="lead-phone" className="sr-only">Mobile number</Label>
-            <div className="relative">
+            <Label htmlFor="lf-phone">Mobile number</Label>
+            <div className="relative mt-1.5">
               <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500 text-base pointer-events-none select-none">
                 +91
               </span>
               <Input
-                ref={phoneRef}
-                id="lead-phone"
+                id="lf-phone"
+                required
                 type="tel"
                 inputMode="numeric"
+                className="pl-14"
                 value={phone}
                 onChange={(e) => setPhone(normalisePhoneInput(e.target.value))}
-                onBlur={(e) => setPhone(normalisePhoneInput(e.target.value))}
                 placeholder="98765 43210"
                 autoComplete="tel-national"
                 maxLength={10}
-                className="pl-14"
+                disabled={submitting}
               />
             </div>
           </div>
-          <div>
-            <Label htmlFor="lead-email" className="sr-only">Email address (optional)</Label>
-            <Input
-              id="lead-email"
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value)
-                if (emailError) setEmailError('')
-              }}
-              onBlur={handleEmailBlur}
-              placeholder="Email (optional)"
-              autoComplete="email"
-              aria-invalid={!!emailError}
-              className={emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}
-            />
-            {emailError && (
-              <p className="text-xs text-red-500 mt-1">{emailError}</p>
-            )}
-          </div>
         </div>
-
-        {error && (
-          <p className="text-sm text-red-500 mt-2">{error}</p>
-        )}
-
+        <div>
+          <Label htmlFor="lf-email">
+            Email <span className="text-gray-400 font-normal">(optional)</span>
+          </Label>
+          <Input
+            id="lf-email"
+            type="email"
+            className="mt-1.5"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            autoComplete="email"
+            disabled={submitting}
+          />
+        </div>
+        {error && <p className="text-sm text-red-500">{error}</p>}
         <Button
           type="submit"
           size="hero"
-          className="w-full mt-4"
-          // Disable until name + 10-digit phone are valid AND any inline
-          // email error is cleared. Stops rage-clicking on empty forms and
-          // also blocks submit while the email format is wrong.
-          disabled={
-            submitting ||
-            !name.trim() ||
-            phone.replace(/\D/g, '').length !== 10 ||
-            !!emailError
-          }
+          className="w-full mt-2"
+          disabled={submitting || !firstName.trim() || phone.replace(/\D/g, '').length !== 10}
         >
-          {submitting ? 'Submitting...' : ctaText}
-        </Button>
-
-        <div className="mt-3 flex items-center justify-center gap-2">
-          <span className="text-xs text-gray-400">or</span>
-          <WhatsAppGate location="lead_form" vertical={vertical}>
-            <button
-              type="button"
-              className="text-xs text-[#E8521A] font-medium hover:underline"
-            >
-              Talk to a counsellor on WhatsApp
-            </button>
-          </WhatsAppGate>
-        </div>
-
-        <p className="text-xs text-gray-400 text-center mt-3 leading-relaxed">
-          A Cadabams counsellor will call you within a few hours.
-          {showPrice && (
-            <>
-              <br />
-              Full refund after session 1 if not right for you.
-            </>
+          {submitting ? (
+            <span className="inline-flex items-center gap-2">
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+              Submitting…
+            </span>
+          ) : (
+            'Get my free programme match →'
           )}
+        </Button>
+        <p className="text-xs text-gray-400 text-center mt-1">
+          Free · 2-minute match · No commitment
         </p>
-      </form>
-    </div>
+      </div>
+    </form>
   )
 }

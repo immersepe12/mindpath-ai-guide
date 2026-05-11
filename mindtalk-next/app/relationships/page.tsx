@@ -95,14 +95,14 @@ export default function RelationshipsPage() {
           headline={fm.heroHeadline}
           subtext={fm.heroSubtext}
           ctaText={fm.ctaText}
-          ctaUrl="/relationships/quiz"
+          ctaUrl="#lead-form"
           vertical={fm.vertical}
         />
         <ProblemAgitation
           headline={fm.problemHeadline}
           problems={fm.problems}
           ctaText={fm.ctaText}
-          ctaUrl="/relationships/quiz"
+          ctaUrl="#lead-form"
         />
         <JourneyTimeline
           headline={fm.timelineHeadline}
@@ -119,7 +119,7 @@ export default function RelationshipsPage() {
           priceNote={fm.priceNote}
           refundNote={fm.refundNote}
           ctaText={fm.ctaText}
-          ctaUrl="/relationships/quiz"
+          ctaUrl="#lead-form"
         />
         <FAQSection
           headline={fm.faqHeadline}
@@ -127,11 +127,11 @@ export default function RelationshipsPage() {
         />
         <CTASection
           ctaText={fm.ctaText}
-          ctaUrl="/relationships/quiz"
+          ctaUrl="#lead-form"
         />
       </main>
       <Footer />
-      <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl="/relationships/quiz" />
+      <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl="#lead-form" />
             <p className="text-xs text-gray-400 mt-8 text-center pb-4">
         Clinically reviewed: March 2026 · Cadabams Group
       </p>

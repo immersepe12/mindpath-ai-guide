@@ -2,13 +2,14 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { getVariant, type Variant } from '@/lib/ab-test'
+import LeadCaptureForm from '@/components/LeadCaptureForm'
 
 interface VerticalHeroProps {
   headline: string
   subtext: string
   ctaText: string
-  /** Where the hero CTA points. Should be the per-vertical quiz route
-   * (e.g. /anxiety/quiz) — set on the LP page wrapper. */
+  /** Where the primary CTA points. Use '#lead-form' to scroll to the
+   * inline form rendered on the right of this hero. */
   ctaUrl: string
   vertical: string
 }
@@ -73,26 +74,11 @@ export default function VerticalHero({ headline, subtext, ctaText, ctaUrl, verti
             <p className="text-sm text-gray-400">{trustLine}</p>
           </div>
 
-          {/* Right — quiz invitation card */}
+          {/* Right — inline lead capture form. Replaces the legacy
+              '7-question assessment' card. All page CTAs scroll to this
+              form via '#lead-form'. */}
           <div>
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-md p-7 text-center">
-              <div className="text-xs font-semibold tracking-widest text-[#E8521A] uppercase mb-3">
-                7-question assessment
-              </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
-                Find the right psychologist for you
-              </h2>
-              <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                A short, warm assessment. No clinical jargon. We&apos;ll match
-                you to the right Cadabams psychologist for a 90-day programme.
-              </p>
-              <Button size="lg" className="w-full" asChild>
-                <a href={ctaUrl}>{variantCtaText} →</a>
-              </Button>
-              <p className="text-xs text-gray-400 mt-3">
-                Takes about 90 seconds.
-              </p>
-            </div>
+            <LeadCaptureForm vertical={vertical} />
           </div>
         </div>
       </div>

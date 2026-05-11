@@ -85,7 +85,7 @@ export default function MinimalNav() {
             href={DOWNLOAD_URL}
             className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#F77268] to-[#F97316] text-white font-semibold h-9 px-4 text-sm hover:scale-[1.02] hover:shadow-[0_8px_24px_rgba(249,115,22,0.28)] transition-all"
           >
-            Download Free
+            The App
           </a>
 
           {/* Hamburger — mobile only */}

@@ -58,6 +58,10 @@ const verticalData: Record<string, {
 function QuizResultInner() {
   const params = useSearchParams()
   const vertical = params.get('vertical') ?? 'anxiety'
+  // 'inline' = arrived via the LP inline form (no quiz answers). The
+  // result page hides the 'Why this fits you' reasons in that case
+  // since those were written assuming a 7-question quiz behind it.
+  const isInline = params.get('source') === 'inline'
   const name = params.get('name') ?? ''
   const phone = params.get('phone') ?? ''
   const email = params.get('email') ?? ''
@@ -91,15 +95,23 @@ function QuizResultInner() {
           {name ? `${name}, we recommend:` : 'We recommend:'}
         </h1>
         <h2 className="text-xl font-semibold text-gray-800 mb-6">{data.headline}</h2>
-        <div className="space-y-3 mb-8">
-          <p className="text-sm font-medium text-gray-700">Why this programme fits you:</p>
-          {data.reasons.map((r) => (
-            <div key={r} className="flex items-start gap-3">
-              <Check className="w-4 h-4 text-[#E8521A] mt-0.5 shrink-0" />
-              <p className="text-sm text-gray-600 leading-relaxed">{r}</p>
-            </div>
-          ))}
-        </div>
+        {isInline ? (
+          <p className="text-sm text-gray-600 leading-relaxed mb-8">
+            We&apos;ve matched you to <span className="font-medium text-gray-800">{data.label}</span>.
+            A Cadabams counsellor will call you within a few hours to answer
+            any questions and confirm your psychologist match.
+          </p>
+        ) : (
+          <div className="space-y-3 mb-8">
+            <p className="text-sm font-medium text-gray-700">Why this programme fits you:</p>
+            {data.reasons.map((r) => (
+              <div key={r} className="flex items-start gap-3">
+                <Check className="w-4 h-4 text-[#E8521A] mt-0.5 shrink-0" />
+                <p className="text-sm text-gray-600 leading-relaxed">{r}</p>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="border-t border-gray-100 pt-6 mb-6">
           <div className="text-3xl font-bold text-gray-900 mb-1">₹7,799</div>
           <div className="text-sm text-gray-500">Full 90-day programme · Less than ₹650/session</div>
