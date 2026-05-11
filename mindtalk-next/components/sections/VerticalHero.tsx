@@ -45,7 +45,11 @@ export default function VerticalHero({ headline, subtext, ctaText, ctaUrl, verti
     ? `${label} · Free first call`
     : `${label} · ₹7,799`
 
-  const variantCtaText = isFreeCall ? 'Book free counsellor call' : ctaText
+  // The CTA scrolls to the inline lead-capture form on the same page now,
+  // so the A/B price-framing variant B ('Book free counsellor call') is
+  // no longer accurate copy. Both variants use the page-level ctaText
+  // (set to 'Find my programme match →' in the MDX frontmatter).
+  const variantCtaText = ctaText
 
   const trustLine = isFreeCall
     ? 'Free 15-min call with a Cadabams counsellor · No commitment'
