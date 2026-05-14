@@ -131,7 +131,7 @@ export default function RelationshipsPage() {
         />
       </main>
       <Footer />
-      <StickyMobileCTA ctaText={fm.stickyCtaText} ctaUrl="#lead-form" />
+      <StickyMobileCTA ctaText={fm.ctaText} />
             <p className="text-xs text-gray-400 mt-8 text-center pb-4">
         Clinically reviewed: March 2026 · Cadabams Group
       </p>
