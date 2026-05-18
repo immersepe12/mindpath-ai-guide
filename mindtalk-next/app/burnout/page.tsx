@@ -1,4 +1,5 @@
 import { getMDXFrontmatter } from '@/lib/mdx'
+import WebViewBanner from '@/components/layout/WebViewBanner'
 import MinimalNav from '@/components/layout/MinimalNav'
 import Footer from '@/components/layout/Footer'
 import VerticalHero from '@/components/sections/VerticalHero'
@@ -89,6 +90,7 @@ export default function BurnoutPage() {
       ))}
       <PageTracker page="vertical" vertical={fm.vertical} />
       <ScrollDepthTracker page={fm.vertical} />
+      <WebViewBanner />
       <MinimalNav />
       <main>
         <VerticalHero
