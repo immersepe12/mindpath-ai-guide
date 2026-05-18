@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     name, phone, email, vertical,
     durationOfIssue, symptoms, priorTherapy, readinessScore,
     utmSource, utmMedium, utmCampaign, utmContent, pageUrl,
-    source,
+    source, gclid,
     // Quiz fields — sent by VerticalQuizFlow on each LP. quizAnswers is a
     // JSON object of {questionId: answer}; quizCompleted is a boolean flag;
     // quizNote is a pre-formatted human-readable Q&A transcript for Freshsales.
@@ -79,6 +79,7 @@ export async function POST(req: NextRequest) {
   // packages_lp, quiz, etc.) so the sales/care team can see the journey at
   // a glance. Truncated to 230 chars to stay under typical text-field limits.
   const sourceLabel = typeof source === 'string' && source.trim() ? source.trim() : undefined
+  const cleanGclid = typeof gclid === 'string' && gclid.trim() ? gclid.trim() : undefined
   const mediumParts = [
     pageUrl,
     sourceLabel ? `src_form=${sourceLabel}`   : '',
@@ -86,6 +87,7 @@ export async function POST(req: NextRequest) {
     utmMedium   ? `med=${utmMedium}`     : '',
     utmCampaign ? `cmp=${utmCampaign}`   : '',
     utmContent  ? `cnt=${utmContent}`    : '',
+    cleanGclid  ? `gclid=${cleanGclid}`  : '',
     vertical    ? `vert=${vertical}`     : '',
     quizCompleted ? 'quiz=done' : '',
     durationOfIssue ? `dur=${durationOfIssue}` : '',
@@ -332,6 +334,7 @@ export async function POST(req: NextRequest) {
       utm_campaign:      utmCampaign,
       utm_medium:        utmMedium,
       utm_content:       utmContent,
+      gclid:             cleanGclid,
       source:            typeof source === 'string' ? source : undefined,
       quiz_completed:    quizCompleted ? 'true' : undefined,
       quiz_answers:      quizAnswersJson,

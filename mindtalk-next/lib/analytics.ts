@@ -40,9 +40,12 @@ export function initAnalytics() {
 export function captureUTMs() {
   if (typeof window === 'undefined') return
   const params = new URLSearchParams(window.location.search)
-  const utmFields = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']
+  // gclid is the Google Ads click id — not a utm_ param but captured into
+  // the same bag so paid-search leads are attributable even when the
+  // campaign has no UTM Final-URL-suffix configured.
+  const fields = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid']
   const stored: Record<string,string> = {}
-  utmFields.forEach(k => {
+  fields.forEach(k => {
     const v = params.get(k)
     if (v) stored[k] = v
   })

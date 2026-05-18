@@ -66,6 +66,14 @@ export default function LeadCaptureForm({ vertical }: LeadCaptureFormProps) {
     let utms: Record<string, string> = {}
     try { utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}') } catch {}
 
+    // gclid: prefer the persisted value (captured on the landing page,
+    // survives navigation), fall back to the current URL in case the
+    // form page itself was the Google Ads landing page.
+    let gclid = utms.gclid ?? ''
+    if (!gclid && typeof window !== 'undefined') {
+      gclid = new URLSearchParams(window.location.search).get('gclid') ?? ''
+    }
+
     // Fire-and-forget /api/lead with keepalive so the redirect happens
     // even if Freshsales backoff stretches the request several seconds.
     // The route still completes its full retry chain in the background.
@@ -83,6 +91,7 @@ export default function LeadCaptureForm({ vertical }: LeadCaptureFormProps) {
         utmMedium:   utms.utm_medium   ?? '',
         utmCampaign: utms.utm_campaign ?? '',
         utmContent:  utms.utm_content  ?? '',
+        gclid,
         pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
       }),
     }).catch(() => {})
