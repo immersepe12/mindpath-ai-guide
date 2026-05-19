@@ -1,65 +1,33 @@
 'use client'
-// Sticky bottom CTA bar — visible on mobile/tablet (below lg breakpoint
-// = 1024px) on the vertical landing pages. Hero on those pages stacks
-// the inline LeadCaptureForm below the headline on mobile, so 87% of
-// visitors bounce before scrolling far enough to see it. This bar gives
-// them an immediate single-tap path to the form.
+// Sticky bottom CTA bar — visible on mobile/tablet (below lg = 1024px)
+// on the vertical landing pages. This is the primary CTA for paid Meta
+// traffic, which lands in the Facebook/Instagram in-app WebView where
+// the React lead form is unreliable.
 //
-// Hides when #lead-form is intersecting the viewport (no point showing
-// a sticky CTA while the form is already visible) and reappears when
-// the user scrolls back away from it. Dismiss × stows it for the rest
-// of the session via sessionStorage so it doesn't nag repeat tappers.
-import { useEffect, useRef, useState } from 'react'
+// The button triggers WhatsAppGate: it captures name + phone (firing
+// /api/lead → Freshsales + Fyno) BEFORE opening WhatsApp, so no lead
+// reaches WhatsApp untracked. The wa.me handoff also escapes the Meta
+// WebView entirely — it opens the native WhatsApp app.
+//
+// Dismiss × stows it for the session via sessionStorage.
+import { useEffect, useState } from 'react'
+import WhatsAppGate from '@/components/WhatsAppGate'
 
 interface StickyMobileCTAProps {
   ctaText: string
+  vertical: string
 }
 
 const DISMISS_KEY = 'mt_sticky_cta_dismissed'
 
-export default function StickyMobileCTA({ ctaText }: StickyMobileCTAProps) {
+export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAProps) {
   const [dismissed, setDismissed] = useState(false)
-  const [formVisible, setFormVisible] = useState(false)
-  const observerRef = useRef<IntersectionObserver | null>(null)
 
-  // Initial mount: check sessionStorage for the dismiss flag and start
-  // observing #lead-form for viewport intersection.
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(DISMISS_KEY) === '1') {
-        setDismissed(true)
-        return
-      }
+      if (sessionStorage.getItem(DISMISS_KEY) === '1') setDismissed(true)
     } catch {}
-
-    const form = document.getElementById('lead-form')
-    if (!form) return
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => setFormVisible(entries[0]?.isIntersecting ?? false),
-      // Trigger as soon as any part of the form enters / leaves the viewport.
-      { threshold: 0.01 },
-    )
-    observerRef.current.observe(form)
-
-    return () => {
-      observerRef.current?.disconnect()
-      observerRef.current = null
-    }
   }, [])
-
-  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault()
-    const form = document.getElementById('lead-form')
-    if (!form) return
-    form.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    // Focus the first input after the scroll animation has had a moment
-    // to land. 400ms is enough for the typical smooth-scroll distance on
-    // mobile without being noticeably laggy.
-    window.setTimeout(() => {
-      document.getElementById('lf-name')?.focus({ preventScroll: true })
-    }, 400)
-  }
 
   function handleDismiss(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation()
@@ -67,7 +35,7 @@ export default function StickyMobileCTA({ ctaText }: StickyMobileCTAProps) {
     setDismissed(true)
   }
 
-  if (dismissed || formVisible) return null
+  if (dismissed) return null
 
   return (
     <div
@@ -75,15 +43,20 @@ export default function StickyMobileCTA({ ctaText }: StickyMobileCTAProps) {
       // Safe-area aware — pads against the iPhone notch / Android gesture bar.
       style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
       role="region"
-      aria-label="Quick form access"
+      aria-label="Quick contact"
     >
-      <button
-        type="button"
-        onClick={handleClick}
-        className="flex-1 text-center font-semibold text-base py-2 min-h-[40px]"
+      <WhatsAppGate
+        location="sticky_mobile"
+        vertical={vertical}
+        message={`Hi, I'm interested in the ${vertical} programme`}
       >
-        {ctaText}
-      </button>
+        <button
+          type="button"
+          className="flex-1 text-center font-semibold text-base py-2 min-h-[40px]"
+        >
+          {ctaText}
+        </button>
+      </WhatsAppGate>
       <button
         type="button"
         onClick={handleDismiss}

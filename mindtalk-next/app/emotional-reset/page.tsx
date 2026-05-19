@@ -1,5 +1,4 @@
 import { getMDXFrontmatter } from '@/lib/mdx'
-import WebViewBanner from '@/components/layout/WebViewBanner'
 import MinimalNav from '@/components/layout/MinimalNav'
 import Footer from '@/components/layout/Footer'
 import VerticalHero from '@/components/sections/VerticalHero'
@@ -84,7 +83,6 @@ export default function EmotionalResetPage() {
       ))}
       <PageTracker page="vertical" vertical={fm.vertical} />
       <ScrollDepthTracker page={fm.vertical} />
-      <WebViewBanner />
       <MinimalNav />
       <main>
         <VerticalHero
@@ -127,7 +125,7 @@ export default function EmotionalResetPage() {
         />
       </main>
       <Footer />
-      <StickyMobileCTA ctaText={fm.ctaText} />
+      <StickyMobileCTA ctaText={fm.ctaText} vertical={fm.vertical} />
             <p className="text-xs text-gray-400 mt-8 text-center pb-4">
         Clinically reviewed: March 2026 · Cadabams Group
       </p>
