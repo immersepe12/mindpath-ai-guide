@@ -111,6 +111,10 @@ export default function WhatsAppGate({
 
     let utms: Record<string, string> = {}
     try { utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}') } catch {}
+    let gclid = utms.gclid ?? ''
+    if (!gclid && typeof window !== 'undefined') {
+      gclid = new URLSearchParams(window.location.search).get('gclid') ?? ''
+    }
 
     // Freshsales + Fyno via /api/lead (keepalive so it survives tab switch)
     fetch('/api/lead', {
@@ -131,6 +135,7 @@ export default function WhatsAppGate({
         utmMedium:   utms.utm_medium   ?? '',
         utmCampaign: utms.utm_campaign ?? '',
         utmContent:  utms.utm_content  ?? '',
+        gclid,
         pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
       }),
     }).catch(() => {})

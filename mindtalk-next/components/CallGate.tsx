@@ -102,6 +102,10 @@ export default function CallGate({
 
     let utms: Record<string, string> = {}
     try { utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}') } catch {}
+    let gclid = utms.gclid ?? ''
+    if (!gclid && typeof window !== 'undefined') {
+      gclid = new URLSearchParams(window.location.search).get('gclid') ?? ''
+    }
 
     // Freshsales + Fyno via /api/lead. keepalive so it survives the
     // immediate navigation to tel: that follows.
@@ -123,6 +127,7 @@ export default function CallGate({
         utmMedium:   utms.utm_medium   ?? '',
         utmCampaign: utms.utm_campaign ?? '',
         utmContent:  utms.utm_content  ?? '',
+        gclid,
         pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
       }),
     }).catch(() => {})
