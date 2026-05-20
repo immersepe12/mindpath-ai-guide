@@ -1,17 +1,20 @@
 'use client'
 // Sticky bottom CTA bar — visible on mobile/tablet (below lg = 1024px)
-// on the vertical landing pages. This is the primary CTA for paid Meta
-// traffic, which lands in the Facebook/Instagram in-app WebView where
-// the React lead form is unreliable.
+// on the vertical landing pages. Primary CTA for paid Meta traffic,
+// which lands in the Facebook/Instagram in-app WebView where the React
+// lead form (and the React phone-gate modal) is unreliable.
 //
-// The button triggers WhatsAppGate: it captures name + phone (firing
-// /api/lead → Freshsales + Fyno) BEFORE opening WhatsApp, so no lead
-// reaches WhatsApp untracked. The wa.me handoff also escapes the Meta
-// WebView entirely — it opens the native WhatsApp app.
+// Tapping the button opens WhatsApp directly via wa.me — no React modal
+// in between, so the handoff works even inside the Meta WebView. The
+// trade-off is that no Freshsales/Fyno lead is created at this step —
+// the team captures the contact's details inside the WhatsApp chat.
 //
 // Dismiss × stows it for the session via sessionStorage.
 import { useEffect, useState } from 'react'
-import WhatsAppGate from '@/components/WhatsAppGate'
+
+// MindTalk's WhatsApp Business number — already in international format
+// (country code 91 + 10-digit mobile). Used verbatim in the wa.me link.
+const WABA_NUMBER = '918197268789'
 
 interface StickyMobileCTAProps {
   ctaText: string
@@ -37,6 +40,10 @@ export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAPr
 
   if (dismissed) return null
 
+  const waUrl =
+    `https://wa.me/${WABA_NUMBER}` +
+    `?text=${encodeURIComponent(`Hi, I'm interested in the ${vertical} programme`)}`
+
   return (
     <div
       className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-[#EC6206] text-white rounded-t-2xl shadow-[0_-4px_16px_rgba(0,0,0,0.12)] flex items-center gap-2 px-4 pt-3"
@@ -45,18 +52,14 @@ export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAPr
       role="region"
       aria-label="Quick contact"
     >
-      <WhatsAppGate
-        location="sticky_mobile"
-        vertical={vertical}
-        message={`Hi, I'm interested in the ${vertical} programme`}
+      <a
+        href={waUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-1 text-center font-semibold text-base py-2 min-h-[40px] flex items-center justify-center"
       >
-        <button
-          type="button"
-          className="flex-1 text-center font-semibold text-base py-2 min-h-[40px]"
-        >
-          {ctaText}
-        </button>
-      </WhatsAppGate>
+        {ctaText}
+      </a>
       <button
         type="button"
         onClick={handleDismiss}
