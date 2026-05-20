@@ -38,18 +38,29 @@ export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAPr
     setDismissed(true)
   }
 
-  // Fire a Meta Lead pixel event before the wa.me handoff. fbq dispatches
-  // to every initialised pixel automatically (both 2063667027512797 and
-  // 4251984441783471 are init'd in components/MetaPixel.tsx), so one call
-  // hits both. We don't preventDefault — the click continues to the
-  // wa.me URL. Browser-only by design (no CAPI mirror here); the user is
-  // leaving the page, so the helper that POSTs to /api/track/meta might
-  // race the navigation.
+  // Before the wa.me handoff, fire a Meta Lead two ways:
+  //   1. navigator.sendBeacon() to /api/track/sticky-lead — server-side
+  //      CAPI fire that survives the navigation away (the WebView
+  //      hand-off to WhatsApp can kill in-flight fetches; sendBeacon is
+  //      queued by the browser to complete regardless).
+  //   2. fbq('track', 'Lead', …) — best-effort browser pixel. May not
+  //      complete in WebView; CAPI above covers the gap. fbq dispatches
+  //      to every initialised pixel automatically, so one call hits both
+  //      2063667027512797 and 4251984441783471 (init'd in MetaPixel.tsx).
+  // No preventDefault — the click continues to the wa.me URL.
   function handleCtaClick() {
+    try {
+      let utms: Record<string, string> = {}
+      try { utms = JSON.parse(localStorage.getItem('mindtalk_utms') || '{}') } catch {}
+      navigator.sendBeacon(
+        '/api/track/sticky-lead',
+        JSON.stringify({ vertical, ...utms }),
+      )
+    } catch {}
     try {
       const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq
       if (typeof fbq === 'function') {
-        fbq('track', 'Lead', { content_name: 'cbt_programme' })
+        fbq('track', 'Lead', { content_name: 'cbt_programme', currency: 'INR', value: 7799 })
       }
     } catch {}
   }
