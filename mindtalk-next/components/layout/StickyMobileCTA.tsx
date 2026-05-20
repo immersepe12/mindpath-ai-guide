@@ -38,6 +38,22 @@ export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAPr
     setDismissed(true)
   }
 
+  // Fire a Meta Lead pixel event before the wa.me handoff. fbq dispatches
+  // to every initialised pixel automatically (both 2063667027512797 and
+  // 4251984441783471 are init'd in components/MetaPixel.tsx), so one call
+  // hits both. We don't preventDefault — the click continues to the
+  // wa.me URL. Browser-only by design (no CAPI mirror here); the user is
+  // leaving the page, so the helper that POSTs to /api/track/meta might
+  // race the navigation.
+  function handleCtaClick() {
+    try {
+      const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq
+      if (typeof fbq === 'function') {
+        fbq('track', 'Lead', { content_name: vertical })
+      }
+    } catch {}
+  }
+
   if (dismissed) return null
 
   const waUrl =
@@ -56,6 +72,7 @@ export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAPr
         href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={handleCtaClick}
         className="flex-1 text-center font-semibold text-base py-2 min-h-[40px] flex items-center justify-center"
       >
         {ctaText}
