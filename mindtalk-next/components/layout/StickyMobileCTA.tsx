@@ -49,7 +49,7 @@ export default function StickyMobileCTA({ ctaText, vertical }: StickyMobileCTAPr
     try {
       const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq
       if (typeof fbq === 'function') {
-        fbq('track', 'Lead', { content_name: vertical })
+        fbq('track', 'Lead', { content_name: 'cbt_programme' })
       }
     } catch {}
   }
