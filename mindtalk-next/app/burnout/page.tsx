@@ -131,7 +131,7 @@ export default function BurnoutPage() {
         />
       </main>
       <Footer />
-      <StickyMobileCTA ctaText={fm.ctaText} vertical={fm.vertical} />
+      <StickyMobileCTA vertical={fm.vertical} />
             <p className="text-xs text-gray-400 mt-8 text-center pb-4">
         Clinically reviewed: March 2026 · Cadabams Group
       </p>
