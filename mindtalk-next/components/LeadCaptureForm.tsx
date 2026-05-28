@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { trackInlineFormSubmitted, trackInlineFormError, trackLeadSubmitted } from '@/lib/analytics'
+import { collectLeadContext } from '@/lib/leadContext'
 
 interface LeadCaptureFormProps {
   vertical: string
@@ -93,6 +94,7 @@ export default function LeadCaptureForm({ vertical }: LeadCaptureFormProps) {
         utmContent:  utms.utm_content  ?? '',
         gclid,
         pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
+        context:     collectLeadContext({ ctaSource: 'Inline LP Form', ctaType: 'form' }),
       }),
     }).catch(() => {})
 

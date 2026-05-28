@@ -19,6 +19,7 @@ import {
   trackLeadSubmitted,
   trackMetaViewContent,
 } from '@/lib/analytics'
+import { collectLeadContext } from '@/lib/leadContext'
 
 interface Option {
   label: string
@@ -189,6 +190,7 @@ export default function QuizFlow({ questions }: QuizFlowProps) {
           utmCampaign: utms.utm_campaign ?? '',
           utmContent: utms.utm_content ?? '',
           pageUrl: window.location.href,
+          context: collectLeadContext({ ctaSource: 'Generic Quiz', ctaType: 'form' }),
         }),
       })
       // Mixpanel + Fyno + Meta Lead (Pixel + CAPI)

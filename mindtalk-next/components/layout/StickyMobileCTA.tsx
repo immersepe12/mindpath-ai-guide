@@ -13,6 +13,7 @@
 // inside the Meta WebView is unreliable; a controlled input + onClick
 // sidesteps it.
 import { useEffect, useState } from 'react'
+import { collectLeadContext } from '@/lib/leadContext'
 
 // MindTalk's WhatsApp Business number — international format (91 + 10).
 const WABA_NUMBER = '918197268789'
@@ -77,6 +78,7 @@ export default function StickyMobileCTA({ vertical }: StickyMobileCTAProps) {
           utmCampaign: utms.utm_campaign ?? '',
           utmContent:  utms.utm_content  ?? '',
           gclid:       utms.gclid        ?? '',
+          context:     collectLeadContext({ ctaSource: 'Phone Gate Book', ctaType: 'book' }),
         }),
       )
     } catch {}

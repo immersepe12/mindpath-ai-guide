@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { trackLeadSubmitted, trackWhatsAppClick } from '@/lib/analytics'
+import { collectLeadContext } from '@/lib/leadContext'
 
 const WA_NUMBER     = '918197268789'
 const PHONE_STORAGE = 'mindtalk_wa_phone'
@@ -137,6 +138,7 @@ export default function WhatsAppGate({
         utmContent:  utms.utm_content  ?? '',
         gclid,
         pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
+        context:     collectLeadContext({ ctaSource: `WhatsApp Gate ${location}`, ctaType: 'whatsapp' }),
       }),
     }).catch(() => {})
 
