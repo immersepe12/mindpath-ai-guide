@@ -8,12 +8,23 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Domain retirement: cadabamsmindtalk.com permanently redirects to mindtalk.in.
+      // These offsite rules take precedence over the legacy internal redirects below,
+      // and the catch-all is last so everything else lands on mindtalk.in's homepage.
+      { source: '/', destination: 'https://www.mindtalk.in/', permanent: true },
+      { source: '/anxiety', destination: 'https://www.mindtalk.in/illnesses/anxiety', permanent: true },
+      { source: '/emotional-reset', destination: 'https://www.mindtalk.in/illnesses/depression', permanent: true },
+      { source: '/relationships', destination: 'https://www.mindtalk.in/treatments/couples-therapy', permanent: true },
+      { source: '/burnout', destination: 'https://www.mindtalk.in/journeys/burnout-recovery', permanent: true },
+      { source: '/team', destination: 'https://www.mindtalk.in/doctors', permanent: true },
+      { source: '/quiz', destination: 'https://www.mindtalk.in/assessments', permanent: true },
+      // Legacy internal redirects (kept; they chain into the offsite rules above).
       { source: '/home', destination: '/', permanent: true },
       { source: '/stress-anxiety', destination: '/anxiety', permanent: true },
       { source: '/workplace', destination: '/burnout', permanent: true },
-      { source: '/emotional-reset', destination: '/depression', permanent: true },
       { source: '/assessment', destination: '/quiz', permanent: true },
-      // /app is now the primary app sales surface — do not redirect.
+      // Catch-all — must stay last.
+      { source: '/:path*', destination: 'https://www.mindtalk.in/', permanent: true },
     ]
   },
   async headers() {
