@@ -18,11 +18,11 @@ const nextConfig = {
       { source: '/burnout', destination: 'https://www.mindtalk.in/journeys/burnout-recovery', permanent: true },
       { source: '/team', destination: 'https://www.mindtalk.in/doctors', permanent: true },
       { source: '/quiz', destination: 'https://www.mindtalk.in/assessments', permanent: true },
-      // Legacy internal redirects (kept; they chain into the offsite rules above).
-      { source: '/home', destination: '/', permanent: true },
-      { source: '/stress-anxiety', destination: '/anxiety', permanent: true },
-      { source: '/workplace', destination: '/burnout', permanent: true },
-      { source: '/assessment', destination: '/quiz', permanent: true },
+      // Legacy aliases — pointed straight at their offsite targets (single hop).
+      { source: '/home', destination: 'https://www.mindtalk.in/', permanent: true },
+      { source: '/stress-anxiety', destination: 'https://www.mindtalk.in/illnesses/anxiety', permanent: true },
+      { source: '/workplace', destination: 'https://www.mindtalk.in/journeys/burnout-recovery', permanent: true },
+      { source: '/assessment', destination: 'https://www.mindtalk.in/assessments', permanent: true },
       // Catch-all — must stay last.
       { source: '/:path*', destination: 'https://www.mindtalk.in/', permanent: true },
     ]
