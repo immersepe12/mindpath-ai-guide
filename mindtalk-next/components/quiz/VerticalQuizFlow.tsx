@@ -19,6 +19,7 @@ import {
   trackLeadSubmitted,
   trackMetaViewContent,
 } from '@/lib/analytics'
+import { collectLeadContext } from '@/lib/leadContext'
 
 interface Option {
   label: string
@@ -242,6 +243,7 @@ export default function VerticalQuizFlow({ vertical, questions }: Props) {
           utmCampaign: utms.utm_campaign ?? '',
           utmContent:  utms.utm_content  ?? '',
           pageUrl:     typeof window !== 'undefined' ? window.location.href : '',
+          context:     collectLeadContext({ ctaSource: `Quiz ${vertical}`, ctaType: 'form' }),
         }),
       }).catch(() => {})
       trackLeadSubmitted({

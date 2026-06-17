@@ -97,6 +97,20 @@ function track(event: string, props?: Record<string,unknown>) {
   try { mixpanel.track(prefixed(event), { ...getStoredUTMs(), ...props }) } catch {}
 }
 
+// Public Mixpanel distinct_id reader used by lib/leadContext.ts to
+// stamp the Cadabams CRM activity row with the visitor's analytics id.
+// Returns null when the snippet isn't loaded (e.g. dev hostname gate,
+// or initAnalytics hasn't run yet).
+export function getDistinctId(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const id = mixpanel.get_distinct_id?.()
+    return typeof id === 'string' && id.length > 0 ? id : null
+  } catch {
+    return null
+  }
+}
+
 // ─── PAGE EVENTS ─────────────────────────────────────────────────────────────
 
 export function trackPageView(pageName: string, props?: Record<string,unknown>) {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createCadabamsCrmLead, type LeadContext } from '@/lib/crm/cadabamsCrm'
 
 // Wrap a fetch in 429 retry-with-exponential-backoff. Honours Retry-After
 // when the server provides one, otherwise climbs 600ms → 1.2s → 2.4s → 4.8s.
@@ -30,12 +31,23 @@ export async function POST(req: NextRequest) {
     name, phone, email, vertical,
     durationOfIssue, symptoms, priorTherapy, readinessScore,
     utmSource, utmMedium, utmCampaign, utmContent, pageUrl,
-    source, gclid,
+    source, gclid, zip,
     // Quiz fields — sent by VerticalQuizFlow on each LP. quizAnswers is a
     // JSON object of {questionId: answer}; quizCompleted is a boolean flag;
     // quizNote is a pre-formatted human-readable Q&A transcript for Freshsales.
     quizAnswers, quizCompleted, quizNote,
-  } = body
+    // Optional client-collected attribution context for the Cadabams CRM
+    // direct-write integration. Server-side leads (no context) → first-touch
+    // / referrer / mixpanel id columns just stay empty.
+    context,
+  } = body as {
+    name?: string; phone?: string; email?: string; vertical?: string;
+    durationOfIssue?: string; symptoms?: unknown; priorTherapy?: string; readinessScore?: number;
+    utmSource?: string; utmMedium?: string; utmCampaign?: string; utmContent?: string; pageUrl?: string;
+    source?: string; gclid?: string; zip?: string;
+    quizAnswers?: unknown; quizCompleted?: boolean; quizNote?: string;
+    context?: LeadContext;
+  }
 
   const normalisePhone = (raw: string) => {
     let digits = raw.replace(/\D/g, '')
@@ -64,7 +76,25 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const normalisedPhone = normalisePhone(phone)
+  const normalisedPhone = normalisePhone(phone as string)
+
+  // ── Cadabams CRM direct-write (gated, additive) ──────────────────────
+  // Kicked off here in parallel with the existing Freshsales + Fyno
+  // writes below. Resolved at the end and reported in the response body
+  // for telemetry. Never blocks the route's success — the primary CRM
+  // write still determines the route's response. Gated to 'off' until
+  // CADABAMS_CRM_DUAL_WRITE is set in env; when off the call returns
+  // { ok: false, skipped: 'disabled' } in ~0ms.
+  const cadabamsPromise = createCadabamsCrmLead({
+    phone:        normalisedPhone,
+    mobile:       normalisedPhone.replace(/^\+91/, '').replace(/^\+/, ''),
+    countryCodeId: 402,
+    name:         (typeof name === 'string' && name.trim()) || 'Phone Lead',
+    email:        typeof email === 'string' && email.trim() ? email.trim() : undefined,
+    zip:          typeof zip   === 'string' && zip.trim()   ? zip.trim()   : undefined,
+    userAgent:    req.headers.get('user-agent') ?? undefined,
+    context,
+  })
 
   const lpUrls: Record<string, string> = {
     anxiety:      'https://cadabamsmindtalk.com/anxiety',
@@ -398,9 +428,16 @@ export async function POST(req: NextRequest) {
   // navigation. We deliberately do NOT re-fire CAPI here — that would
   // double-count in Meta because the event_ids would differ.
 
+  // Resolve the Cadabams CRM write before responding. The function never
+  // throws, so this just gathers the result — primary-CRM success (above)
+  // already drives the route's `success` field; the cadabams field is
+  // pure telemetry.
+  const cadabamsResult = await cadabamsPromise
+
   return NextResponse.json({
     success:     freshsalesStatus.ok || fynoStatus.ok,
     freshsales:  freshsalesStatus,
     fyno:        fynoStatus,
+    cadabams:    cadabamsResult,
   })
 }
